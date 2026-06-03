@@ -18,7 +18,7 @@
             <button class="sidebar-toggle" id="sidebar-toggle">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
-            <h1 class="header__title">Mis Calificaciones</h1>
+            <h1 class="header__title">Mis calificaciones</h1>
             <div class="header__actions">
                 <div class="header__user">
                     <div class="header__user-avatar" id="header-avatar"></div>
@@ -36,8 +36,8 @@
         <div class="content">
             <div class="content__header">
                 <div>
-                    <h2 class="content__title">Mis Notas y Plan de Evaluacion</h2>
-                    <p class="content__subtitle">Consulta tus calificaciones detalladas por curso</p>
+                    <h2 class="content__title">Mis notas y plan de evaluación</h2>
+                    <p class="content__subtitle">Consulte sus calificaciones detalladas por curso</p>
                 </div>
                 <button class="btn btn--primary" onclick="descargarNotasPDF()">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 0.5rem;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -135,7 +135,7 @@ function renderNotas(inscripciones) {
                 <div style="padding: 1rem 1.5rem; border-top: 1px solid var(--color-border-light);">
                     <h4 style="font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); margin-bottom: 0.75rem;">Otras Calificaciones</h4>
                     <div class="table-container"><table class="table">
-                        <thead><tr><th>Tipo</th><th>Descripcion</th><th>Nota</th><th>Fecha</th></tr></thead>
+                        <thead><tr><th>Tipo</th><th>Descripción</th><th>Nota</th><th>Fecha</th></tr></thead>
                         <tbody>
                             ${otrasNotas.map(n => `
                                 <tr>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="">
-    <title>Mis Cursos - Facilitador | UPTEC Cursos</title>
+    <title>Mis cursos - Facilitador | UPTEC Cursos</title>
     <link rel="stylesheet" href="../../../frontend/css/main.css">
 </head>
 <body>
@@ -18,7 +18,7 @@
             <button class="sidebar-toggle" id="sidebar-toggle">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
-            <h1 class="header__title">Mis Cursos</h1>
+            <h1 class="header__title">Mis cursos</h1>
             <div class="header__actions">
                 <div class="header__user">
                     <div class="header__user-avatar" id="header-avatar"></div>
@@ -36,8 +36,8 @@
         <div class="content">
             <div class="content__header">
                 <div>
-                    <h2 class="content__title">Mis Cursos Asignados</h2>
-                    <p class="content__subtitle">Gestiona los cursos que impartes</p>
+                    <h2 class="content__title">Mis cursos asignados</h2>
+                    <p class="content__subtitle">Gestione los cursos que imparte</p>
                 </div>
             </div>
 
@@ -49,7 +49,7 @@
                             <select class="form-select" id="filter-estado" style="width: 160px;" onchange="loadCursos()">
                                 <option value="">Todos</option>
                                 <option value="Planificado">Planificados</option>
-                                <option value="En Curso">En Curso</option>
+                                <option value="En Curso">En curso</option>
                                 <option value="Finalizado">Finalizados</option>
                             </select>
                         </div>
@@ -145,7 +145,7 @@ function renderCursos(cursos) {
                 ` : ''}
             </div>
             <div class="card__footer">
-                <a href="estudiantes.html?curso=${c.id}" class="btn btn--sm btn--primary">Ver Estudiantes</a>
+                <a href="estudiantes.html?curso=${c.id}" class="btn btn--sm btn--primary">Ver estudiantes</a>
                 <a href="calificaciones.html?curso=${c.id}" class="btn btn--sm btn--ghost">Calificaciones</a>
             </div>
         </div>

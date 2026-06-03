@@ -18,7 +18,7 @@
             <button class="sidebar-toggle" id="sidebar-toggle">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
-            <h1 class="header__title">Mis Reportes</h1>
+            <h1 class="header__title">Reportes</h1>
             <div class="header__actions">
                 <div class="header__user">
                     <div class="header__user-avatar" id="header-avatar"></div>
@@ -36,8 +36,8 @@
         <div class="content">
             <div class="content__header">
                 <div>
-                    <h2 class="content__title">Reportes de Mis Cursos</h2>
-                    <p class="content__subtitle">Estadisticas de rendimiento de tus estudiantes</p>
+                    <h2 class="content__title">Reportes de los cursos asignados</h2>
+                    <p class="content__subtitle">Estadísticas de rendimiento de tus estudiantes</p>
                 </div>
                 <button class="btn btn--primary" onclick="descargarReportePDF()">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 0.5rem;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -55,7 +55,7 @@
             <div class="grid grid--2" style="margin-bottom: 1.5rem;">
                 <div class="card">
                     <div class="card__header">
-                        <h3 class="card__title">Desempeno por Curso</h3>
+                        <h3 class="card__title">Desempeño por curso</h3>
                     </div>
                     <div class="card__body" id="reporte-desempeno">
                         <div class="skeleton" style="height: 200px;"></div>
@@ -64,7 +64,7 @@
 
                 <div class="card">
                     <div class="card__header">
-                        <h3 class="card__title">Distribucion de Notas</h3>
+                        <h3 class="card__title">Distribución de notas</h3>
                     </div>
                     <div class="card__body" id="reporte-distribucion">
                         <div class="skeleton" style="height: 200px;"></div>
@@ -74,7 +74,7 @@
 
             <div class="card">
                 <div class="card__header">
-                    <h3 class="card__title">Mejores Estudiantes por Curso</h3>
+                    <h3 class="card__title">Mejores estudiantes por curso</h3>
                 </div>
                 <div class="card__body" id="reporte-mejores">
                     <div class="skeleton" style="height: 250px;"></div>
@@ -104,7 +104,7 @@ async function loadReportes() {
 
         renderStats(resumen);
         
-        // Procesar datos de desempeno desde mis-cursos
+        // Procesar datos de desempeño desde mis-cursos
         const cursos = misCursos.cursos || [];
         const desempeno = cursos.map(c => ({
             codigo: c.codigo,
@@ -150,10 +150,10 @@ async function descargarReportePDF() {
 
 function renderStats(data) {
     const stats = [
-        { icon: '📚', cls: 'stat-card__icon--primary', value: data.mis_cursos || 0, label: 'Mis Cursos' },
-        { icon: '👨‍🎓', cls: 'stat-card__icon--accent', value: data.mis_estudiantes || 0, label: 'Mis Estudiantes' },
-        { icon: '📊', cls: 'stat-card__icon--secondary', value: data.promedio_general || 0, label: 'Promedio General' },
-        { icon: '🏆', cls: 'stat-card__icon--info', value: data.tasa_aprobacion || 0, label: '% Aprobacion' }
+        { icon: '📚', cls: 'stat-card__icon--primary', value: data.mis_cursos || 0, label: 'Mis cursos' },
+        { icon: '👨‍🎓', cls: 'stat-card__icon--accent', value: data.mis_estudiantes || 0, label: 'Mis estudiantes' },
+        { icon: '📊', cls: 'stat-card__icon--secondary', value: data.promedio_general || 0, label: 'Promedio general' },
+        { icon: '🏆', cls: 'stat-card__icon--info', value: data.tasa_aprobacion || 0, label: '% Aprobación' }
     ];
 
     document.getElementById('stats-container').innerHTML = stats.map(s => `

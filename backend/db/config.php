@@ -25,7 +25,7 @@ class Database
     private string $host = 'localhost';
     private string $database = 'uptec_cursos';
     private string $username = 'root';
-    private string $password = 'admin';
+    private string $password = '';
     private string $charset = 'utf8mb4';
 
     private function __construct()

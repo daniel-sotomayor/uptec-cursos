@@ -18,7 +18,7 @@
             <button class="sidebar-toggle" id="sidebar-toggle">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
-            <h1 class="header__title">Panel de Analista</h1>
+            <h1 class="header__title">Panel de analista</h1>
             <div class="header__actions">
                 <div class="header__user">
                     <div class="header__user-avatar" id="header-avatar"></div>
@@ -27,7 +27,7 @@
                         <span class="header__user-role" id="header-role"></span>
                     </div>
                 </div>
-                <button class="header__logout" id="logout-btn" title="Cerrar Sesion">
+                <button class="header__logout" id="logout-btn" title="Cerrar Sesión">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 </button>
             </div>
@@ -51,7 +51,7 @@
             <div class="grid grid--2" style="margin-top: 1.5rem;">
                 <div class="card">
                     <div class="card__header">
-                        <h3 class="card__title">Cursos por Area</h3>
+                        <h3 class="card__title">Cursos por área</h3>
                     </div>
                     <div class="card__body" id="cursos-area">
                         <div class="skeleton" style="height: 200px;"></div>
@@ -97,7 +97,7 @@
 
 function renderStats(data) {
     const stats = [
-        { icon: '📚', cls: 'stat-card__icon--primary', value: data.total_cursos || 0, label: 'Total Cursos' },
+        { icon: '📚', cls: 'stat-card__icon--primary', value: data.total_cursos || 0, label: 'Total cursos' },
         { icon: '📋', cls: 'stat-card__icon--accent', value: data.cursos_planificados || 0, label: 'Planificados' },
         { icon: '👨‍🏫', cls: 'stat-card__icon--secondary', value: data.total_facilitadores || 0, label: 'Facilitadores' },
         { icon: '📝', cls: 'stat-card__icon--info', value: data.total_inscripciones || 0, label: 'Inscripciones' }

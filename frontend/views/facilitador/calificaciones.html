@@ -18,7 +18,7 @@
             <button class="sidebar-toggle" id="sidebar-toggle">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
-            <h1 class="header__title">Registro de Calificaciones</h1>
+            <h1 class="header__title">Registro de calificaciones</h1>
             <div class="header__actions">
                 <div class="header__user">
                     <div class="header__user-avatar" id="header-avatar"></div>
@@ -37,7 +37,7 @@
             <div class="content__header">
                 <div>
                     <h2 class="content__title">Calificaciones</h2>
-                    <p class="content__subtitle">Registra y gestiona las notas de tus estudiantes</p>
+                    <p class="content__subtitle">Registre y gestione las notas de sus estudiantes</p>
                 </div>
             </div>
 
@@ -50,7 +50,7 @@
                                 <option value="">Todos mis cursos</option>
                             </select>
                         </div>
-                        <button class="btn btn--primary" onclick="openNotaModal()">+ Nueva Calificacion</button>
+                        <button class="btn btn--primary" onclick="openNotaModal()">+ Nueva calificación</button>
                     </div>
                 </div>
             </div>
@@ -158,7 +158,7 @@ function openNotaModal() {
         </form>
     `;
     const footer = `<button class="btn btn--ghost" onclick="Modal.close()">Cancelar</button><button class="btn btn--primary" onclick="saveNota()">Guardar</button>`;
-    Modal.open(content, { title: 'Nueva Calificacion', footer });
+    Modal.open(content, { title: 'Nueva calificación', footer });
 }
 
 async function loadEstudiantesCurso() {
@@ -186,7 +186,7 @@ async function saveNota() {
     if (!data.inscripcion_id || !data.nota) { Toast.show('Complete los campos requeridos', 'warning'); return; }
     try {
         await API.post('calificacion', data);
-        Toast.show('Calificacion registrada', 'success');
+        Toast.show('Calificación registrada', 'success');
         Modal.close(); loadCalificaciones();
     } catch (err) { Toast.show(err.message, 'error'); }
 }

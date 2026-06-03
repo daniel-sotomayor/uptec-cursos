@@ -18,7 +18,7 @@
             <button class="sidebar-toggle" id="sidebar-toggle">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
-            <h1 class="header__title">Mis Cursos</h1>
+            <h1 class="header__title">Mis cursos</h1>
             <div class="header__actions">
                 <div class="header__user">
                     <div class="header__user-avatar" id="header-avatar"></div>
@@ -36,8 +36,8 @@
         <div class="content">
             <div class="content__header">
                 <div>
-                    <h2 class="content__title">Mis Cursos Inscritos</h2>
-                    <p class="content__subtitle">Todos los cursos en los que estas inscrito</p>
+                    <h2 class="content__title">Mis cursos inscritos</h2>
+                    <p class="content__subtitle">Todos los cursos en los que está inscrito</p>
                 </div>
                 <a href="inscribir.html" class="btn btn--accent">+ Inscribirme en otro curso</a>
             </div>
@@ -70,7 +70,7 @@ async function loadMisCursos() {
 function renderMisCursos(cursos) {
     const container = document.getElementById('mis-cursos-container');
     if (!cursos.length) {
-        container.innerHTML = '<div class="empty-state"><div class="empty-state__icon">📭</div><div class="empty-state__title">No estas inscrito en ningun curso</div><div class="empty-state__text"><a href="inscribir.html">Inscribirme ahora</a></div></div>';
+        container.innerHTML = '<div class="empty-state"><div class="empty-state__icon">📭</div><div class="empty-state__title">No estás inscrito en ningún curso</div><div class="empty-state__text"><a href="inscribir.html">Inscribirme ahora</a></div></div>';
         return;
     }
 

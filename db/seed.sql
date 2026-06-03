@@ -75,17 +75,14 @@ INSERT INTO cursos (codigo, nombre, descripcion, duracion_horas, fecha_inicio, f
 INSERT INTO evaluaciones (curso_id, nombre, descripcion, tipo, peso, fecha_evaluacion, orden) VALUES
 -- PROG-001
 (1, 'Parcial 1', 'Primera evaluacion parcial - Fundamentos', 'Parcial', 20.00, '2026-02-01', 1),
-(1, 'Parcial 2', 'Segunda evaluacion parcial - POO y MySQL', 'Parcial', 25.00, '2026-02-20', 2),
 (1, 'Proyecto Final', 'Proyecto integrador del curso', 'Proyecto', 30.00, '2026-03-10', 3),
 (1, 'Asistencia', 'Puntualidad y asistencia a clases', 'Asistencia', 25.00, '2026-03-14', 4),
 -- WEB-001
 (2, 'Parcial 1', 'HTML5 y CSS3 avanzado', 'Parcial', 25.00, '2026-02-05', 1),
-(2, 'Parcial 2', 'JavaScript y DOM', 'Parcial', 25.00, '2026-02-25', 2),
 (2, 'Proyecto Web', 'Sitio web completo', 'Proyecto', 30.00, '2026-03-15', 3),
 (2, 'Asistencia', 'Puntualidad y asistencia', 'Asistencia', 20.00, '2026-03-19', 4),
 -- BASE-001
 (3, 'Parcial 1', 'Modelado y normalizacion', 'Parcial', 25.00, '2026-02-15', 1),
-(3, 'Parcial 2', 'SQL avanzado', 'Parcial', 25.00, '2026-03-01', 2),
 (3, 'Proyecto BD', 'Diseno de base de datos', 'Proyecto', 35.00, '2026-03-25', 3),
 (3, 'Asistencia', 'Puntualidad y asistencia', 'Asistencia', 15.00, '2026-03-30', 4);
 
@@ -126,7 +123,6 @@ INSERT INTO inscripciones (usuario_id, curso_id, estado, nota_final, fecha_compl
 INSERT INTO calificaciones (inscripcion_id, evaluacion_id, tipo_evaluacion, descripcion, nota, peso, fecha_evaluacion) VALUES
 -- Participante 5 en curso 5 (finalizado con 18.50)
 (1, NULL, 'Parcial 1', 'Primera evaluacion parcial', 17.00, 25.00, '2025-11-15'),
-(1, NULL, 'Parcial 2', 'Segunda evaluacion parcial', 19.00, 25.00, '2025-12-01'),
 (1, NULL, 'Proyecto', 'Proyecto final del curso', 20.00, 30.00, '2025-12-10'),
 (1, NULL, 'Asistencia', 'Puntualidad y asistencia', 18.00, 20.00, '2025-12-15'),
 -- Participante 5 en curso 1 (en progreso)

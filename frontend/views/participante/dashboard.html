@@ -18,7 +18,7 @@
             <button class="sidebar-toggle" id="sidebar-toggle">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
-            <h1 class="header__title">Panel de Participante</h1>
+            <h1 class="header__title">Panel de participante</h1>
             <div class="header__actions">
                 <div class="header__user">
                     <div class="header__user-avatar" id="header-avatar"></div>
@@ -27,7 +27,7 @@
                         <span class="header__user-role" id="header-role"></span>
                     </div>
                 </div>
-                <button class="header__logout" id="logout-btn" title="Cerrar Sesion">
+                <button class="header__logout" id="logout-btn" title="Cerrar Sesión">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 </button>
             </div>
@@ -37,7 +37,7 @@
             <div class="content__header">
                 <div>
                     <h2 class="content__title">Bienvenido, <span id="user-name"></span></h2>
-                    <p class="content__subtitle">Consulta tus cursos, notas y plan de evaluacion</p>
+                    <p class="content__subtitle">Consulte sus cursos, notas y plan de evaluación</p>
                 </div>
             </div>
 
@@ -49,7 +49,7 @@
 
             <div class="card" style="margin-top: 1.5rem;">
                 <div class="card__header">
-                    <h3 class="card__title">Mis Cursos Inscritos</h3>
+                    <h3 class="card__title">Mis cursos inscritos</h3>
                     <a href="mis-cursos.html" class="btn btn--sm btn--ghost">Ver todos</a>
                 </div>
                 <div class="card__body" id="mis-cursos">
@@ -81,9 +81,9 @@
 
 function renderStats(data) {
     const stats = [
-        { icon: '📚', cls: 'stat-card__icon--primary', value: data.mis_cursos || 0, label: 'Mis Cursos' },
+        { icon: '📚', cls: 'stat-card__icon--primary', value: data.mis_cursos || 0, label: 'Mis cursos' },
         { icon: '🏆', cls: 'stat-card__icon--accent', value: data.cursos_completados || 0, label: 'Completados' },
-        { icon: '📊', cls: 'stat-card__icon--secondary', value: data.promedio_general || 0, label: 'Promedio General' }
+        { icon: '📊', cls: 'stat-card__icon--secondary', value: data.promedio_general || 0, label: 'Promedio general' }
     ];
     document.getElementById('stats-container').innerHTML = stats.map(s => `
         <div class="stat-card">
@@ -102,7 +102,7 @@ function renderMisCursos(inscripciones) {
 
     DataTable.render('mis-cursos', inscripciones, [
         { label: 'Curso', key: 'codigo', format: (v, r) => `<strong>${v || ''}</strong><br><small>${Utils.escapeHtml(r.nombre)}</small>` },
-        { label: 'Area', key: 'area' },
+        { label: 'Área', key: 'area' },
         { label: 'Estado', key: 'estado', format: (v) => `<span class="badge ${estadoBadge[v] || 'badge--neutral'}">${v}</span>` },
         { label: 'Nota Final', key: 'nota_final', format: (v) => v ? `<span class="badge ${v >= 10 ? 'badge--accent' : 'badge--danger'}" style="font-size:1rem">${v}</span>` : '<span class="badge badge--neutral">Pendiente</span>' }
     ], {

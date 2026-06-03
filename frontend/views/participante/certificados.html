@@ -18,7 +18,7 @@
             <button class="sidebar-toggle" id="sidebar-toggle">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
-            <h1 class="header__title">Mis Certificados</h1>
+            <h1 class="header__title">Mis certificados</h1>
             <div class="header__actions">
                 <div class="header__user">
                     <div class="header__user-avatar" id="header-avatar"></div>
@@ -36,8 +36,8 @@
         <div class="content">
             <div class="content__header">
                 <div>
-                    <h2 class="content__title">Certificados Obtenidos</h2>
-                    <p class="content__subtitle">Descarga tus certificados de cursos completados</p>
+                    <h2 class="content__title">Certificados obtenidos</h2>
+                    <p class="content__subtitle">Descargue sus certificados de los cursos completados</p>
                 </div>
             </div>
 
@@ -105,7 +105,7 @@ function renderCertificados(certificados) {
                         <span>${Utils.formatDate(c.fecha_completado)}</span>
                     </div>
                     <div>
-                        <strong style="display: block; color: var(--color-text-muted); font-size: 0.75rem; text-transform: uppercase;">Duracion</strong>
+                        <strong style="display: block; color: var(--color-text-muted); font-size: 0.75rem; text-transform: uppercase;">Duración</strong>
                         <span>${c.duracion_horas} horas</span>
                     </div>
                     <div>

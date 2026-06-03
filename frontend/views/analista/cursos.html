@@ -18,7 +18,7 @@
             <button class="sidebar-toggle" id="sidebar-toggle">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
-            <h1 class="header__title">Verificacion de Cursos</h1>
+            <h1 class="header__title">Verificación de cursos</h1>
             <div class="header__actions">
                 <div class="header__search">
                     <svg class="header__search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -40,8 +40,8 @@
         <div class="content">
             <div class="content__header">
                 <div>
-                    <h2 class="content__title">Todos los Cursos</h2>
-                    <p class="content__subtitle">Verifica la informacion y asigna facilitadores</p>
+                    <h2 class="content__title">Todos los cursos</h2>
+                    <p class="content__subtitle">Verifica la información y asigna facilitadores</p>
                 </div>
                 <button class="btn btn--primary" onclick="openCourseModal()">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -57,7 +57,7 @@
                             <select class="form-select" id="filter-estado" style="width: 160px;" onchange="loadCursos()">
                                 <option value="">Todos</option>
                                 <option value="Planificado">Planificado</option>
-                                <option value="En Curso">En Curso</option>
+                                <option value="En Curso">En curso</option>
                                 <option value="Finalizado">Finalizado</option>
                             </select>
                         </div>
@@ -127,7 +127,7 @@ function openCourseModal(id) {
             <input type="hidden" id="course-id" value="${curso ? curso.id : ''}">
             <div class="d-grid grid--2 gap-3">
                 <div class="form-group">
-                    <label class="form-label form-label--required">Codigo</label>
+                    <label class="form-label form-label--required">Código</label>
                     <input type="text" id="course-codigo" class="form-input" value="${curso ? curso.codigo : ''}" ${curso ? 'disabled' : ''} required>
                 </div>
                 <div class="form-group">
@@ -136,16 +136,16 @@ function openCourseModal(id) {
                 </div>
             </div>
             <div class="form-group">
-                <label class="form-label">Descripcion</label>
+                <label class="form-label">Descripción</label>
                 <textarea id="course-descripcion" class="form-textarea" rows="3">${curso ? Utils.escapeHtml(curso.descripcion || '') : ''}</textarea>
             </div>
             <div class="d-grid grid--3 gap-3">
                 <div class="form-group">
-                    <label class="form-label form-label--required">Duracion (horas)</label>
+                    <label class="form-label form-label--required">Duración (horas)</label>
                     <input type="number" id="course-duracion" class="form-input" value="${curso ? curso.duracion_horas : ''}" min="1" required>
                 </div>
                 <div class="form-group">
-                    <label class="form-label form-label--required">Cupo Maximo</label>
+                    <label class="form-label form-label--required">Cupo máximo</label>
                     <input type="number" id="course-cupo" class="form-input" value="${curso ? curso.cupo_maximo : '30'}" min="1" required>
                 </div>
                 <div class="form-group">
@@ -159,13 +159,13 @@ function openCourseModal(id) {
             </div>
             <div class="d-grid grid--2 gap-3">
                 <div class="form-group">
-                    <label class="form-label">Area</label>
+                    <label class="form-label">Área</label>
                     <select class="form-select" id="course-area">
-                        <option value="">Seleccione un area</option>
-                        <option value="Administracion" ${curso && curso.area === 'Administracion' ? 'selected' : ''}>Administracion</option>
-                        <option value="Informatica" ${curso && curso.area === 'Informatica' ? 'selected' : ''}>Informatica</option>
-                        <option value="Mecanica" ${curso && curso.area === 'Mecanica' ? 'selected' : ''}>Mecanica</option>
-                        <option value="Electrica" ${curso && curso.area === 'Electrica' ? 'selected' : ''}>Electrica</option>
+                        <option value="">Seleccione un área</option>
+                        <option value="Administracion" ${curso && curso.area === 'Administracion' ? 'selected' : ''}>Administración</option>
+                        <option value="Informatica" ${curso && curso.area === 'Informatica' ? 'selected' : ''}>Informática</option>
+                        <option value="Mecanica" ${curso && curso.area === 'Mecanica' ? 'selected' : ''}>Mecánica</option>
+                        <option value="Electrica" ${curso && curso.area === 'Electrica' ? 'selected' : ''}>Eléctrica</option>
                         <option value="Mantenimiento" ${curso && curso.area === 'Mantenimiento' ? 'selected' : ''}>Mantenimiento</option>
                         <option value="Transporte Ferroviario" ${curso && curso.area === 'Transporte Ferroviario' ? 'selected' : ''}>Transporte Ferroviario</option>
                     </select>
@@ -183,7 +183,7 @@ function openCourseModal(id) {
         </form>
     `;
     const footer = `<button class="btn btn--ghost" onclick="Modal.close()">Cancelar</button><button class="btn btn--primary" onclick="saveCourse()">${curso ? 'Guardar' : 'Crear'}</button>`;
-    Modal.open(content, { title: curso ? 'Editar Curso' : 'Nuevo Curso', footer });
+    Modal.open(content, { title: curso ? 'Editar curso' : 'Nuevo curso', footer });
 }
 
 async function saveCourse() {
