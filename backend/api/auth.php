@@ -124,9 +124,15 @@ $router->register('POST', '/backend/api/api.php', function($params) {
 
         $hash = password_hash($data['password'], PASSWORD_BCRYPT, ['cost' => 12]);
 
+        if ($requestedRole === 'Facilitador') {
+            $activo = 0;
+        } else {
+            $activo = 1;
+}
+
         $stmt = $db->prepare("
             INSERT INTO usuarios (cedula, nombre, apellidos, correo, telefono, password, rol, area, activo)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         ");
 
         $stmt->execute([
@@ -137,7 +143,8 @@ $router->register('POST', '/backend/api/api.php', function($params) {
             $data['telefono'],
             $hash,
             $requestedRole,
-            $area
+            $area,
+            $activo,
         ]);
 
         $userId = (int)$db->lastInsertId();

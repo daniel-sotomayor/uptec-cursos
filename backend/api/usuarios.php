@@ -216,21 +216,25 @@ $router->register('PUT', '/backend/api/api.php', function($params) {
         if (isset($data['nombre'])) { $campos[] = "nombre = ?"; $values[] = $data['nombre']; }
         if (isset($data['apellidos'])) { $campos[] = "apellidos = ?"; $values[] = $data['apellidos']; }
         if (isset($data['telefono'])) { $campos[] = "telefono = ?"; $values[] = $data['telefono']; }
-        if (isset($data['activo']) && Auth::isAdmin()) { $campos[] = "activo = ?"; $values[] = $data['activo']; }
+        if (isset($data['activo']) && Auth::isAnalystOrAbove()) { $campos[] = "activo = ?"; $values[] = $data['activo']; }
         if (isset($data['rol']) && Auth::isAdmin()) { $campos[] = "rol = ?"; $values[] = $data['rol']; }
         if (isset($data['area']) && Auth::isAdmin()) { $campos[] = "area = ?"; $values[] = $data['area']; }
         // Actualizar contraseña si se proporciona (solo Admin o Analista puede cambiar)
-        if (isset($data['password']) && !empty($data['password']) && strlen($data['password']) >= 6) {
-            $hash = password_hash($data['password'], PASSWORD_BCRYPT, ['cost' => 12]);
-            $campos[] = "password = ?";
-            $values[] = $hash;
+        // Solo procesar la contraseña si viene definida, no está vacía y tiene al menos 6 caracteres
+        if (isset($data['password']) && trim($data['password']) !== '') {
+            $password = trim($data['password']);
+            if (strlen($password) >= 6) {
+                $hash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+                $campos[] = "password = ?";
+                $values[] = $hash;
+            }
         }
 
         if (empty($campos)) {
             http_response_code(400);
             return jsonResponse(false, null, 'No hay campos para actualizar');
         }
-
+        error_log("[DEBUG UPTEC] Campos a actualizar: " . print_r($campos, true));
         $sql = "UPDATE usuarios SET " . implode(', ', $campos) . " WHERE id = ?";
         $values[] = $id;
 
@@ -252,7 +256,7 @@ $router->register('PUT', '/backend/api/api.php', function($params) {
         return jsonResponse(false, null, 'Error al actualizar usuario');
     }
 
-}, [requireAdmin()], 'usuario');
+}, [requireAnalystOrAbove()], 'usuario');
 
 // ============================================
 // DELETE /backend/api/api.php?endpoint=usuario&id=X

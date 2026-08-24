@@ -387,7 +387,7 @@ $router->register('GET', '/backend/api/api.php', function($params) {
 
 // ============================================
 // POST /backend/api/api.php?endpoint=evaluacion
-// Crear evaluacion para un curso
+// Crear evaluacion para un curso (Analista, Admin y Facilitador)
 // ============================================
 $router->register('POST', '/backend/api/api.php', function($params) {
     $endpoint = $_GET['endpoint'] ?? '';
@@ -408,6 +408,16 @@ $router->register('POST', '/backend/api/api.php', function($params) {
 
     try {
         $db = getDB();
+
+        // SEGURIDAD: Verificar que el Facilitador sea el dueño del curso
+        if ($currentUser['rol'] === 'Facilitador') {
+            $stmtCheck = $db->prepare("SELECT id FROM cursos WHERE id = ? AND facilitador_id = ?");
+            $stmtCheck->execute([$data['curso_id'], $currentUser['id']]);
+            if (!$stmtCheck->fetch()) {
+                http_response_code(403);
+                return jsonResponse(false, null, 'No tiene permiso para agregar evaluaciones a este curso');
+            }
+        }
 
         $stmt = $db->prepare("
             INSERT INTO evaluaciones (curso_id, nombre, descripcion, tipo, peso, fecha_evaluacion, orden)
@@ -435,7 +445,7 @@ $router->register('POST', '/backend/api/api.php', function($params) {
         return jsonResponse(false, null, 'Error al crear evaluacion');
     }
 
-}, [requireAnalystOrAbove()], 'evaluacion');
+}, [requireTeacherOrAbove()], 'evaluacion'); // <--- IMPORTANTE: Se cambió el middleware aquí
 
 // ============================================
 // GET /backend/api/api.php?endpoint=mis-cursos
@@ -481,3 +491,41 @@ $router->register('GET', '/backend/api/api.php', function($params) {
     }
 
 }, [requireAuth()], 'mis-cursos');
+
+// ============================================
+// GET /backend/api/api.php?endpoint=evaluaciones-curso
+// Lista las evaluaciones creadas para un curso especifico
+// ============================================
+$router->register('GET', '/backend/api/api.php', function($params) {
+    $endpoint = $_GET['endpoint'] ?? '';
+    if ($endpoint !== 'evaluaciones-curso') return null;
+
+    $cursoId = Sanitizer::int($_GET['curso_id'] ?? 0);
+
+    if (!$cursoId) {
+        http_response_code(400);
+        return jsonResponse(false, null, 'ID de curso requerido');
+    }
+
+    try {
+        $db = getDB();
+        
+        // Buscamos las evaluaciones activas del curso
+        $stmt = $db->prepare("
+            SELECT id, nombre, peso 
+            FROM evaluaciones 
+            WHERE curso_id = ? AND activo = 1 
+            ORDER BY orden ASC
+        ");
+        $stmt->execute([$cursoId]);
+        $evaluaciones = $stmt->fetchAll();
+
+        return jsonResponse(true, ['evaluaciones' => $evaluaciones]);
+
+    } catch (PDOException $e) {
+        error_log("[UPTEC] Error obteniendo evaluaciones del curso: " . $e->getMessage());
+        http_response_code(500);
+        return jsonResponse(false, null, 'Error al obtener evaluaciones');
+    }
+
+}, [requireTeacherOrAbove()], 'evaluaciones-curso');

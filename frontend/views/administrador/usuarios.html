@@ -197,13 +197,13 @@ function openUserModal(id) {
             </div>
             <div class="form-group">
                 <label class="form-label">Nueva Contraseña (opcional)</label>
-                <input type="password" id="user-password" class="form-input" placeholder="Minimo 6 caracteres">
+                <input type="password" id="user-password" class="form-input" placeholder="Minimo 6 caracteres" autocomplete="new-password" readonly onfocus="this.removeAttribute('readonly');">
                 <small class="form-hint">Deja en blanco para mantener la actual</small>
             </div>
                 ` : `
                 <div class="form-group">
                     <label class="form-label">Contraseña (opcional)</label>
-                    <input type="password" id="user-password" class="form-input" placeholder="Minimo 6 caracteres">
+                    <input type="password" id="user-password" class="form-input" placeholder="Minimo 6 caracteres" autocomplete="new-password" readonly onfocus="this.removeAttribute('readonly');">
                     <small class="form-hint">Si no ingresas, se generara automaticamente</small>
                 </div>
                 `}
@@ -227,6 +227,7 @@ async function saveUser() {
     const telefono = document.getElementById('user-telefono').value.trim();
     const rol = document.getElementById('user-rol').value;
     const area = document.getElementById('user-area').value.trim();
+    const password = document.getElementById('user-password').value.trim();
 
     // Validaciones
     if (!id && !cedula) { Toast.show('La cedula es requerida', 'warning'); return; }
@@ -255,10 +256,10 @@ async function saveUser() {
                 updateData.area = area;
             }
             // Agregar contraseña si fue proporcionada al editar
-            const password = document.getElementById('user-password').value;
             if (password && password.length >= 6) {
                 updateData.password = password;
             }
+            console.log("Datos a enviar al backend:", updateData);
             await API.put('usuario', id, updateData);
             Toast.show('Usuario actualizado exitosamente', 'success');
         } else {
@@ -267,7 +268,6 @@ async function saveUser() {
                 userData.area = area;
             }
             // Agregar contraseña si fue proporcionada
-            const password = document.getElementById('user-password').value;
             if (password && password.length >= 6) {
                 userData.password = password;
             }
@@ -287,10 +287,33 @@ async function saveUser() {
 }
 
 function deleteUser(id) {
-    ConfirmDialog.open('Estas seguro de desactivar este usuario?', async () => {
+    // 1. Localizamos el usuario en el estado actual de la tabla
+    const user = currentUsers.find(u => u.id === id);
+    if (!user) {
+        Toast.show('Usuario no encontrado en la lista', 'error');
+        return;
+    }
+
+    // 2. Pedimos confirmación mostrando el nombre del usuario
+    ConfirmDialog.open(`¿Estás seguro de desactivar a ${Utils.escapeHtml(user.nombre)}?`, async () => {
         try {
-            await API.delete('usuario', id);
-            Toast.show('Usuario desactivado', 'success');
+            // 3. Armamos exactamente la misma carga útil (payload) que en saveUser()
+            let updateData = {
+                nombre: user.nombre,
+                apellidos: user.apellidos,
+                telefono: user.telefono,
+                rol: user.rol,
+                activo: 0 // Forzamos el estado a Inactivo (0)
+            };
+
+            // Mantenemos el área si el usuario la tiene asignada
+            if (user.area) {
+                updateData.area = user.area;
+            }
+
+            // 4. Enviamos la petición por PUT al mismo endpoint que el modal
+            await API.put('usuario', id, updateData);
+            Toast.show('Usuario desactivado exitosamente', 'success');
             loadUsers();
         } catch (err) {
             Toast.show(err.message || 'Error desactivando usuario', 'error');

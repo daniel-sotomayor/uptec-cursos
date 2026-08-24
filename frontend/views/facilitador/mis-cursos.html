@@ -146,11 +146,85 @@ function renderCursos(cursos) {
             </div>
             <div class="card__footer">
                 <a href="estudiantes.html?curso=${c.id}" class="btn btn--sm btn--primary">Ver estudiantes</a>
-                <a href="calificaciones.html?curso=${c.id}" class="btn btn--sm btn--ghost">Calificaciones</a>
+                <a href="calificaciones.html?curso=${c.id}" class="btn btn--sm btn--outline">Calificaciones</a>
+                <button onclick="abrirModalEvaluacion(${c.id})" class="btn btn--sm btn--ghost">Añadir evaluación</button>
             </div>
         </div>
     `).join('')}</div>`;
 }
+
+window.abrirModalEvaluacion = function(cursoId) {
+    const content = `
+        <form id="form-evaluacion" onsubmit="guardarEvaluacion(event, ${cursoId})">
+            <div class="form-group">
+                <label>Nombre de la Evaluación</label>
+                <input type="text" id="eval_nombre" required placeholder="Ej: Parcial 1" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Tipo</label>
+                <select id="eval_tipo" class="form-control" required>
+                    <option value="Parcial">Parcial</option>
+                    <option value="Proyecto">Proyecto</option>
+                    <option value="Trabajo">Trabajo</option>
+                    <option value="Asistencia">Asistencia</option>
+                    <option value="Final">Final</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Peso en la nota final (%)</label>
+                <input type="number" id="eval_peso" min="1" max="100" step="0.01" required class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Fecha de Evaluación</label>
+                <input type="date" id="eval_fecha" required class="form-control">
+            </div>
+            <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 1rem;">
+                <button type="button" class="btn btn--ghost" onclick="Modal.close()">Cancelar</button>
+                <button type="submit" class="btn btn--primary">Guardar Evaluación</button>
+            </div>
+        </form>
+    `;
+    
+    // Utilizamos tu componente existente
+    Modal.open(content, { title: 'Añadir al Plan de Evaluación' });
+};
+
+window.guardarEvaluacion = async function(e, cursoId) {
+    e.preventDefault(); // Evitamos que la página se recargue
+    
+    const btnSubmit = e.target.querySelector('button[type="submit"]');
+    btnSubmit.disabled = true; // Prevenimos doble clic
+    btnSubmit.textContent = 'Guardando...';
+
+    // Armamos el payload
+    const data = {
+        curso_id: cursoId,
+        nombre: document.getElementById('eval_nombre').value,
+        tipo: document.getElementById('eval_tipo').value,
+        peso: parseFloat(document.getElementById('eval_peso').value),
+        fecha_evaluacion: document.getElementById('eval_fecha').value
+    };
+
+    try {
+        // Consumimos el endpoint blindado
+        const response = await API.post('evaluacion', data);
+        
+        if (response.success) {
+            Toast.show('Evaluación agregada al plan con éxito', 'success');
+            Modal.close();
+            
+            // Opcional: si tienes una función para recargar la vista, llámala aquí
+            // cargarMisCursos(); 
+        }
+    } catch (error) {
+        // Tu API.js ya extrae el mensaje de error del backend
+        Toast.show(error.message || 'Error al guardar la evaluación', 'error');
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = 'Guardar Evaluación';
+    }
+};
+
 </script>
 
 </body>

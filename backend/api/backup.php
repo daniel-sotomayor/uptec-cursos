@@ -134,4 +134,74 @@ $router->register('GET', '/backend/api/api.php', function($params) {
         return jsonResponse(false, null, 'Error al obtener tablas');
     }
 
+    // ============================================
+// POST /backend/api/api.php?endpoint=restore
+// Importar y restaurar la base de datos (.sql)
+// ============================================
+$router->register('POST', '/backend/api/api.php', function($params) {
+    $endpoint = $_GET['endpoint'] ?? '';
+    if ($endpoint !== 'restore') return null;
+
+    // 1. Validar que el archivo se haya recibido correctamente
+    if (!isset($_FILES['backup_file']) || $_FILES['backup_file']['error'] !== UPLOAD_ERR_OK) {
+        http_response_code(400);
+        return jsonResponse(false, null, 'No se recibió ningún archivo o hubo un error en la transmisión.');
+    }
+
+    // 2. Validar estrictamente la extensión (.sql)
+    $fileInfo = pathinfo($_FILES['backup_file']['name']);
+    if (strtolower($fileInfo['extension']) !== 'sql') {
+        http_response_code(400);
+        return jsonResponse(false, null, 'Formato inválido. Solo se admiten archivos con extensión .sql.');
+    }
+
+    // 3. Leer el contenido del archivo temporal
+    $tempPath = $_FILES['backup_file']['tmp_name'];
+    $sqlContent = file_get_contents($tempPath);
+
+    if (empty(trim($sqlContent))) {
+        http_response_code(400);
+        return jsonResponse(false, null, 'El archivo SQL está vacío.');
+    }
+
+    $db = getDB();
+    $user = Auth::user();
+
+    try {
+        // 4. Preparar la base de datos e iniciar transacción
+        $db->beginTransaction();
+
+        // Desactivar temporalmente la verificación de claves foráneas
+        $db->exec("SET FOREIGN_KEY_CHECKS = 0;");
+
+        // Ejecutar las sentencias SQL (Drop tables, Create tables, Inserts)
+        $db->exec($sqlContent);
+
+        // Reactivar las claves foráneas
+        $db->exec("SET FOREIGN_KEY_CHECKS = 1;");
+
+        // Registrar la actividad en la bitácora del sistema
+        Auth::logActivity($user['id'], $user['nombre'] . ' ' . $user['apellidos'], 'RESTORE', 'database', null, null, [
+            'archivo' => $_FILES['backup_file']['name']
+        ]);
+
+        // Confirmar los cambios
+        $db->commit();
+
+        return jsonResponse(true, null, 'Base de datos restaurada exitosamente.');
+
+    } catch (PDOException $e) {
+        // Si algo falla, revertimos cualquier cambio parcial y reactivamos las claves foráneas
+        if (isset($db) && $db->inTransaction()) {
+            $db->rollBack();
+            $db->exec("SET FOREIGN_KEY_CHECKS = 1;");
+        }
+        
+        error_log("[UPTEC RESTORE ERROR] " . $e->getMessage());
+        http_response_code(500);
+        return jsonResponse(false, null, 'Fallo al restaurar la base de datos. Verifique la estructura del archivo SQL.');
+    }
+
+}, [requireAdmin(), validateCsrf()], 'restore');
+
 }, [requireAdmin()], 'tablas');

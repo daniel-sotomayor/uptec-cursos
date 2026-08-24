@@ -111,7 +111,7 @@ $router->register('GET', '/backend/api/api.php', function($params) {
         // Para cada inscripcion, obtener calificaciones detalladas y plan de evaluacion
         foreach ($inscripciones as &$insc) {
             $stmt = $db->prepare("
-                SELECT cal.tipo_evaluacion, cal.descripcion, cal.nota, cal.peso, cal.fecha_evaluacion, cal.observaciones
+                SELECT cal.id, cal.evaluacion_id, cal.tipo_evaluacion, cal.descripcion, cal.nota, cal.peso, cal.fecha_evaluacion, cal.observaciones
                 FROM calificaciones cal
                 WHERE cal.inscripcion_id = ?
                 ORDER BY cal.fecha_evaluacion
@@ -139,7 +139,7 @@ $router->register('GET', '/backend/api/api.php', function($params) {
 
 // ============================================
 // POST /backend/api/api.php?endpoint=calificacion
-// Registrar calificacion (Facilitador)
+// Registrar calificacion (Facilitador) - ESTRICTO CON EVALUACIÓN MATRIZ
 // ============================================
 $router->register('POST', '/backend/api/api.php', function($params) {
     $endpoint = $_GET['endpoint'] ?? '';
@@ -149,10 +149,12 @@ $router->register('POST', '/backend/api/api.php', function($params) {
     $user = Auth::user();
 
     $inscripcionId = Sanitizer::int($data['inscripcion_id'] ?? 0);
+    $evaluacionId = Sanitizer::int($data['evaluacion_id'] ?? 0); // Requisito estricto
     $nota = Sanitizer::float($data['nota'] ?? -1);
 
     $validator = new Validator();
     $validator->integer($inscripcionId, 'inscripcion_id', 1);
+    $validator->integer($evaluacionId, 'evaluacion_id', 1); // Validación obligatoria
     $validator->nota($nota ?? 0, 'nota');
 
     if ($validator->hasErrors()) {
@@ -163,7 +165,7 @@ $router->register('POST', '/backend/api/api.php', function($params) {
     try {
         $db = getDB();
 
-        // Verificar que el facilitador tenga acceso a esta inscripcion
+        // 1. Obtener la inscripción para saber de qué curso es el alumno
         $stmt = $db->prepare("
             SELECT i.*, c.facilitador_id, c.nombre AS curso_nombre
             FROM inscripciones i
@@ -178,23 +180,49 @@ $router->register('POST', '/backend/api/api.php', function($params) {
             return jsonResponse(false, null, 'Inscripcion no encontrada');
         }
 
+        // Verificar acceso del Facilitador a este curso
         if ($user['rol'] === 'Facilitador' && $inscripcion['facilitador_id'] != $user['id']) {
             http_response_code(403);
             return jsonResponse(false, null, 'No tiene acceso a este curso');
         }
 
+        // 2. Obtener la Evaluación Matriz para forzar el Peso y la Fecha oficial
+        $stmtEval = $db->prepare("SELECT * FROM evaluaciones WHERE id = ? AND activo = 1");
+        $stmtEval->execute([$evaluacionId]);
+        $evaluacionOficial = $stmtEval->fetch();
+
+        if (!$evaluacionOficial) {
+            http_response_code(404);
+            return jsonResponse(false, null, 'Evaluacion no encontrada en el plan de estudios');
+        }
+
+        // 3. Validar que no califiquen a un alumno con el parcial de OTRA materia
+        if ($evaluacionOficial['curso_id'] != $inscripcion['curso_id']) {
+            http_response_code(400);
+            return jsonResponse(false, null, 'Esta evaluacion no pertenece al curso del estudiante');
+        }
+
+        // 4. Verificar que no exista ya una calificación para esta evaluación e inscripción
+        $stmtDuplicado = $db->prepare("SELECT id FROM calificaciones WHERE inscripcion_id = ? AND evaluacion_id = ?");
+        $stmtDuplicado->execute([$inscripcionId, $evaluacionId]);
+        if ($stmtDuplicado->fetch()) {
+             http_response_code(409);
+             return jsonResponse(false, null, 'El estudiante ya tiene una nota cargada para esta evaluacion');
+        }
+
+        // 5. Inserción BLINDADA: Usamos los metadatos de $evaluacionOficial, no los del $data del frontend
         $stmt = $db->prepare("
             INSERT INTO calificaciones (inscripcion_id, evaluacion_id, tipo_evaluacion, descripcion, nota, peso, fecha_evaluacion, observaciones)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ");
         $stmt->execute([
             $inscripcionId,
-            !empty($data['evaluacion_id']) ? $data['evaluacion_id'] : null,
-            $data['tipo_evaluacion'] ?? 'Otro',
-            $data['descripcion'] ?? null,
+            $evaluacionId,
+            $evaluacionOficial['tipo'],
+            $evaluacionOficial['descripcion'],
             $nota,
-            $data['peso'] ?? 100.00,
-            $data['fecha_evaluacion'] ?? date('Y-m-d'),
+            $evaluacionOficial['peso'],
+            $evaluacionOficial['fecha_evaluacion'] ?? date('Y-m-d'),
             $data['observaciones'] ?? null
         ]);
 
@@ -202,8 +230,9 @@ $router->register('POST', '/backend/api/api.php', function($params) {
 
         Auth::logActivity($user['id'], $user['nombre'] . ' ' . $user['apellidos'], 'CREATE', 'calificaciones', $calId, null, [
             'inscripcion_id' => $inscripcionId,
+            'evaluacion_id'  => $evaluacionId,
             'nota' => $nota,
-            'tipo' => $data['tipo_evaluacion'] ?? 'Otro'
+            'peso_oficial' => $evaluacionOficial['peso']
         ]);
 
         return jsonResponse(true, [
@@ -335,7 +364,7 @@ $router->register('GET', '/backend/api/api.php', function($params) {
         // Obtener calificaciones por estudiante
         foreach ($estudiantes as &$est) {
             $stmt = $db->prepare("
-                SELECT tipo_evaluacion, nota, peso, fecha_evaluacion, observaciones
+                SELECT id, evaluacion_id, tipo_evaluacion, nota, peso, fecha_evaluacion, observaciones
                 FROM calificaciones
                 WHERE inscripcion_id = ?
                 ORDER BY fecha_registro

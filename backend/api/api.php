@@ -207,6 +207,13 @@ function jsonResponse(bool $success, $data = null, ?string $error = null): array
 // Inicializar router
 $router = new Router();
 
+// Endpoint para importar y restaurar la base de datos (.sql)
+// Recibe un POST en ?endpoint=restore
+$router->register('POST', '/backend/api/api.php', function() {
+    require_once __DIR__ . '/backup.php';
+    return importarRestauracionBD();
+}, [requireAdmin(), validateCsrf()], 'restore');
+
 // ============================================
 // ENDPOINTS DE AUTENTICACION
 // ============================================

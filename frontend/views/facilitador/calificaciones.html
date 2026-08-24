@@ -112,83 +112,97 @@ function openNotaModal() {
         <form id="nota-form">
             <div class="form-group">
                 <label class="form-label form-label--required">Curso</label>
-                <select class="form-select" id="nota-curso" onchange="loadEstudiantesCurso()" required>
+                <select class="form-select" id="nota-curso" onchange="cargarDatosRelacionados()" required>
                     <option value="">Selecciona un curso</option>${cursoOptions}
                 </select>
             </div>
-            <div class="form-group">
-                <label class="form-label form-label--required">Estudiante (Inscripcion)</label>
-                <select class="form-select" id="nota-inscripcion" required><option value="">Primero selecciona un curso</option></select>
-            </div>
+            
             <div class="d-grid grid--2 gap-3">
                 <div class="form-group">
-                    <label class="form-label form-label--required">Tipo</label>
-                    <select class="form-select" id="nota-tipo">
-                        <option value="Parcial">Parcial</option>
-                        <option value="Final">Final</option>
-                        <option value="Proyecto">Proyecto</option>
-                        <option value="Asistencia">Asistencia</option>
-                        <option value="Trabajo">Trabajo</option>
-                        <option value="Otro">Otro</option>
+                    <label class="form-label form-label--required">Estudiante (Inscripción)</label>
+                    <select class="form-select" id="nota-inscripcion" required>
+                        <option value="">Primero selecciona un curso</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="form-label form-label--required">Nota (0-20)</label>
-                    <input type="number" id="nota-valor" class="form-input" min="0" max="20" step="0.01" required>
+                    <label class="form-label form-label--required">Evaluación a calificar</label>
+                    <select class="form-select" id="nota-evaluacion" required>
+                        <option value="">Primero selecciona un curso</option>
+                    </select>
                 </div>
             </div>
+
             <div class="form-group">
-                <label class="form-label">Descripcion</label>
-                <input type="text" id="nota-descripcion" class="form-input" placeholder="Descripcion de la evaluacion">
+                <label class="form-label form-label--required">Nota (0-20)</label>
+                <input type="number" id="nota-valor" class="form-input" min="0" max="20" step="0.01" required>
             </div>
-            <div class="d-grid grid--2 gap-3">
-                <div class="form-group">
-                    <label class="form-label">Peso (%)</label>
-                    <input type="number" id="nota-peso" class="form-input" value="100" min="0" max="100" step="0.01">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Fecha</label>
-                    <input type="date" id="nota-fecha" class="form-input" value="${new Date().toISOString().split('T')[0]}">
-                </div>
-            </div>
+            
             <div class="form-group">
-                <label class="form-label">Observaciones</label>
-                <textarea id="nota-obs" class="form-textarea" rows="2"></textarea>
+                <label class="form-label">Observaciones (Opcional)</label>
+                <textarea id="nota-obs" class="form-textarea" rows="2" placeholder="Ej: Excelente desarrollo del algoritmo..."></textarea>
             </div>
         </form>
     `;
     const footer = `<button class="btn btn--ghost" onclick="Modal.close()">Cancelar</button><button class="btn btn--primary" onclick="saveNota()">Guardar</button>`;
-    Modal.open(content, { title: 'Nueva calificación', footer });
+    Modal.open(content, { title: 'Registrar calificación', footer });
 }
 
-async function loadEstudiantesCurso() {
+async function cargarDatosRelacionados() {
     const cursoId = document.getElementById('nota-curso').value;
-    const select = document.getElementById('nota-inscripcion');
-    if (!cursoId) { select.innerHTML = '<option>Selecciona un curso</option>'; return; }
+    const selectEstudiantes = document.getElementById('nota-inscripcion');
+    const selectEvaluaciones = document.getElementById('nota-evaluacion');
+
+    if (!cursoId) { 
+        selectEstudiantes.innerHTML = '<option value="">Selecciona un curso</option>'; 
+        selectEvaluaciones.innerHTML = '<option value="">Selecciona un curso</option>'; 
+        return; 
+    }
+
+    selectEstudiantes.innerHTML = '<option value="">Cargando estudiantes...</option>';
+    selectEvaluaciones.innerHTML = '<option value="">Cargando evaluaciones...</option>';
 
     try {
-        const data = await API.get('estudiantes-curso', { id: cursoId });
-        const estudiantes = data.estudiantes || [];
-        select.innerHTML = estudiantes.map(e => `<option value="${e.inscripcion_id}">${Utils.escapeHtml(e.nombre_estudiante)} (${e.cedula})</option>`).join('');
-    } catch (e) { select.innerHTML = '<option>Error cargando</option>'; }
+        // 1. Cargar estudiantes (ya lo tenías)
+        const dataEst = await API.get('estudiantes-curso', { id: cursoId });
+        const estudiantes = dataEst.estudiantes || [];
+        selectEstudiantes.innerHTML = estudiantes.length ? 
+            estudiantes.map(e => `<option value="${e.inscripcion_id}">${Utils.escapeHtml(e.nombre_estudiante)} (${e.cedula})</option>`).join('') :
+            '<option value="">No hay estudiantes inscritos</option>';
+
+        // 2. NUEVO: Cargar las evaluaciones creadas en ese curso
+        const dataEval = await API.get('evaluaciones-curso', { curso_id: cursoId });
+        const evaluaciones = dataEval.evaluaciones || [];
+        selectEvaluaciones.innerHTML = evaluaciones.length ? 
+            evaluaciones.map(ev => `<option value="${ev.id}">${Utils.escapeHtml(ev.nombre)} - ${ev.peso}%</option>`).join('') :
+            '<option value="">⚠️ No has creado evaluaciones para este curso</option>';
+
+    } catch (e) { 
+        console.error(e);
+        Toast.show('Error al cargar datos del curso', 'error');
+    }
 }
 
 async function saveNota() {
     const data = {
         inscripcion_id: document.getElementById('nota-inscripcion').value,
-        tipo_evaluacion: document.getElementById('nota-tipo').value,
+        evaluacion_id: document.getElementById('nota-evaluacion').value, // El ID clave de la evaluación
         nota: document.getElementById('nota-valor').value,
-        descripcion: document.getElementById('nota-descripcion').value,
-        peso: document.getElementById('nota-peso').value,
-        fecha_evaluacion: document.getElementById('nota-fecha').value,
         observaciones: document.getElementById('nota-obs').value
     };
-    if (!data.inscripcion_id || !data.nota) { Toast.show('Complete los campos requeridos', 'warning'); return; }
+
+    if (!data.inscripcion_id || !data.evaluacion_id || !data.nota) { 
+        Toast.show('Complete todos los campos requeridos', 'warning'); 
+        return; 
+    }
+
     try {
         await API.post('calificacion', data);
-        Toast.show('Calificación registrada', 'success');
-        Modal.close(); loadCalificaciones();
-    } catch (err) { Toast.show(err.message, 'error'); }
+        Toast.show('Calificación registrada con éxito', 'success');
+        Modal.close(); 
+        loadCalificaciones();
+    } catch (err) { 
+        Toast.show(err.message || 'Error al guardar la nota', 'error'); 
+    }
 }
 </script>
 

@@ -83,7 +83,7 @@ function renderNotas(inscripciones) {
 
         // Plan de evaluacion vs calificaciones reales
         const planRows = (insc.plan_evaluacion || []).map(eva => {
-            const cal = (insc.calificaciones || []).find(c => c.tipo_evaluacion === eva.tipo && c.descripcion?.includes(eva.nombre));
+            const cal = (insc.calificaciones || []).find(c => c.evaluacion_id == eva.id);
             return {
                 nombre: eva.nombre,
                 tipo: eva.tipo,
@@ -93,6 +93,24 @@ function renderNotas(inscripciones) {
                 tieneNota: !!cal
             };
         });
+
+        // 1 y 2. Lógica para la barra de progreso
+        let totalPeso = 0;
+        let pesoEvaluado = 0;
+
+        planRows.forEach(p => {
+            const peso = parseFloat(p.peso) || 0;
+            totalPeso += peso;
+            // Si la nota no es nula, sumamos el peso al progreso actual
+            if (p.nota !== null) {
+                pesoEvaluado += peso;
+            }
+        });
+
+        // 3. Cálculo del porcentaje
+        const porcentaje = totalPeso > 0 ? (pesoEvaluado / totalPeso) * 100 : 0;
+        // Asignamos un color (acento si llegó al 100%, primario si está en progreso)
+        const color = { bg: porcentaje >= 100 ? 'var(--color-accent)' : 'var(--color-primary)' };
 
         // Calificaciones que no estan en el plan
         const otrasNotas = (insc.calificaciones || []).filter(c => !planRows.some(p => p.tieneNota && p.nombre === c.descripcion));
@@ -129,6 +147,18 @@ function renderNotas(inscripciones) {
                             `).join('')}
                         </tbody>
                     </table></div>
+                    
+                    <!-- BARRA DE PROGRESO INYECTADA AQUI -->
+                    <div style="margin-top: 1.5rem;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 0.25rem; font-weight: 600; text-transform: uppercase;">
+                            <span>Progreso del Curso</span>
+                            <span>${pesoEvaluado}% / ${totalPeso}%</span>
+                        </div>
+                        <div style="margin-top: 0.5rem; background: var(--color-border-light); border-radius: var(--radius-full); height: 6px; overflow: hidden;">
+                            <div style="background: ${color.bg}; height: 100%; border-radius: var(--radius-full); width: ${porcentaje}%; transition: width 0.4s ease;"></div>
+                        </div>
+                    </div>
+                    
                 </div>` : ''}
 
                 ${otrasNotas.length ? `
