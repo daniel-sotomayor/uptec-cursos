@@ -36,7 +36,7 @@ Consulta `documentacion/README.md` para ver todos los documentos disponibles:
 
 1. Clona el repositorio:
    ```bash
-git clone https://github.com/daniel-sotomayor/daniel-sotomayoruptec-cursos.git
+git clone https://github.com/daniel-sotomayor/uptec-cursos.git
 cd daniel-sotomayoruptec-cursos
 ```
 2. Configura el servidor web y la base de datos según `documentacion/06-instalacion.md`.
