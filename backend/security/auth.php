@@ -24,7 +24,7 @@ class Auth
     private const SESSION_LAST_ACTIVITY = '_uptec_last_activity';
     private const INACTIVITY_LIMIT = 1800; // 30 minutos
     private const MAX_LOGIN_ATTEMPTS = 5;
-    private const LOCKOUT_TIME = 900; // 15 minutos
+    private const LOCKOUT_TIME = 180; // 3 minutos
 
     private static array $roleHierarchy = [
         'Administrador' => 4,
@@ -60,7 +60,7 @@ class Auth
         self::init();
 
         if (self::isLockedOut()) {
-            return ['error' => 'Cuenta temporalmente bloqueada por intentos fallidos. Espere 15 minutos.'];
+            return ['error' => 'Cuenta temporalmente bloqueada por intentos fallidos. Espere 3 minutos.'];
         }
 
         try {

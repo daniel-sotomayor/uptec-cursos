@@ -32,17 +32,6 @@ Consulta `documentacion/README.md` para ver todos los documentos disponibles:
 
 **UPTEC Cursos** es un sistema web completo para la gestión académica de cursos, inscripciones, calificaciones y reportes. Está diseñado para un entorno universitario con control de roles, seguridad y auditoría.
 
-## Cómo comenzar
-
-1. Clona el repositorio:
-   ```bash
-git clone https://github.com/daniel-sotomayor/uptec-cursos.git
-cd daniel-sotomayoruptec-cursos
-```
-2. Configura el servidor web y la base de datos según `documentacion/06-instalacion.md`.
-3. Importa `db/schema.sql` y `db/seed.sql` en MySQL.
-4. Accede a `login.html` o al dashboard según el rol.
-
 ## Enlaces de documentación
 
 - `documentacion/08-diagramas.md` - Diagramas de arquitectura, ER y flujos.
