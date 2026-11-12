@@ -44,15 +44,15 @@ INSERT INTO usuarios (cedula, nombre, apellidos, correo, telefono, password, rol
 ('32361673', 'Carlos', 'Gonzalez Martinez', 'cgonzalez@uptec.edu.ve', '0416-3333333', '$2b$12$bKhVT3pYhKJRmua1wwhuWu.5zNRSkjiZ1jq7s1x4pzm42AyqvsSke', 'Facilitador', 1),
 ('32361674', 'Ana', 'Ramirez Silva', 'aramirez@uptec.edu.ve', '04244444444', '$2b$12$bKhVT3pYhKJRmua1wwhuWu.5zNRSkjiZ1jq7s1x4pzm42AyqvsSke', 'Facilitador', 1);
 
--- Participantes (Estudiantes) - sin contrasena (se registran publicamente)
+-- Participantes (Estudiantes) (contrasena: participante123)
 -- Cada uno con su area/carrera asignada
-INSERT INTO usuarios (cedula, nombre, apellidos, correo, telefono, rol, area, activo) VALUES
-('32361675', 'Pedro', 'Hernandez Castro', 'phernandez@uptec.edu.ve', '04125555555', 'Participante', 'Informatica', 1),
-('32361676', 'Laura', 'Diaz Morales', 'ldiaz@uptec.edu.ve', '0414-6666666', 'Participante', 'Administracion', 1),
-('32361677', 'Miguel', 'Torres Vargas', 'mtorres@uptec.edu.ve', '04167777777', 'Participante', 'Mecanica', 1),
-('32361678', 'Carmen', 'Flores Ruiz', 'cflores@uptec.edu.ve', '04248888888', 'Participante', 'Electrica', 1),
-('32361679', 'Jose', 'Jimenez Aguilar', 'jjimenez@uptec.edu.ve', '04129999999', 'Participante', 'Mantenimiento', 1),
-('32361610', 'Patricia', 'Reyes Mendoza', 'preyes@uptec.edu.ve', '04140000000', 'Participante', 'Transporte Ferroviario', 1);
+INSERT INTO usuarios (cedula, nombre, apellidos, correo, telefono, password, rol, area, activo) VALUES
+('32361675', 'Pedro', 'Hernandez Castro', 'phernandez@uptec.edu.ve', '04125555555', '$2b$12$bKhVT3pYhKJRmua1wwhuWu.5zNRSkjiZ1jq7s1x4pzm42AyqvsSke', 'Participante', 'Informatica', 1),
+('32361676', 'Laura', 'Diaz Morales', 'ldiaz@uptec.edu.ve', '0414-6666666', '$2b$12$bKhVT3pYhKJRmua1wwhuWu.5zNRSkjiZ1jq7s1x4pzm42AyqvsSke', 'Participante', 'Administracion', 1),
+('32361677', 'Miguel', 'Torres Vargas', 'mtorres@uptec.edu.ve', '04167777777', '$2b$12$bKhVT3pYhKJRmua1wwhuWu.5zNRSkjiZ1jq7s1x4pzm42AyqvsSke', 'Participante', 'Mecanica', 1),
+('32361678', 'Carmen', 'Flores Ruiz', 'cflores@uptec.edu.ve', '04248888888', '$2b$12$bKhVT3pYhKJRmua1wwhuWu.5zNRSkjiZ1jq7s1x4pzm42AyqvsSke', 'Participante', 'Electrica', 1),
+('32361679', 'Jose', 'Jimenez Aguilar', 'jjimenez@uptec.edu.ve', '04129999999', '$2b$12$bKhVT3pYhKJRmua1wwhuWu.5zNRSkjiZ1jq7s1x4pzm42AyqvsSke', 'Participante', 'Mantenimiento', 1),
+('32361610', 'Patricia', 'Reyes Mendoza', 'preyes@uptec.edu.ve', '04140000000', '$2b$12$bKhVT3pYhKJRmua1wwhuWu.5zNRSkjiZ1jq7s1x4pzm42AyqvsSke', 'Participante', 'Transporte Ferroviario', 1);
 
 -- ============================================
 -- INSERTAR: Cursos de ejemplo

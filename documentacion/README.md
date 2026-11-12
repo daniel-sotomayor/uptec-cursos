@@ -106,11 +106,11 @@ uptec-cursos/
 
 | Rol | Cédula | Correo | Contraseña |
 |-----|--------|--------|------------|
-| Administrador | V12345678 | admin@uptec.edu.ve | admin123 |
-| Analista | V87654321 | analista@uptec.edu.ve | analista123 |
-| Facilitador | V11111111 | jperez@uptec.edu.ve | facilitador123 |
-| Facilitador | V22222222 | mlopez@uptec.edu.ve | facilitador123 |
-| Participante | V55555555 | phernandez@uptec.edu.ve | (registrarse) |
+| Administrador | 12345678 | admin@uptec.edu.ve | admin123 |
+| Analista | 87654321 | analista@uptec.edu.ve | analista123 |
+| Facilitador | 32361671 | jperez@uptec.edu.ve | facilitador123 |
+| Facilitador | 32361672 | mlopez@uptec.edu.ve | facilitador123 |
+| Participante | 32361675 | phernandez@uptec.edu.ve | participante123 |
 
 ---
 

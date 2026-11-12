@@ -69,7 +69,7 @@
                 // Ignorar error
             }
             this.user = null;
-            window.location.href = '/uptec-cursos/frontend/login.html';
+            window.location.href = '/login.html';
         },
 
         // Cambiar password

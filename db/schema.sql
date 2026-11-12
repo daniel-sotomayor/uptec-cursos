@@ -316,12 +316,12 @@ BEGIN
     UPDATE inscripciones
     SET nota_final = promedio,
         estado = CASE
-            WHEN promedio >= 10 THEN 'Completado'
-            WHEN promedio < 10 AND promedio > 0 THEN 'Reprobado'
-            ELSE estado
+            WHEN total_peso >= 1.0 AND promedio >= 10 THEN 'Completado'
+            WHEN total_peso >= 1.0 AND promedio < 10 THEN 'Reprobado'
+            ELSE 'En Progreso'
         END,
         fecha_completado = CASE
-            WHEN promedio >= 10 THEN NOW()
+            WHEN total_peso >= 1.0 AND promedio >= 10 THEN NOW()
             ELSE fecha_completado
         END
     WHERE id = NEW.inscripcion_id;
@@ -345,15 +345,46 @@ BEGIN
     UPDATE inscripciones
     SET nota_final = promedio,
         estado = CASE
-            WHEN promedio >= 10 THEN 'Completado'
-            WHEN promedio < 10 AND promedio > 0 THEN 'Reprobado'
-            ELSE estado
+            WHEN total_peso >= 1.0 AND promedio >= 10 THEN 'Completado'
+            WHEN total_peso >= 1.0 AND promedio < 10 THEN 'Reprobado'
+            ELSE 'En Progreso'
         END,
         fecha_completado = CASE
-            WHEN promedio >= 10 THEN NOW()
+            WHEN total_peso >= 1.0 AND promedio >= 10 THEN NOW()
             ELSE fecha_completado
         END
     WHERE id = NEW.inscripcion_id;
+END//
+
+CREATE TRIGGER actualizar_nota_final_delete
+AFTER DELETE ON calificaciones
+FOR EACH ROW
+BEGIN
+    DECLARE promedio DECIMAL(4,2);
+    DECLARE total_peso DECIMAL(6,2);
+
+    SELECT COALESCE(SUM(nota * (peso/100)), 0), COALESCE(SUM(peso/100), 0) INTO promedio, total_peso
+    FROM calificaciones
+    WHERE inscripcion_id = OLD.inscripcion_id;
+
+    IF total_peso > 0 THEN
+        SET promedio = ROUND(promedio / total_peso, 2);
+    ELSE
+        SET promedio = NULL;
+    END IF;
+
+    UPDATE inscripciones
+    SET nota_final = promedio,
+        estado = CASE
+            WHEN total_peso >= 1.0 AND promedio >= 10 THEN 'Completado'
+            WHEN total_peso >= 1.0 AND promedio < 10 THEN 'Reprobado'
+            ELSE 'En Progreso'
+        END,
+        fecha_completado = CASE
+            WHEN total_peso >= 1.0 AND promedio >= 10 THEN NOW()
+            ELSE NULL
+        END
+    WHERE id = OLD.inscripcion_id;
 END//
 
 DELIMITER ;

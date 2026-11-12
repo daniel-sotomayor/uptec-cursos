@@ -271,8 +271,6 @@ $router->register('DELETE', '/backend/api/api.php', function($params) {
 
 // ============================================
 // GET /backend/api/api.php?endpoint=cursos-disponibles
-// Cursos disponibles para inscripcion (participante)
-// Solo muestra cursos del area/carrera del participante
 // ============================================
 $router->register('GET', '/backend/api/api.php', function($params) {
     $endpoint = $_GET['endpoint'] ?? '';
@@ -283,31 +281,30 @@ $router->register('GET', '/backend/api/api.php', function($params) {
     try {
         $db = getDB();
 
-        // Obtener el area del participante
-        $stmtUser = $db->prepare("SELECT area FROM usuarios WHERE id = ?");
-        $stmtUser->execute([$user['id']]);
-        $userArea = $stmtUser->fetchColumn();
-
-        // Si el usuario no tiene area asignada, no mostrar cursos
-        if (!$userArea) {
-            return jsonResponse(true, ['cursos' => [], 'mensaje' => 'No tiene un area/carrera asignada. Contacte al administrador.']);
+        // 1. Verificar si hay cursos que deban finalizar hoy
+        if (function_exists('verificarCursosVencidos')) {
+            verificarCursosVencidos($db);
         }
 
+        // Obtener el area del participante (solo para referencia y display)
+        $stmtUser = $db->prepare("SELECT area FROM usuarios WHERE id = ?");
+        $stmtUser->execute([$user['id']]);
+        $userArea = $stmtUser->fetchColumn() ?: 'General';
+
+        // Mostrar TODOS los cursos disponibles (las áreas y estados previos no ocultan cursos)
         $stmt = $db->prepare("
             SELECT c.*,
                    CONCAT(f.nombre, ' ', f.apellidos) AS nombre_facilitador,
-                   (SELECT COUNT(*) FROM inscripciones WHERE curso_id = c.id AND estado != 'Abandonado') AS total_inscritos
+                   (SELECT COUNT(*) FROM inscripciones WHERE curso_id = c.id AND estado != 'Abandonado') AS total_inscritos,
+                   (SELECT COUNT(*) FROM inscripciones WHERE curso_id = c.id AND usuario_id = ? AND estado != 'Abandonado') AS ya_inscrito,
+                   (SELECT COUNT(*) FROM egresados WHERE curso_id = c.id AND usuario_id = ? AND estado_academico = 'Aprobado') AS ya_aprobado
             FROM cursos c
             LEFT JOIN usuarios f ON c.facilitador_id = f.id
             WHERE c.activo = 1
-              AND c.estado IN ('Planificado', 'En Curso')
-              AND c.id NOT IN (
-                  SELECT curso_id FROM inscripciones
-                  WHERE usuario_id = ? AND estado != 'Abandonado'
-              )
+              AND c.estado IN ('Verificado', 'En Curso', 'Planificado')
             ORDER BY c.fecha_inicio DESC
         ");
-        $stmt->execute([$user['id']]);
+        $stmt->execute([$user['id'], $user['id']]);
 
         return jsonResponse(true, ['cursos' => $stmt->fetchAll(), 'area_usuario' => $userArea]);
 

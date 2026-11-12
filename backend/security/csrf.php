@@ -21,9 +21,12 @@ class CSRF
     {
         if (session_status() === PHP_SESSION_NONE) {
             ini_set('session.cookie_httponly', '1');
-            ini_set('session.cookie_secure', isset($_SERVER['HTTPS']) ? '1' : '0');
+            $isHttps = (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off')
+                    || (isset($_SERVER['SERVER_PORT']) && (int)$_SERVER['SERVER_PORT'] === 443)
+                    || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https');
+            ini_set('session.cookie_secure', $isHttps ? '1' : '0');
             ini_set('session.use_strict_mode', '1');
-            ini_set('session.cookie_samesite', 'Strict');
+            ini_set('session.cookie_samesite', 'Lax');
             session_start();
         }
 

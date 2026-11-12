@@ -1,593 +1,308 @@
+# START OF FILE `07-frontend.md`
+
 # Frontend
 
-## UPTEC Cursos v2.0 - Documentación del Frontend
+## UPTECMS Cursos v2.0 - Documentación Integral de la Capa de Presentación
 
 ---
 
-## Visión General
+## 1. Visión General de la Arquitectura Frontend
 
-El frontend está construido con tecnologías web nativas (vanilla stack):
+La interfaz de usuario de **UPTECMS Cursos** está concebida bajo la filosofía **Zero-Dependencies (sin dependencias externas ni compiladores)**. Opera directamente en el navegador con tecnologías web nativas, garantizando tiempos de carga casi instantáneos ($\approx 120\text{ ms}$), bajo consumo de memoria RAM en equipos cliente y facilidad de mantenimiento sin requerir entornos de desarrollo pesados (Node.js, Webpack o npm).
 
-| Tecnología            | Uso                                  |
-|-----------------------|--------------------------------------|
-| **HTML5**             | Estructura semántica                 |
-| **CSS3**              | Estilos con variables, grid, flexbox |
-| **JavaScript (ES6+)** | Interactividad, API calls            |
-| **Fetch API**         | Comunicación con backend             |
-| **Emojis Unicode**    | Iconografía (sin dependencias)       |
+| Tecnología | Implementación Técnica | Propósito en el Sistema |
+|:---|:---|:---|
+| **HTML5 Semántico** | Estructura nativa sin frameworks | Maquetado accesible, formularios reactivos y modales dinámicos. |
+| **CSS3 Modular** | Variables CSS, Grid, Flexbox y Glassmorphism | Sistema de diseño institucional consistente, temas y soporte responsivo. |
+| **JavaScript ES6+** | Clases, Funciones Flecha, Promesas y Async/Await | Interactividad cliente, manipulación del DOM y renderizado de componentes. |
+| **Fetch API Nativa** | Protocolo HTTP asíncrono con Cookies y CSRF | Comunicación con la API RESTful (JSON, Multipart y Stream binario). |
+| **Iconografía SVG Pura** | Catálogo centralizado en `dashboard.js` | **Cero Emojis**. Vectores SVG embebidos con `stroke="currentColor"`. |
 
 ---
 
-## Estructura de Carpetas
+## 2. Estructura Exhaustiva de Carpetas y Vistas
 
-```
+El frontend se organiza de forma modular, segregando los recursos compartidos (`css/`, `js/`, `img/`) de las vistas privadas protegidas por el control de acceso basado en roles (`views/{rol}/`):
+
+```text
 frontend/
-├── index.html                 # Landing page institucional
-├── login.html                 # Login y registro
+├── index.html                     # Portal de bienvenida institucional (Lobby)
+├── login.html                     # Interfaz con slider para inicio de sesión y registro público
+│
 ├── css/
-│   ├── main.css              # Estilos de dashboard
-│   └── login.css             # Estilos de login/landing
-├── js/
-│   ├── api.js                # Cliente API
-│   ├── auth.js               # Módulo de autenticación
-│   └── dashboard.js          # Utilidades de dashboard
-└── views/
-    ├── administrador/        # 8 vistas
-    ├── analista/             # 2 vistas
-    ├── facilitador/          # 5 vistas
-    └── participante/         # 4 vistas
+│   ├── main.css                   # Sistema de diseño de paneles, tablas, cards, botones y modales
+│   └── login.css                  # Estilos específicos del slider de autenticación y animaciones
+│
+├── img/                           # Logotipos vectoriales y rasterizados de la institución
+│   ├── logo-uptec.png             # Isotipo oficial y Favicon del sistema
+│   ├── logo-uptec-grande.png      # Logotipo de alta resolución para cabeceras y sidebar
+│   └── logo-uptec-grande-v2.png   # Variante institucional alternativa
+│
+├── js/                            # Librerías cliente compartidas (Zero-Dependency)
+│   ├── api.js                     # Cliente HTTP: GET, POST, PUT, DELETE, download, upload y CSRF
+│   ├── auth.js                    # Gestor de estado de sesión, permisos y redirecciones
+│   └── dashboard.js               # Core de interfaz: Sidebar, Header, Modales, Toast, Icons SVG
+│
+└── views/                         # Vistas segregadas por rol (Total: 26 interfaces)
+    ├── administrador/             # Rol Nivel 4 (Control Total - 9 Vistas)
+    │   ├── dashboard.html         # Métricas institucionales, gráficos de área y cursos recientes
+    │   ├── usuarios.html          # Gestión integral de usuarios, contraseñas temporales y roles
+    │   ├── egresados.html         # Histórico general de egresados con filtros avanzados
+    │   ├── cursos.html            # Catálogo curricular, creación y asignación docente
+    │   ├── inscripciones.html     # Matrícula general y modificación de estados
+    │   ├── calificaciones.html    # Supervisión y anulación administrativa de notas
+    │   ├── reportes.html          # Estadísticas globales y descarga de informe PDF
+    │   ├── auditoria.html         # Monitor de traza transaccional forense (logs_actividad)
+    │   └── backup.html            # Panel de exportación (.sql) y restauración con subida
+    │
+    ├── analista/                  # Rol Nivel 3 (Gestión Curricular - 7 Vistas)
+    │   ├── dashboard.html         # Balance operativo de cursos, facilitadores y planificados
+    │   ├── cursos.html            # Verificación de asignaturas y asignación de facilitadores
+    │   ├── egresados.html         # Histórico de egresados y rendimiento por carrera
+    │   ├── facilitadores.html     # Nómina docente con habilitación/inhabilitación de cuentas
+    │   ├── usuarios.html          # Directorio supervisado de participantes y docentes
+    │   ├── verificacion.html      # Control de activación ("En Curso" <-> "Planificado")
+    │   └── reportes.html          # Balance de oferta académica e informe PDF de analista
+    │
+    ├── facilitador/               # Rol Nivel 2 (Docente Titular - 5 Vistas)
+    │   ├── dashboard.html         # Resumen de carga académica y matrícula a cargo
+    │   ├── mis-cursos.html        # Asignaturas asignadas, plan de evaluación (100%) y egresados
+    │   ├── estudiantes.html       # Matriz de progreso estudiantil y avance evaluado
+    │   ├── calificaciones.html    # Asentamiento y corrección de notas por evaluación
+    │   └── reportes.html          # Estadísticas de aprobación y distribución vigesimal
+    │
+    └── participante/              # Rol Nivel 1 (Estudiante - 5 Vistas)
+        ├── dashboard.html         # Panel personal, asignaturas en curso y promedio general
+        ├── inscribir.html         # Oferta de materias por carrera con validación de cupos
+        ├── mis-cursos.html        # Asignaturas donde mantiene matrícula activa
+        ├── mis-notas.html         # Desglose de evaluaciones parciales y boletín en PDF
+        └── certificados.html      # Galería de diplomas oficiales apaisados con vista previa y PDF
 ```
 
 ---
 
-## Landing Page (`index.html`)
+## 3. Catálogo Centralizado de Iconos Vectoriales SVG (`Icons`)
 
-### Diseño: Glassmorphism
+**Archivo:** `frontend/js/dashboard.js`  
+A partir de la versión 2.0, **se erradicaron al 100% los emojis Unicode** de todas las vistas del sistema. En su lugar, el objeto global `window.Icons` provee vectores SVG puros estilizados con trazo uniforme (`stroke-width="2"`, `stroke-linecap="round"`, `stroke-linejoin="round"` y `stroke="currentColor"`), lo que permite que adopten dinámicamente el color del texto o botón contenedor.
 
-Estilo moderno con efectos de transparencia y desenfoque.
+```javascript
+// Definición en frontend/js/dashboard.js
+const Icons = {
+    dashboard: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>',
+    usuarios: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+    egresados: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>',
+    cursos: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10M6 10h10"/></svg>',
+    inscripciones: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
+    calificaciones: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg>',
+    reportes: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/></svg>',
+    auditoria: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>',
+    respaldo: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>',
+    certificados: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>',
+    alerta: (size = 48) => `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+    vacio: (size = 48) => `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>`
+};
+window.Icons = Icons;
+```
 
-```css
-.landing-feature {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 24px;
+---
+
+## 4. Módulos JavaScript Compartidos
+
+### 4.1. Cliente de Comunicación HTTP (`api.js`)
+Centraliza el manejo de peticiones asíncronas hacia el backend (`/uptec-cursos/backend/api/api.php`), la resolución de tokens CSRF, la subida de archivos multipart y el blindaje ante errores que arrojen HTML.
+
+#### Métodos Públicos Expuestos (`window.API`):
+* `API.init()`: Obtiene el token CSRF inicial desde `GET ?endpoint=csrf`.
+* `API.get(endpoint, params)`: Petición GET autenticada con parámetros query serializados.
+* `API.post(endpoint, data)`: Envía datos JSON con cabecera `Content-Type: application/json` y `X-CSRF-Token`.
+* `API.put(endpoint, id, data)`: Modificación de registros con validación CSRF.
+* `API.delete(endpoint, id)`: Eliminación lógica o física con verificación de permisos.
+* `API.upload(endpoint, formData)`: **Nuevo método para multipart/form-data**. Permite enviar objetos `FormData` con archivos binarios (ej. restauración de base de datos) omitiendo deliberadamente la cabecera manual `Content-Type` para que el navegador inyecte el delimitador `boundary` correcto junto al `X-CSRF-Token`.
+* `API.download(endpoint, params, filename)`: Descarga por streaming seguro binario creando un Blob temporal revocable (`URL.createObjectURL`).
+
+#### Filtro Antifallos (`_handleResponse`):
+```javascript
+async _handleResponse(response) {
+    const text = await response.text();
+    // Detección estricta de volcados de error en PHP (HTML)
+    if (text.trim().startsWith('<')) {
+        console.error('[UPTEC] Respuesta HTML de error recibida:', text.substring(0, 300));
+        const error = new Error('Error del servidor. Revise la consola para más detalles.');
+        error.status = response.status;
+        error.htmlResponse = true;
+        throw error;
+    }
+    const data = JSON.parse(text);
+    if (!response.ok) {
+        throw new Error(data.error || data.message || 'Error en la petición');
+    }
+    return data;
 }
 ```
 
-### Secciones
+---
 
-| Sección | Descripción |
-|---------|-------------|
-| **Navbar** | Navegación fija con logo UPTEC |
-| **Hero** | Título principal, descripción, CTAs |
-| **Características** | 6 cards con features del sistema |
-| **Roles** | 4 cards describiendo cada rol |
-| **Stats** | Estadísticas visuales |
-| **CTA** | Llamado a la acción final |
-| **Footer** | Copyright UPTEC |
-
-### Animaciones
-
-- Partículas flotantes (fondo animado)
-- Fade-in en scroll (Intersection Observer)
-- Efecto hover en cards (transform + shadow)
-- Navbar con efecto al hacer scroll
+### 4.2. Módulo de Autenticación de Interfaz (`auth.js`)
+Controla la sesión en el cliente utilizando `localStorage` para almacenamiento ligero de datos del usuario autenticado (`uptec_user`) y token:
+* `AUTH.login(email, password)`
+* `AUTH.logout()`: Limpia el almacenamiento y redirige a `login.html`.
+* `AUTH.check()`: Valida vigencia de sesión con el endpoint `GET ?endpoint=me`.
+* `AUTH.user`: Objeto con las propiedades del usuario logueado (`nombre`, `apellidos`, `cedula`, `correo`, `rol`).
+* `AUTH.getRole()`: Retorna el rol activo para la construcción del menú.
 
 ---
 
-## Login (`login.html`)
-
-### Diseño: Slider de Formularios
-
-Dos formularios en un contenedor deslizante:
-
-```
-┌─────────────────────────────────────────┐
-│  INFO PANEL         │    FORM SLIDER   │
-│                     │                  │
-│  ¿Ya tienes         │  ┌───────────┐   │
-│  cuenta?            │  │  LOGIN    │   │
-│                     │  │  Form     │   │
-│  [Iniciar Sesion]   │  └───────────┘   │
-│                     │                  │
-├─────────────────────┤  ┌───────────┐   │
-│  ¿Eres nuevo?       │  │ REGISTER  │   │
-│                     │  │  Form     │   │
-│  [Crear Cuenta]     │  └───────────┘   │
-└─────────────────────────────────────────┘
-```
-
-### Modos
-
-| Modo | Descripción |
-|------|-------------|
-| **Login** | Formulario de inicio de sesión (email + password) |
-| **Register** | Formulario de registro con selector de rol |
-
-### Selector de Rol (Registro)
-
-```html
-<div class="role-selector">
-    <label class="role-option">
-        <input type="radio" name="rol" value="Participante">
-        <div class="role-card">
-            <span class="role-icon">👨‍🎓</span>
-            <span class="role-label">Participante</span>
-        </div>
-    </label>
-    <label class="role-option">
-        <input type="radio" name="rol" value="Facilitador">
-        <div class="role-card">
-            <span class="role-icon">👨‍🏫</span>
-            <span class="role-label">Facilitador</span>
-        </div>
-    </label>
-</div>
-```
-
-### Campo de Área (Solo Participantes)
-
-Se muestra/oculta dinámicamente según el rol seleccionado.
-
-**Áreas disponibles:**
-- Administración
-- Informática
-- Mecánica
-- Eléctrica
-- Mantenimiento
-- Transporte Ferroviario
-
-### Sistema de Notificaciones Toast
-
-```javascript
-// Uso
-showToast('success', 'Éxito', 'Operación completada');
-showToast('error', 'Error', 'Credenciales inválidas');
-```
+### 4.3. Core de Dashboard y Utilidades UI (`dashboard.js`)
+Provee las herramientas visuales compartidas por todos los roles:
+* **`autoInjectFavicon()`:** Función autoejecutable que inspecciona la profundidad de la URL (`window.location.pathname`) y enlaza automáticamente el isotipo en la cabecera `<head>` sin romper rutas relativas (`../../img/logo-uptec.png`).
+* **`Sidebar.init(rol)`:** Construye el menú de navegación lateral según el rol del usuario utilizando los vectores del objeto `Icons`.
+* **`Header.init()`:** Inicializa el avatar con las iniciales del usuario, el nombre, el rol y vincula el botón de cerrar sesión.
+* **`Toast.show(message, type)`:** Notificaciones flotantes estilizadas (`success`, `error`, `warning`, `info`) con iconos SVG y temporizador de auto-cierre de 4 segundos.
+* **`Modal.open(content, options)`:** Diálogos modales accesibles con bloqueo de scroll corporal, soporte de tamaños (`modal--lg`) y botones de pie configurables.
+* **`ConfirmDialog.open(message, onConfirm, onCancel)`:** Diálogo emergente de advertencia para acciones destructivas utilizando `Icons.alerta(48)`.
+* **`DataTable.render(containerId, data, columns, options)`:** Motor de tablas dinámicas con formato de celdas, badges de estado y botones de acción inline.
+* **`Utils.escapeHtml(str)`:** Neutralizador de código HTML para prevenir inyecciones XSS en el cliente.
+* **`Utils.formatDate(date)` / `Utils.formatDateTime(date)`:** Formateadores de fecha adaptados a la localización venezolana (`es-VE`).
 
 ---
 
-## Módulos JavaScript
+## 5. Descripción Detallada de las Vistas Clave
 
-### `api.js` - Cliente API
-
-**Funcionalidades:**
-- Gestión automática de tokens CSRF
-- Métodos HTTP: GET, POST, PUT, DELETE
-- Descarga de archivos (backup)
-- Manejo de errores global
-
-**API expuesta:**
-```javascript
-window.API = {
-    init()           // Obtener CSRF token inicial
-    get(endpoint, params)
-    post(endpoint, data)
-    put(endpoint, id, data)
-    delete(endpoint, id)
-    download(endpoint, params, filename)
-}
-```
-
-**Ejemplo de uso:**
-```javascript
-// Obtener lista de cursos
-const response = await API.get('cursos', { estado: 'En Curso' });
-console.log(response.cursos);
-
-// Crear usuario
-await API.post('usuario', {
-    cedula: 'V12345678',
-    nombre: 'Juan',
-    apellidos: 'Perez',
-    correo: 'jperez@uptec.edu.ve',
-    telefono: '04121111111',
-    rol: 'Facilitador'
-});
-```
-
-### `auth.js` - Autenticación
-
-**Funciones:**
-```javascript
-// Módulo AUTH global
-AUTH.login(email, password)
-AUTH.logout()
-AUTH.check()          // Verificar sesión activa
-AUTH.user()           // Obtener datos del usuario
-AUTH.require()        // Redirigir si no hay sesión
-AUTH.isAdmin()
-AUTH.isAnalyst()
-AUTH.isTeacher()
-AUTH.isStudent()
-```
-
-### `dashboard.js` - Utilidades de Dashboard
-
-**Componentes compartidos:**
-```javascript
-// Sidebar toggle
-initSidebar()
-
-// Cerrar sesión
-setupLogout()
-
-// Mostrar info del usuario en navbar
-showUserInfo()
-
-// Sistema de tabs
-initTabs()
-
-// Modales
-openModal(id)
-closeModal(id)
-
-// Tablas dinámicas
-renderTable(data, columns, container)
-```
+### 5.1. Portal de Inicio Institucional (`index.html`)
+Diseñado como un portal universitario formal de alta gama:
+* **Cabecera Institucional:** Barra de navegación fija translúcida con el escudo de la **UPTECMS**, accesos anclados y botones directos a iniciar sesión y registro.
+* **Hero Section con Identidad Fotográfica:** Encabezado con imagen de campus universitario de fondo, tipografía sobria con acentos dorados (`var(--uptec-gold)`) y tarjeta de exhibición (*Showcase*) con fotografías reales de estudiantes aprendiendo en equipo.
+* **Beneficios de la Plataforma:** 6 tarjetas de características equipadas con vectores SVG institucionales y fondos suaves diferenciados.
+* **Comunidad Estudiantil:** Galería fotográfica con testimonios sobre aprendizaje colaborativo, motivación constante y mentoría docente personalizada.
+* **Reseña Universitaria:** Bloque histórico y filosófico con la Misión, Visión, Ubicación oficial (Antímano, Caracas) y reseña histórica del Gran Mariscal Antonio José de Sucre.
+* **Cintillo Estadístico:** Contadores de carreras, cursos, egresados y años de trayectoria sobre una cinta en color azul marino profundo (`#0f172a`).
 
 ---
 
-## Vistas por Rol
-
-### ADMINISTRADOR (`views/administrador/`)
-
-#### 1. `dashboard.html`
-
-**Métricas mostradas:**
-- Cards con totales (estudiantes, facilitadores, analistas, cursos, inscripciones)
-- Gráfico de cursos por estado
-- Lista de cursos recientes
-- Lista de usuarios recientes
-- Actividad reciente (últimos logs)
-- Gráfico de estudiantes por área
-- Top 5 cursos con más estudiantes
-
-**Widgets:**
-```javascript
-loadResumen()      // Métricas principales
-loadCursosPorEstado()
-loadCursosRecientes()
-loadUsuariosRecientes()
-loadActividadReciente()
-loadEstudiantesPorArea()
-loadTopCursos()
-```
-
-#### 2. `usuarios.html`
-
-**Funcionalidades:**
-- Tabla de usuarios con paginación
-- Filtros: por rol, estado, búsqueda
-- Modal para crear usuario
-- Edición inline de usuarios
-- Desactivar usuario (soft delete)
-
-**Roles gestionables:**
-- Administrador (solo creación)
-- Analista
-- Facilitador
-- Participante
-
-#### 3. `cursos.html`
-
-**Funcionalidades:**
-- Tabla de cursos con filtros
-- Modal para crear curso
-- Asignar facilitador desde lista desplegable
-- Asignar analista
-- Crear plan de evaluación
-- Ver detalles del curso (estudiantes inscritos, horarios, evaluaciones)
-
-#### 4. `inscripciones.html`
-
-- Listado de todas las inscripciones
-- Filtros por curso, estado, búsqueda
-- Cambiar estado de inscripción
-
-#### 5. `calificaciones.html`
-
-- Ver todas las calificaciones del sistema
-- Filtrar por curso o estudiante
-
-#### 6. `reportes.html`
-
-**Reportes disponibles:**
-- Estadísticas globales
-- Promedio general de notas
-- Tasa de aprobación
-- Cursos por área
-- Inscripciones por mes (últimos 6 meses)
-- Top facilitadores
-
-#### 7. `auditoria.html`
-
-- Logs de actividad del sistema
-- Filtros: por acción, tabla, fechas
-- Visualización de datos antes/después (JSON)
-- Paginación (500 registros máximo)
-
-#### 8. `backup.html`
-
-- Botón para descargar backup SQL
-- Información sobre la última exportación
+### 5.2. Portal de Acceso y Registro Deslizable (`login.html`)
+* **Slider Deslizante con Contenedor Blanco Pulido:** Formularios sobre tarjetas blancas de alta legibilidad, eliminando los fondos saturados previos.
+* **Formulario de Inicio de Sesión:** Validación con iconos SVG sutiles integrados (`✉️` $\rightarrow$ sobre vectorial, `🔒` $\rightarrow$ candado vectorial), feedback de carga con spinner y soporte para tecla *Escape*.
+* **Formulario de Registro Público:**
+  * Selector visual de rol con tarjetas interactivas: **Participante** (birrete SVG) o **Facilitador** (docente SVG).
+  * Selector dinámico de carrera o área técnica para participantes (*Administración, Informática, Mecánica, Eléctrica, Mantenimiento, Transporte Ferroviario* o *Externo*).
+  * Validación en cliente campo por campo (cédula de 6 a 9 dígitos, teléfonos nacionales con formato `04XXXXXXXXX` y contraseñas de al menos 6 caracteres con letra y número).
+  * Sistema de notificaciones Toast conectado a las respuestas de la API.
 
 ---
 
-### ANALISTA (`views/analista/`)
-
-#### 1. `dashboard.html`
-
-**Métricas:**
-- Total de cursos
-- Cursos planificados (sin iniciar)
-- Total de facilitadores
-- Total de inscripciones
-- Cursos por área
-- Cursos sin facilitador asignado
-
-#### 2. `cursos.html`
-
-Similar al admin pero con restricciones:
-- ✅ Crear, editar cursos
-- ✅ Asignar facilitadores
-- ✅ Crear plan de evaluación
-- ❌ Eliminar cursos
-- ❌ Ver todos los usuarios (solo facilitadores)
+### 5.3. Módulo de Administración (`views/administrador/`)
+* **`egresados.html`:** Histórico institucional de egresados. Cuenta con buscador en la barra superior (`.header__search`), selector por curso y filtro por condición (`Aprobado`/`Reprobado`), mostrando notas definitivas y códigos de certificados emitidos.
+* **`backup.html`:** Interfaz bidireccional de persistencia:
+  * Tarjeta de **Exportación**: Descarga directa de archivos `.sql` generados al vuelo por streaming.
+  * Tarjeta de **Restauración**: Selector de archivos `.sql`, inspección de peso ($\le 25\text{ MB}$), modal de confirmación crítica con `Icons.alerta(48)` y envío vía `API.upload()`.
+* **`cursos.html`:** Mantenimiento de asignaturas con modal que permite cargar nombre, código, cupo, horas, nivel, carrera y asignar al docente facilitador.
+* **`usuarios.html`:** Nómina de operadores y estudiantes con botones vectoriales de edición y desactivación segura mediante `ConfirmDialog`.
+* **`auditoria.html`:** Trazabilidad forense con distintivos vectoriales coloreados por cada acción del sistema (`CREATE`, `UPDATE`, `DELETE`, `LOGIN`, `RESTORE`, `FINALIZAR_CURSO`).
 
 ---
 
-### FACILITADOR (`views/facilitador/`)
-
-#### 1. `dashboard.html`
-
-**Métricas:**
-- Mis cursos (cantidad)
-- Mis estudiantes (total inscritos en sus cursos)
-- Lista de cursos activos con conteo de inscritos
-
-#### 2. `mis-cursos.html`
-
-- Lista de cursos donde es facilitador asignado
-- Acceso rápido a calificaciones por curso
-
-#### 3. `estudiantes.html`
-
-- Listado de estudiantes por curso
-- Información de contacto
-- Estado de inscripción
-- Nota final (si aplica)
-
-#### 4. `calificaciones.html`
-
-**Funcionalidades:**
-- Seleccionar curso
-- Ver lista de estudiantes inscritos
-- Registrar calificación:
-  - Tipo (Parcial, Final, Proyecto, Asistencia, Trabajo, Otro)
-  - Descripción
-  - Nota (0-20)
-  - Peso (%)
-  - Fecha
-- Ver calificaciones registradas
-- Editar calificaciones existentes
-
-**Cálculo automático:**
-- Al registrar/editar calificación, el backend calcula la nota final ponderada
-- El trigger actualiza el estado de la inscripción (Completado/Reprobado)
-
-#### 5. `reportes.html`
-
-- Reportes limitados a sus cursos
-- Estadísticas de aprobación por curso
-- Listado de estudiantes aprobados/reprobados
+### 5.4. Módulo de Analista Académico (`views/analista/`)
+* **`verificacion.html`:** Panel de activación de asignaturas. Permite a los analistas revisar la carga horaria y docentes asignados; si el curso está en estado `'Planificado'`, presenta el botón vectorial **«Iniciar Curso»** pasándolo a `'En Curso'`. Si requiere correcciones, el botón **«A Planificado»** lo pausa de inmediato.
+* **`facilitadores.html`:** Directorio del cuerpo docente que permite al analista habilitar cuentas de profesores recién registrados mediante botones vectoriales de activación.
+* **`egresados.html`:** Supervisión del histórico de asignaturas concluidas y porcentaje de aprobación.
 
 ---
 
-### PARTICIPANTE (`views/participante/`)
-
-#### 1. `dashboard.html`
-
-**Métricas:**
-- Mis cursos (inscritos)
-- Cursos completados
-- Promedio general
-- Lista de inscripciones con estado y nota final
-
-#### 2. `inscribir.html`
-
-**Flujo de inscripción:**
-1. Sistema verifica área/carrera del participante
-2. Muestra solo cursos de esa área
-3. Excluye cursos en los que ya está inscrito
-4. Solo cursos en estado "Planificado" o "En Curso"
-5. Verifica cupos disponibles
-
-**Restricciones:**
-- Si no tiene área asignada → mensaje de error
-- Si no hay cursos disponibles → mensaje informativo
-
-#### 3. `mis-cursos.html`
-
-- Lista de cursos inscritos
-- Información del facilitador
-- Estado de inscripción
-- Fecha de inscripción
-
-#### 4. `mis-notas.html`
-
-**Información mostrada por curso:**
-- Datos del curso (nombre, código, área)
-- Facilitador
-- Plan de evaluación del curso
-- Calificaciones obtenidas
-- Nota final calculada
-- Estado (En Progreso, Completado, Reprobado)
-
-**Visualización:**
-```
-Curso: Programación en PHP
-Facilitador: Carlos González
-
-Plan de Evaluación:
-- Parcial 1 (20%)
-- Parcial 2 (25%)
-- Proyecto Final (30%)
-- Asistencia (25%)
-
-Mis Calificaciones:
-- Parcial 1: 16.00 / 20
-- Parcial 2: --
-...
-
-Nota Final: -- (En Progreso)
-```
+### 5.5. Módulo del Facilitador Docente (`views/facilitador/`)
+* **`mis-cursos.html`:** 
+  * Asignaturas en curso presentan el botón **«Plan de Evaluación»**, abriendo un modal interactivo con la barra de progreso acumulada del curso y el porcentaje restante para alcanzar el 100%.
+  * Cursos en estado `'Finalizado'` ocultan el plan y despliegan el botón **«Lista de Egresados»**, abriendo un modal con el balance de alumnos aprobados y reprobados del grupo.
+* **`estudiantes.html`:** Matriz integral de calificaciones por curso. Despliega una columna por cada evaluación del plan pedagógico, el cálculo individual del porcentaje evaluado del estudiante y su nota promedio vigesimal.
+* **`calificaciones.html`:** Formulario interactivo donde el facilitador selecciona la asignatura, el estudiante matriculado y la evaluación a calificar, registrando notas entre `0.00` y `20.00` con recálculo automático en segundo plano.
 
 ---
 
-## Componentes UI Compartidos
-
-### Sidebar de Navegación
-
-```html
-<nav class="sidebar">
-    <div class="sidebar__logo">UPTEC</div>
-    <ul class="sidebar__menu">
-        <li><a href="dashboard.html">📊 Dashboard</a></li>
-        <li><a href="cursos.html">📚 Cursos</a></li>
-        <!-- Items específicos por rol -->
-    </ul>
-    <button class="btn-logout">🚪 Cerrar Sesión</button>
-</nav>
-```
-
-### Tablas de Datos
-
-```javascript
-// Ejemplo de configuración de columnas
-const columns = [
-    { key: 'codigo', label: 'Código' },
-    { key: 'nombre', label: 'Nombre' },
-    { key: 'estado', label: 'Estado', render: (v) => `<span class="badge badge-${v}">${v}</span>` },
-    { key: 'acciones', label: 'Acciones', render: (row) => `
-        <button onclick="editar(${row.id})">✏️</button>
-        <button onclick="eliminar(${row.id})">🗑️</button>
-    `}
-];
-
-renderTable(data, columns, '#tabla-container');
-```
-
-### Modales
-
-```html
-<div class="modal" id="modal-curso">
-    <div class="modal__content">
-        <h3>Nuevo Curso</h3>
-        <form id="form-curso">
-            <!-- Campos -->
-        </form>
-        <button onclick="closeModal('modal-curso')">Cerrar</button>
-    </div>
-</div>
-```
-
-### Badges de Estado
-
-| Estado | Clase CSS | Color |
-|--------|-----------|-------|
-| Activo | `badge-activo` | 🟢 Verde |
-| Inactivo | `badge-inactivo` | 🔴 Rojo |
-| Planificado | `badge-planificado` | 🔵 Azul |
-| En Curso | `badge-en-curso` | 🟡 Amarillo |
-| Finalizado | `badge-finalizado` | 🟢 Verde oscuro |
-| Cancelado | `badge-cancelado` | 🔴 Rojo |
+### 5.6. Módulo del Participante / Estudiante (`views/participante/`)
+* **`inscribir.html`:** Catálogo inteligente de asignaturas abiertas. Excluye automáticamente cursos ya cursados y materias que el estudiante **ya haya aprobado en el histórico de egresados**. Si el estudiante reprobó, el curso se vuelve a mostrar disponible cuando se aperture en un nuevo ciclo.
+* **`mis-notas.html`:** Resumen de calificaciones obtenidas por cada asignatura inscrita con barra de avance de notas cargadas y botón para descargar el boletín oficial en PDF.
+* **`certificados.html`:** Galería de certificados aprobados:
+  * Resuelve de forma infalible el nombre del curso, código oficial, horas académicas y nombre del docente facilitador.
+  * Botón **«Vista Previa»**: Despliega un modal que replica el anverso del diploma apaisado oficial con marco dorado, franja tricolor, datos caligráficos del alumno y firmas de las autoridades.
+  * Botón **«Descargar PDF»**: Descarga el documento oficial de dos páginas emitido por `SimplePDF.php`.
 
 ---
 
-## CSS Variables (Design System)
+## 6. Sistema de Diseño CSS (Design System)
 
-### Colores UPTEC
+**Archivo:** `frontend/css/main.css`
 
+### 6.1. Paleta de Colores Institucionales UPTECMS
 ```css
 :root {
-    --uptec-blue: #0061f1;
-    --uptec-blue-dark: #004fa3;
-    --uptec-red: #e00000;
-    --uptec-orange: #ff5e00;
-    --uptec-green: #18ad72;
+    /* Identidad Principal */
+    --color-primary: #1d4ed8;         /* Azul UPTECMS */
+    --color-primary-dark: #1e3a8a;    /* Azul Marino Profundo */
+    --color-navy: #0f172a;            /* Base oscura ejecutiva */
+    
+    /* Estados y Acentos */
+    --color-accent: #059669;          /* Esmeralda: Aprobados y Completados */
+    --color-warning: #d97706;         /* Ámbar: Pendientes y Advertencias */
+    --color-danger: #dc2626;          /* Rojo: Reprobados y Eliminación */
+    --color-gold: #b45309;            /* Dorado de certificaciones */
+    
+    /* Superficies y Neutros */
+    --color-bg: #f8fafc;              /* Fondo general de la plataforma */
+    --color-bg-card: #ffffff;         /* Superficie de tarjetas y modales */
+    --color-bg-secondary: #f1f5f9;    /* Fondos secundarios de tablas y badges */
+    --color-border: #e2e8f0;          /* Líneas divisorias estándar */
+    --color-border-light: #edf2f7;    /* Rieles de barras de progreso */
+    
+    /* Tipografía */
+    --color-text-primary: #1e293b;    /* Texto principal de alto contraste */
+    --color-text-secondary: #475569;  /* Texto secundario y descriptivo */
+    --color-text-muted: #64748b;      /* Metadatos, etiquetas y fechas */
 }
 ```
 
-### Espaciado
+### 6.2. Badges de Estado Estandarizados
+
+| Estado Académico / Registro | Clase CSS Aplicada | Color Representativo |
+|:---|:---|:---|
+| **Activo / Aprobado / En Curso / Verificado** | `.badge--accent` | Fondo verde suave con texto `#047857` |
+| **Planificado / Inscrito** | `.badge--primary` | Fondo azul suave con texto `#1d4ed8` |
+| **En Progreso** | `.badge--info` | Fondo celeste con texto `#0284c7` |
+| **Pendiente / Advertencia** | `.badge--warning` | Fondo ámbar con texto `#b45309` |
+| **Reprobado / Inactivo / Cancelado** | `.badge--danger` | Fondo rojo con texto `#b91c1c` |
+| **Finalizado / Abandonado / Código** | `.badge--neutral` | Fondo pizarra con texto `#475569` |
+
+### 6.3. Breakpoints de Diseño Responsivo
 
 ```css
-:root {
-    --space-xs: 0.5rem;
-    --space-sm: 1rem;
-    --space-md: 1.5rem;
-    --space-lg: 2rem;
-    --space-xl: 3rem;
-}
-```
-
-### Sombras
-
-```css
-:root {
-    --shadow-sm: 0 2px 10px rgba(0,0,0,0.1);
-    --shadow-md: 0 10px 30px rgba(0,0,0,0.2);
-    --shadow-lg: 0 20px 50px rgba(0,0,0,0.3);
-}
-```
-
----
-
-## Responsive Design
-
-### Breakpoints
-
-| Breakpoint | Descripción |
-|------------|-------------|
-| `< 768px` | Mobile - Sidebar colapsado, tablas scrollables |
-| `768px - 1024px` | Tablet - Sidebar compacto |
-| `> 1024px` | Desktop - Layout completo |
-
-### Patrón Mobile-First
-
-```css
-/* Base: Mobile */
-.sidebar { display: none; }
-
-/* Tablet */
-@media (min-width: 768px) {
-    .sidebar { display: block; width: 200px; }
+/* Dispositivos Móviles (Teléfonos) */
+@media (max-width: 768px) {
+    .sidebar { display: none; }
+    .sidebar.open { display: block; position: fixed; z-index: 1000; width: 280px; }
+    .grid--2, .grid--3, .grid--4 { grid-template-columns: 1fr; }
+    .header__search-input { width: 140px; }
 }
 
-/* Desktop */
-@media (min-width: 1024px) {
+/* Tabletas y Pantallas Medianas */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .sidebar { width: 220px; }
+    .grid--4 { grid-template-columns: repeat(2, 1fr); }
+    .grid--3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Equipos de Escritorio y Monitores */
+@media (min-width: 1025px) {
     .sidebar { width: 260px; }
+    .main { margin-left: 260px; }
 }
 ```
 
 ---
 
-## Accesibilidad
+## 7. Accesibilidad y Estándares de Usabilidad
 
-- **Contraste**: Todos los textos cumplen WCAG 2.1 AA
-- **Navegación por teclado**: Tabindex en formularios
-- **ARIA labels**: En botones e iconos
-- **Reduced motion**: `@media (prefers-reduced-motion)`
+1. **Contraste Tipográfico WCAG 2.1 AA:** Todo el texto sobre fondos claros u oscuros mantiene una relación de contraste mínima de $4.5:1$.
+2. **Navegación Asistida por Teclado:** Los modales capturan el foco y permiten cierre instantáneo con la tecla `Escape`. Los formularios cuentan con secuencias de tabulación lógicas (`tabindex`).
+3. **Comentarios de Carga Inmediatos:** Todas las consultas asíncronas inicializan un bloque de esqueleto visual (`.skeleton`) o un spinner SVG para evitar parpadeos y desorientación del usuario.
 
 ---
-
-## Performance
-
-| Optimización | Implementación |
-|--------------|----------------|
-| **Sin frameworks** | Carga rápida, zero dependencies |
-| **CSS en archivos** | Cacheable, sin inline styles masivos |
-| **Lazy loading** | Intersection Observer para animaciones |
-| **Fetch API** | Requests asíncronos sin recarga |
-| **Minificación** | Recomendado para producción |
+# END OF FILE `07-frontend.md`

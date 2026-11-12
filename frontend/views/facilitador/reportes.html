@@ -1,11 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="">
-    <title>Reportes - Facilitador | UPTEC Cursos</title>
+    <title>Reportes - Facilitador | UPTECMS Cursos</title>
     <link rel="stylesheet" href="../../../frontend/css/main.css">
+    <link rel="icon" type="image/png" href="../../img/logo-uptec.png">
 </head>
 <body>
 
@@ -16,9 +17,9 @@
     <main class="main">
         <header class="header">
             <button class="sidebar-toggle" id="sidebar-toggle">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
-            <h1 class="header__title">Reportes</h1>
+            <h1 class="header__title">Reportes Académicos</h1>
             <div class="header__actions">
                 <div class="header__user">
                     <div class="header__user-avatar" id="header-avatar"></div>
@@ -27,8 +28,8 @@
                         <span class="header__user-role" id="header-role"></span>
                     </div>
                 </div>
-                <button class="header__logout" id="logout-btn" title="Cerrar Sesion">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                <button class="header__logout" id="logout-btn" title="Cerrar Sesión">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 </button>
             </div>
         </header>
@@ -36,15 +37,12 @@
         <div class="content">
             <div class="content__header">
                 <div>
-                    <h2 class="content__title">Reportes de los cursos asignados</h2>
-                    <p class="content__subtitle">Estadísticas de rendimiento de tus estudiantes</p>
+                    <h2 class="content__title">Rendimiento de Cursos Asignados</h2>
+                    <p class="content__subtitle">Métricas de desempeño, promedios grupales y estadísticas de aprobación</p>
                 </div>
-                <button class="btn btn--primary" onclick="descargarReportePDF()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 0.5rem;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    Descargar PDF
-                </button>
             </div>
 
+            <!-- Métricas Clave -->
             <div class="grid grid--4" id="stats-container" style="margin-bottom: 1.5rem;">
                 <div class="stat-card skeleton" style="height: 140px;"></div>
                 <div class="stat-card skeleton" style="height: 140px;"></div>
@@ -52,10 +50,11 @@
                 <div class="stat-card skeleton" style="height: 140px;"></div>
             </div>
 
+            <!-- Gráficos de Desempeño y Distribución -->
             <div class="grid grid--2" style="margin-bottom: 1.5rem;">
                 <div class="card">
                     <div class="card__header">
-                        <h3 class="card__title">Desempeño por curso</h3>
+                        <h3 class="card__title">Desempeño Promedio por Curso</h3>
                     </div>
                     <div class="card__body" id="reporte-desempeno">
                         <div class="skeleton" style="height: 200px;"></div>
@@ -64,7 +63,7 @@
 
                 <div class="card">
                     <div class="card__header">
-                        <h3 class="card__title">Distribución de notas</h3>
+                        <h3 class="card__title">Distribución de Calificaciones</h3>
                     </div>
                     <div class="card__body" id="reporte-distribucion">
                         <div class="skeleton" style="height: 200px;"></div>
@@ -72,9 +71,10 @@
                 </div>
             </div>
 
+            <!-- Cuadro de Honor / Destacados -->
             <div class="card">
                 <div class="card__header">
-                    <h3 class="card__title">Mejores estudiantes por curso</h3>
+                    <h3 class="card__title">Estudiantes con Mayor Rendimiento</h3>
                 </div>
                 <div class="card__body" id="reporte-mejores">
                     <div class="skeleton" style="height: 250px;"></div>
@@ -95,7 +95,6 @@
 
 async function loadReportes() {
     try {
-        // Usar endpoints existentes
         const [resumen, misCursos, calificaciones] = await Promise.all([
             API.get('resumen'),
             API.get('mis-cursos'),
@@ -104,17 +103,17 @@ async function loadReportes() {
 
         renderStats(resumen);
         
-        // Procesar datos de desempeño desde mis-cursos
+        // Procesar datos de desempeño
         const cursos = misCursos.cursos || [];
         const desempeno = cursos.map(c => ({
             codigo: c.codigo,
-            promedio: c.promedio_general || 0,
+            promedio: parseFloat(c.promedio_general) || 0,
             aprobados: c.total_completados || 0,
-            reprobados: (c.total_inscritos || 0) - (c.total_completados || 0)
+            reprobados: Math.max(0, (c.total_inscritos || 0) - (c.total_completados || 0))
         }));
         renderDesempeno(desempeno);
         
-        // Procesar distribucion de notas desde calificaciones
+        // Distribución de calificaciones por rangos de nota
         const notas = calificaciones.calificaciones || [];
         const rangos = { '0-9': 0, '10-14': 0, '15-17': 0, '18-20': 0 };
         notas.forEach(n => {
@@ -131,88 +130,142 @@ async function loadReportes() {
         })).filter(d => d.cantidad > 0);
         renderDistribucion(distribucion);
         
-        // Los mejores estudiantes no estan disponibles directamente
         renderMejores([]);
     } catch (err) {
-        Toast.show('Error cargando reportes: ' + err.message, 'error');
-    }
-}
-
-async function descargarReportePDF() {
-    try {
-        Toast.show('Generando PDF...', 'info');
-        await API.download('reportes-pdf', {}, `reporte.pdf`);
-        Toast.show('PDF descargado exitosamente', 'success');
-    } catch (err) {
-        Toast.show('Error al descargar PDF: ' + err.message, 'error');
+        Toast.show('Error al generar los reportes: ' + err.message, 'error');
     }
 }
 
 function renderStats(data) {
     const stats = [
-        { icon: '📚', cls: 'stat-card__icon--primary', value: data.mis_cursos || 0, label: 'Mis cursos' },
-        { icon: '👨‍🎓', cls: 'stat-card__icon--accent', value: data.mis_estudiantes || 0, label: 'Mis estudiantes' },
-        { icon: '📊', cls: 'stat-card__icon--secondary', value: data.promedio_general || 0, label: 'Promedio general' },
-        { icon: '🏆', cls: 'stat-card__icon--info', value: data.tasa_aprobacion || 0, label: '% Aprobación' }
+        { 
+            icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10M6 10h10"/></svg>', 
+            cls: 'stat-card__icon--primary', 
+            value: data.mis_cursos || 0, 
+            label: 'Cursos Asignados' 
+        },
+        { 
+            icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>', 
+            cls: 'stat-card__icon--accent', 
+            value: data.mis_estudiantes || 0, 
+            label: 'Total Estudiantes' 
+        },
+        { 
+            icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>', 
+            cls: 'stat-card__icon--secondary', 
+            value: data.promedio_general || 0, 
+            label: 'Promedio General' 
+        },
+        { 
+            icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>', 
+            cls: 'stat-card__icon--info', 
+            value: data.tasa_aprobacion || 0, 
+            label: 'Tasa de Aprobación' 
+        }
     ];
 
     document.getElementById('stats-container').innerHTML = stats.map(s => `
-        <div class="stat-card">
-            <div class="stat-card__header"><div class="stat-card__icon ${s.cls}">${s.icon}</div></div>
-            <div class="stat-card__value">${s.label.includes('%') ? s.value + '%' : Utils.formatNumber(s.value)}</div>
-            <div class="stat-card__label">${s.label}</div>
+        <div class="stat-card" style="transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='var(--shadow-lg)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow=''">
+            <div class="stat-card__header">
+                <div class="stat-card__icon ${s.cls}" style="display:flex; align-items:center; justify-content:center;">${s.icon}</div>
+            </div>
+            <div class="stat-card__value">${s.label.includes('Tasa') ? s.value + '%' : Utils.formatNumber(s.value)}</div>
+            <div class="stat-card__label" style="font-weight:600; color:var(--color-text-secondary);">${s.label}</div>
         </div>
     `).join('');
 }
 
 function renderDesempeno(cursos) {
     const container = document.getElementById('reporte-desempeno');
-    if (!cursos.length) { container.innerHTML = '<div class="empty-state">Sin datos</div>'; return; }
+    if (!cursos.length) { 
+        container.innerHTML = `<div class="empty-state" style="padding:2rem;"><div class="empty-state__icon">${Icons.vacio(36)}</div><div class="empty-state__title">Sin cursos asignados</div></div>`; 
+        return; 
+    }
+    
     const max = Math.max(...cursos.map(c => c.promedio || 0), 1);
 
-    container.innerHTML = `<div style="display:flex;flex-direction:column;gap:0.875rem">${cursos.map(c => `
-        <div>
-            <div class="d-flex justify-between" style="margin-bottom:0.375rem">
-                <span style="font-weight:500;font-size:0.9375rem">${Utils.escapeHtml(c.codigo)}</span>
-                <span style="font-weight:600;color:var(--color-${c.promedio >= 10 ? 'accent' : 'warning'})">${c.promedio || '-'}</span>
-            </div>
-            <div style="background:var(--color-border-light);border-radius:var(--radius-full);height:8px;overflow:hidden">
-                <div style="background:${c.promedio >= 10 ? 'var(--color-accent)' : 'var(--color-warning)'};height:100%;border-radius:var(--radius-full);width:${(c.promedio/max*100)}%;transition:width 0.5s"></div>
-            </div>
-            <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.25rem;">
-                ${c.aprobados} aprobados / ${c.reprobados} reprobados
-            </div>
+    container.innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            ${cursos.map(c => `
+                <div>
+                    <div class="d-flex justify-between" style="margin-bottom:0.35rem;">
+                        <span style="font-weight:600; font-size:0.9rem; color:var(--color-text-primary);">${Utils.escapeHtml(c.codigo)}</span>
+                        <span style="font-weight:700; color:var(--color-${c.promedio >= 10 ? 'accent' : 'warning'}); font-size:0.9rem;">${c.promedio ? c.promedio.toFixed(2) + ' pts' : '-'}</span>
+                    </div>
+                    <div style="background:var(--color-border-light); border-radius:var(--radius-full); height:8px; overflow:hidden;">
+                        <div style="background:var(--color-${c.promedio >= 10 ? 'accent' : 'warning'}); height:100%; border-radius:var(--radius-full); width:${(c.promedio / max * 100)}%; transition:width 0.5s;"></div>
+                    </div>
+                    <div style="font-size:0.75rem; color:var(--color-text-muted); margin-top:0.3rem;">
+                        ${c.aprobados} estudiantes completados / ${c.reprobados} en progreso o pendientes
+                    </div>
+                </div>
+            `).join('')}
         </div>
-    `).join('')}</div>`;
+    `;
 }
 
 function renderDistribucion(data) {
     const container = document.getElementById('reporte-distribucion');
-    if (!data || !data.length) { container.innerHTML = '<div class="empty-state">Sin datos</div>'; return; }
-    const total = data.reduce((sum, d) => sum + d.cantidad, 0);
+    if (!data || !data.length) { 
+        container.innerHTML = `<div class="empty-state" style="padding:2rem;"><div class="empty-state__icon">${Icons.vacio(36)}</div><div class="empty-state__title">No hay notas registradas</div></div>`; 
+        return; 
+    }
 
-    container.innerHTML = `<div style="display:flex;flex-direction:column;gap:0.875rem">${data.map(d => `
-        <div>
-            <div class="d-flex justify-between" style="margin-bottom:0.375rem">
-                <span style="font-weight:500;font-size:0.9375rem">${d.rango}</span>
-                <span style="font-weight:600;color:var(--color-text-secondary)">${d.cantidad} (${Math.round(d.cantidad/total*100)}%)</span>
-            </div>
-            <div style="background:var(--color-border-light);border-radius:var(--radius-full);height:8px;overflow:hidden">
-                <div style="background:${d.color || 'var(--color-primary)'};height:100%;border-radius:var(--radius-full);width:${(d.cantidad/total*100)}%;transition:width 0.5s"></div>
-            </div>
+    const total = data.reduce((sum, d) => sum + d.cantidad, 0) || 1;
+
+    container.innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            ${data.map(d => `
+                <div>
+                    <div class="d-flex justify-between" style="margin-bottom:0.35rem;">
+                        <span style="font-weight:600; font-size:0.9rem; color:var(--color-text-primary);">${d.rango}</span>
+                        <span style="font-weight:700; color:var(--color-text-secondary); font-size:0.9rem;">${d.cantidad} evaluaciones (${Math.round(d.cantidad / total * 100)}%)</span>
+                    </div>
+                    <div style="background:var(--color-border-light); border-radius:var(--radius-full); height:8px; overflow:hidden;">
+                        <div style="background:${d.color || 'var(--color-primary)'}; height:100%; border-radius:var(--radius-full); width:${(d.cantidad / total * 100)}%; transition:width 0.5s;"></div>
+                    </div>
+                </div>
+            `).join('')}
         </div>
-    `).join('')}</div>`;
+    `;
 }
 
 function renderMejores(data) {
     const container = document.getElementById('reporte-mejores');
-    if (!data || !data.length) { container.innerHTML = '<div class="empty-state">Sin datos</div>'; return; }
+    if (!data || !data.length) { 
+        container.innerHTML = `
+            <div class="empty-state" style="padding:2.5rem; text-align:center;">
+                <div class="empty-state__icon" style="display:flex; justify-content:center; margin-bottom:0.75rem;">
+                    ${Icons.vacio(36)}
+                </div>
+                <div class="empty-state__title" style="font-weight:700;">Sin evaluaciones concluidas</div>
+                <div class="empty-state__text" style="color:var(--color-text-muted); font-size:0.875rem;">A medida que se registren calificaciones definitivas se destacarán los mejores promedios</div>
+            </div>
+        `; 
+        return; 
+    }
 
     DataTable.render('reporte-mejores', data, [
-        { label: 'Estudiante', key: 'nombre_estudiante', format: (v) => `<strong>${Utils.escapeHtml(v)}</strong>` },
-        { label: 'Curso', key: 'nombre_curso', format: (v) => `<small>${Utils.escapeHtml(v)}</small>` },
-        { label: 'Nota Final', key: 'nota_final', format: (v) => `<span class="badge ${v >= 18 ? 'badge--accent' : v >= 15 ? 'badge--primary' : 'badge--secondary'}" style="font-size:1rem">${v}</span>` },
-        { label: 'Estado', key: 'estado', format: (v) => `<span class="badge badge--accent">${v}</span>` }
+        { 
+            label: 'Estudiante', 
+            key: 'nombre_estudiante', 
+            format: (v) => `<strong>${Utils.escapeHtml(v)}</strong>` 
+        },
+        { 
+            label: 'Curso', 
+            key: 'nombre_curso', 
+            format: (v) => `<small>${Utils.escapeHtml(v)}</small>` 
+        },
+        { 
+            label: 'Nota Final', 
+            key: 'nota_final', 
+            format: (v) => `<span class="badge ${parseFloat(v) >= 18 ? 'badge--accent' : 'badge--primary'}" style="font-size:0.95rem; font-weight:800;">${parseFloat(v).toFixed(2)}</span>` 
+        },
+        { 
+            label: 'Estado', 
+            key: 'estado', 
+            format: (v) => `<span class="badge badge--accent">${v}</span>` 
+        }
     ]);
 }
 </script>

@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="">
-    <title>Calificaciones - Facilitador | UPTEC Cursos</title>
+    <title>Calificaciones - Facilitador | UPTECMS Cursos</title>
     <link rel="stylesheet" href="../../../frontend/css/main.css">
+    <link rel="icon" type="image/png" href="../../img/logo-uptec.png">
 </head>
 <body>
 
@@ -16,9 +17,9 @@
     <main class="main">
         <header class="header">
             <button class="sidebar-toggle" id="sidebar-toggle">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
-            <h1 class="header__title">Registro de calificaciones</h1>
+            <h1 class="header__title">Registro de Calificaciones</h1>
             <div class="header__actions">
                 <div class="header__user">
                     <div class="header__user-avatar" id="header-avatar"></div>
@@ -27,8 +28,8 @@
                         <span class="header__user-role" id="header-role"></span>
                     </div>
                 </div>
-                <button class="header__logout" id="logout-btn" title="Cerrar Sesion">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                <button class="header__logout" id="logout-btn" title="Cerrar Sesión">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 </button>
             </div>
         </header>
@@ -36,21 +37,24 @@
         <div class="content">
             <div class="content__header">
                 <div>
-                    <h2 class="content__title">Calificaciones</h2>
-                    <p class="content__subtitle">Registre y gestione las notas de sus estudiantes</p>
+                    <h2 class="content__title">Calificaciones Agregadas</h2>
+                    <p class="content__subtitle">Registra y supervisa las notas obtenidas por los estudiantes en cada evaluación</p>
                 </div>
             </div>
 
             <div class="card" style="margin-bottom: 1.5rem;">
                 <div class="card__body" style="padding: 1rem 1.5rem;">
-                    <div class="d-flex gap-4 flex-wrap items-end">
-                        <div>
-                            <label class="form-label" style="font-size: 0.8125rem;">Curso</label>
-                            <select class="form-select" id="filter-curso" style="width: 240px;" onchange="loadCalificaciones()">
-                                <option value="">Todos mis cursos</option>
+                    <div class="d-flex gap-4 flex-wrap items-end justify-between">
+                        <div style="flex: 1; max-width: 320px;">
+                            <label class="form-label" style="font-size: 0.8125rem;">Filtrar por Curso</label>
+                            <select class="form-select" id="filter-curso" onchange="loadCalificaciones()">
+                                <option value="">Todas mis asignaturas</option>
                             </select>
                         </div>
-                        <button class="btn btn--primary" onclick="openNotaModal()">+ Nueva calificación</button>
+                        <button class="btn btn--primary" onclick="openNotaModal()" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            Agregar Calificación
+                        </button>
                     </div>
                 </div>
             </div>
@@ -83,7 +87,9 @@ async function loadCursos() {
             opt.textContent = `${c.codigo} - ${c.nombre}`;
             select.appendChild(opt);
         });
-    } catch (e) { console.error(e); }
+    } catch (e) { 
+        console.error("Error al cargar cursos del docente:", e); 
+    }
 }
 
 async function loadCalificaciones() {
@@ -92,59 +98,99 @@ async function loadCalificaciones() {
         const cursoId = document.getElementById('filter-curso').value;
         const data = await API.get('calificaciones', cursoId ? { curso_id: cursoId } : {});
         renderCalificaciones(data.calificaciones || []);
-    } catch (err) { Toast.show('Error: ' + err.message, 'error'); }
+    } catch (err) { 
+        Toast.show('Error al obtener calificaciones: ' + err.message, 'error'); 
+    }
 }
 
 function renderCalificaciones(notas) {
     DataTable.render('calificaciones-table', notas, [
-        { label: 'Estudiante', key: 'nombre_estudiante', format: (v) => `<strong>${Utils.escapeHtml(v)}</strong>` },
-        { label: 'Curso', key: 'nombre_curso', format: (v, r) => `<small>${Utils.escapeHtml(v)}<br>${r.codigo_curso}</small>` },
-        { label: 'Evaluacion', key: 'tipo_evaluacion', format: (v, r) => `<strong>${v}</strong>${r.descripcion ? '<br><small>' + Utils.escapeHtml(r.descripcion) + '</small>' : ''}` },
-        { label: 'Nota', key: 'nota', format: (v) => `<span class="badge ${v >= 10 ? 'badge--accent' : v >= 1 ? 'badge--warning' : 'badge--danger'}" style="font-size:0.9375rem">${v}</span>` },
-        { label: 'Peso', key: 'peso', format: (v) => `${v}%` },
-        { label: 'Fecha', key: 'fecha_evaluacion', format: (v) => `<small>${Utils.formatDate(v)}</small>` }
+        { 
+            label: 'Estudiante', 
+            key: 'nombre_estudiante', 
+            format: (v) => `<strong>${Utils.escapeHtml(v)}</strong>` 
+        },
+        { 
+            label: 'Asignatura', 
+            key: 'nombre_curso', 
+            format: (v, r) => `<span class="badge badge--neutral" style="margin-bottom:2px;">${Utils.escapeHtml(r.codigo_curso)}</span><br><small style="color:var(--color-text-secondary);">${Utils.escapeHtml(v)}</small>` 
+        },
+        { 
+            label: 'Evaluación', 
+            key: 'tipo_evaluacion', 
+            format: (v, r) => `<strong>${v}</strong>${r.descripcion ? '<br><small style="color:var(--color-text-muted);">' + Utils.escapeHtml(r.descripcion) + '</small>' : ''}` 
+        },
+        { 
+            label: 'Calificación', 
+            key: 'nota', 
+            format: (v) => {
+                const notaNum = parseFloat(v);
+                const badgeCls = notaNum >= 10 ? 'badge--accent' : notaNum >= 1 ? 'badge--warning' : 'badge--danger';
+                return `<span class="badge ${badgeCls}" style="font-size:0.95rem; font-weight:700;">${notaNum.toFixed(2)} pts</span>`;
+            }
+        },
+        { 
+            label: 'Ponderación', 
+            key: 'peso', 
+            format: (v) => `<strong>${parseFloat(v).toFixed(2)}%</strong>` 
+        },
+        { 
+            label: 'Fecha Aplicada', 
+            key: 'fecha_evaluacion', 
+            format: (v) => `<small>${Utils.formatDate(v)}</small>` 
+        }
     ]);
 }
 
 function openNotaModal() {
-    const cursoOptions = cursosList.map(c => `<option value="${c.id}">${c.codigo} - ${Utils.escapeHtml(c.nombre)}</option>`).join('');
+    const cursoOptions = cursosList
+        .filter(c => c.estado !== 'Finalizado')
+        .map(c => `<option value="${c.id}">${c.codigo} - ${Utils.escapeHtml(c.nombre)}</option>`)
+        .join('');
+
     const content = `
         <form id="nota-form">
-            <div class="form-group">
-                <label class="form-label form-label--required">Curso</label>
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <label class="form-label form-label--required">Asignatura / Curso Activo</label>
                 <select class="form-select" id="nota-curso" onchange="cargarDatosRelacionados()" required>
-                    <option value="">Selecciona un curso</option>${cursoOptions}
+                    <option value="">Selecciona una asignatura...</option>
+                    ${cursoOptions}
                 </select>
             </div>
             
-            <div class="d-grid grid--2 gap-3">
+            <div class="d-grid grid--2 gap-3" style="margin-bottom: 1rem;">
                 <div class="form-group">
-                    <label class="form-label form-label--required">Estudiante (Inscripción)</label>
+                    <label class="form-label form-label--required">Estudiante</label>
                     <select class="form-select" id="nota-inscripcion" required>
                         <option value="">Primero selecciona un curso</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="form-label form-label--required">Evaluación a calificar</label>
+                    <label class="form-label form-label--required">Evaluación del Plan</label>
                     <select class="form-select" id="nota-evaluacion" required>
                         <option value="">Primero selecciona un curso</option>
                     </select>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="form-label form-label--required">Nota (0-20)</label>
-                <input type="number" id="nota-valor" class="form-input" min="0" max="20" step="0.01" required>
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <label class="form-label form-label--required">Calificación Obtenida (Escala 0 a 20 puntos)</label>
+                <input type="number" id="nota-valor" class="form-input" min="0" max="20" step="0.01" placeholder="ej. 16.50" required>
             </div>
             
             <div class="form-group">
-                <label class="form-label">Observaciones (Opcional)</label>
-                <textarea id="nota-obs" class="form-textarea" rows="2" placeholder="Ej: Excelente desarrollo del algoritmo..."></textarea>
+                <label class="form-label">Observaciones y Retroalimentación (Opcional)</label>
+                <textarea id="nota-obs" class="form-textarea" rows="2" placeholder="Notas sobre el desempeño del estudiante..."></textarea>
             </div>
         </form>
     `;
-    const footer = `<button class="btn btn--ghost" onclick="Modal.close()">Cancelar</button><button class="btn btn--primary" onclick="saveNota()">Guardar</button>`;
-    Modal.open(content, { title: 'Registrar calificación', footer });
+
+    const footer = `
+        <button class="btn btn--ghost" onclick="Modal.close()">Cancelar</button>
+        <button class="btn btn--primary" onclick="saveNota()">Guardar Calificación</button>
+    `;
+
+    Modal.open(content, { title: 'Agregar Calificación', footer });
 }
 
 async function cargarDatosRelacionados() {
@@ -153,8 +199,8 @@ async function cargarDatosRelacionados() {
     const selectEvaluaciones = document.getElementById('nota-evaluacion');
 
     if (!cursoId) { 
-        selectEstudiantes.innerHTML = '<option value="">Selecciona un curso</option>'; 
-        selectEvaluaciones.innerHTML = '<option value="">Selecciona un curso</option>'; 
+        selectEstudiantes.innerHTML = '<option value="">Primero selecciona un curso</option>'; 
+        selectEvaluaciones.innerHTML = '<option value="">Primero selecciona un curso</option>'; 
         return; 
     }
 
@@ -162,46 +208,52 @@ async function cargarDatosRelacionados() {
     selectEvaluaciones.innerHTML = '<option value="">Cargando evaluaciones...</option>';
 
     try {
-        // 1. Cargar estudiantes (ya lo tenías)
+        // Cargar participantes activos
         const dataEst = await API.get('estudiantes-curso', { id: cursoId });
         const estudiantes = dataEst.estudiantes || [];
         selectEstudiantes.innerHTML = estudiantes.length ? 
-            estudiantes.map(e => `<option value="${e.inscripcion_id}">${Utils.escapeHtml(e.nombre_estudiante)} (${e.cedula})</option>`).join('') :
-            '<option value="">No hay estudiantes inscritos</option>';
+            estudiantes.map(e => `<option value="${e.inscripcion_id}">${Utils.escapeHtml(e.nombre_estudiante)} (CI ${Utils.escapeHtml(e.cedula)})</option>`).join('') :
+            '<option value="">No hay estudiantes inscritos en este curso</option>';
 
-        // 2. NUEVO: Cargar las evaluaciones creadas en ese curso
+        // Cargar plan de evaluación configurado
         const dataEval = await API.get('evaluaciones-curso', { curso_id: cursoId });
         const evaluaciones = dataEval.evaluaciones || [];
         selectEvaluaciones.innerHTML = evaluaciones.length ? 
-            evaluaciones.map(ev => `<option value="${ev.id}">${Utils.escapeHtml(ev.nombre)} - ${ev.peso}%</option>`).join('') :
-            '<option value="">⚠️ No has creado evaluaciones para este curso</option>';
+            evaluaciones.map(ev => `<option value="${ev.id}">${Utils.escapeHtml(ev.nombre)} — Ponderación: ${ev.peso}%</option>`).join('') :
+            '<option value="">(Sin evaluaciones registradas en este curso)</option>';
 
     } catch (e) { 
-        console.error(e);
-        Toast.show('Error al cargar datos del curso', 'error');
+        console.error("Error al cargar datos vinculados:", e);
+        Toast.show('Error al consultar datos del curso', 'error');
     }
 }
 
 async function saveNota() {
     const data = {
         inscripcion_id: document.getElementById('nota-inscripcion').value,
-        evaluacion_id: document.getElementById('nota-evaluacion').value, // El ID clave de la evaluación
+        evaluacion_id: document.getElementById('nota-evaluacion').value,
         nota: document.getElementById('nota-valor').value,
-        observaciones: document.getElementById('nota-obs').value
+        observaciones: document.getElementById('nota-obs').value.trim()
     };
 
-    if (!data.inscripcion_id || !data.evaluacion_id || !data.nota) { 
-        Toast.show('Complete todos los campos requeridos', 'warning'); 
+    if (!data.inscripcion_id || !data.evaluacion_id || data.nota === '') { 
+        Toast.show('Debes completar todos los campos requeridos', 'warning'); 
         return; 
+    }
+
+    const notaNum = parseFloat(data.nota);
+    if (isNaN(notaNum) || notaNum < 0 || notaNum > 20) {
+        Toast.show('La nota debe situarse entre 0 y 20 puntos', 'error');
+        return;
     }
 
     try {
         await API.post('calificacion', data);
-        Toast.show('Calificación registrada con éxito', 'success');
+        Toast.show('Calificación agregada exitosamente', 'success');
         Modal.close(); 
         loadCalificaciones();
     } catch (err) { 
-        Toast.show(err.message || 'Error al guardar la nota', 'error'); 
+        Toast.show(err.message || 'Error al guardar la calificación', 'error'); 
     }
 }
 </script>

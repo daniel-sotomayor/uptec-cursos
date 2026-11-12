@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="">
-    <title>Facilitadores - Analista | UPTEC Cursos</title>
+    <title>Facilitadores - Analista | UPTECMS Cursos</title>
     <link rel="stylesheet" href="../../../frontend/css/main.css">
+    <link rel="icon" type="image/png" href="../../img/logo-uptec.png">
 </head>
 <body>
 
@@ -16,13 +17,13 @@
     <main class="main">
         <header class="header">
             <button class="sidebar-toggle" id="sidebar-toggle">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
             <h1 class="header__title">Gestión de Facilitadores</h1>
             <div class="header__actions">
                 <div class="header__search">
-                    <svg class="header__search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                    <input type="text" class="header__search-input" placeholder="Buscar facilitador..." id="search-input">
+                    <svg class="header__search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" class="header__search-input" placeholder="Buscar por nombre o cédula..." id="search-input">
                 </div>
                 <div class="header__user">
                     <div class="header__user-avatar" id="header-avatar"></div>
@@ -31,8 +32,8 @@
                         <span class="header__user-role" id="header-role"></span>
                     </div>
                 </div>
-                <button class="header__logout" id="logout-btn" title="Cerrar Sesion">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                <button class="header__logout" id="logout-btn" title="Cerrar Sesión">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 </button>
             </div>
         </header>
@@ -40,18 +41,19 @@
         <div class="content">
             <div class="content__header">
                 <div>
-                    <h2 class="content__title">Facilitadores del Sistema</h2>
-                    <p class="content__subtitle">Visualiza y gestiona los facilitadores disponibles</p>
+                    <h2 class="content__title">Planta Docente / Facilitadores</h2>
+                    <p class="content__subtitle">Supervisa la disponibilidad, asignaciones activas y estado de los docentes de la UPTECMS</p>
                 </div>
             </div>
 
+            <!-- Filtros -->
             <div class="card" style="margin-bottom: 1.5rem;">
                 <div class="card__body" style="padding: 1rem 1.5rem;">
                     <div class="d-flex gap-4 flex-wrap">
                         <div>
-                            <label class="form-label" style="font-size: 0.8125rem;">Estado</label>
-                            <select class="form-select" id="filter-estado" style="width: 160px;" onchange="loadFacilitadores()">
-                                <option value="">Todos</option>
+                            <label class="form-label" style="font-size: 0.8125rem;">Estado de Cuenta</label>
+                            <select class="form-select" id="filter-estado" style="width: 170px;" onchange="loadFacilitadores()">
+                                <option value="">Todos los estados</option>
                                 <option value="1">Activos</option>
                                 <option value="0">Inactivos</option>
                             </select>
@@ -88,26 +90,53 @@ async function loadFacilitadores() {
         currentFacilitadores = data.usuarios || [];
         renderFacilitadores(currentFacilitadores);
     } catch (err) {
-        Toast.show('Error: ' + err.message, 'error');
+        Toast.show('Error al obtener facilitadores: ' + err.message, 'error');
     }
 }
 
 function renderFacilitadores(facilitadores) {
+    // Iconos vectoriales profesionales
+    const iconActivar = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
+    const iconDesactivar = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>`;
+
     DataTable.render('facilitadores-table', facilitadores, [
-        { label: 'Nombre', key: 'nombre_completo', format: (v, r) => `<strong>${Utils.escapeHtml(v || r.nombre + ' ' + r.apellidos)}</strong><br><small>Cedula: ${r.cedula}</small>` },
-        { label: 'Correo', key: 'correo', format: (v) => `<small>${v}</small>` },
-        { label: 'Telefono', key: 'telefono' },
-        { label: 'Cursos Asignados', key: 'total_cursos', format: (v) => `<span class="badge badge--primary">${v || 0}</span>` },
-        { label: 'Estado', key: 'activo', format: (v) => `<span class="badge ${v === '1' || v === 1 ? 'badge--accent' : 'badge--neutral'}">${v === '1' || v === 1 ? 'Activo' : 'Inactivo'}</span>` },
-        { label: 'Ultimo Acceso', key: 'ultimo_acceso', format: (v) => `<small>${Utils.formatDateTime(v) || 'Nunca'}</small>` }
+        { 
+            label: 'Docente / Facilitador', 
+            key: 'nombre_completo', 
+            format: (v, r) => `<strong>${Utils.escapeHtml(v || r.nombre + ' ' + r.apellidos)}</strong><br><small style="color:var(--color-text-muted);">CI ${Utils.escapeHtml(r.cedula)}</small>` 
+        },
+        { 
+            label: 'Correo Electrónico', 
+            key: 'correo', 
+            format: (v) => `<small>${Utils.escapeHtml(v || '-')}</small>` 
+        },
+        { 
+            label: 'Teléfono Móvil', 
+            key: 'telefono',
+            format: (v) => `<small>${Utils.escapeHtml(v || '-')}</small>`
+        },
+        { 
+            label: 'Asignaciones', 
+            key: 'total_cursos', 
+            format: (v) => `<span class="badge badge--primary">${v || 0} cursos</span>` 
+        },
+        { 
+            label: 'Estado', 
+            key: 'activo', 
+            format: (v) => `<span class="badge ${v === '1' || v === 1 ? 'badge--accent' : 'badge--neutral'}">${v === '1' || v === 1 ? 'Activo' : 'Inactivo'}</span>` 
+        },
+        { 
+            label: 'Último Acceso', 
+            key: 'ultimo_acceso', 
+            format: (v) => `<small>${v ? Utils.formatDateTime(v) : '<span style="color:var(--color-text-muted);">Sin ingresos</span>'}</small>` 
+        }
     ], {
         actions: [
-            { icon: '✅', title: 'Activar', class: 'btn btn--sm btn--ghost', onClick: (row) => `cambiarEstadoFacilitador(${row.id}, 1)` },
-            { icon: '🗑️', title: 'Desactivar', class: 'btn btn--sm btn--danger', onClick: (row) => `cambiarEstadoFacilitador(${row.id}, 0)` }
+            { icon: iconActivar, title: 'Habilitar Facilitador', class: 'btn btn--sm btn--ghost', onClick: (row) => `cambiarEstadoFacilitador(${row.id}, 1)` },
+            { icon: iconDesactivar, title: 'Inhabilitar Facilitador', class: 'btn btn--sm btn--danger', onClick: (row) => `cambiarEstadoFacilitador(${row.id}, 0)` }
         ]
     });
 }
-
 
 function cambiarEstadoFacilitador(id, nuevoEstado) {
     const facilitador = currentFacilitadores.find(f => f.id === id);
@@ -124,7 +153,7 @@ function cambiarEstadoFacilitador(id, nuevoEstado) {
         apellidos = parts.slice(1).join(' ') || '';
     }
 
-    const accionTexto = nuevoEstado == 1 ? 'activar' : 'desactivar';
+    const accionTexto = nuevoEstado == 1 ? 'habilitar' : 'inhabilitar';
     ConfirmDialog.open(`¿Estás seguro de ${accionTexto} a ${Utils.escapeHtml(nombre || 'este facilitador')}?`, async () => {
         try {
             let updateData = {
@@ -139,7 +168,7 @@ function cambiarEstadoFacilitador(id, nuevoEstado) {
             }
 
             await API.put('usuario', id, updateData);
-            Toast.show(`Facilitador ${nuevoEstado == 1 ? 'activado' : 'desactivado'} exitosamente`, 'success');
+            Toast.show(`Facilitador ${nuevoEstado == 1 ? 'habilitado' : 'inhabilitado'} exitosamente`, 'success');
             loadFacilitadores();
         } catch (err) {
             Toast.show(err.message || `Error al ${accionTexto} facilitador`, 'error');
@@ -147,7 +176,10 @@ function cambiarEstadoFacilitador(id, nuevoEstado) {
     });
 }
 
-function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
+function debounce(fn, ms) { 
+    let t; 
+    return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; 
+}
 </script>
 
 </body>

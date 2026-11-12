@@ -10,6 +10,11 @@
 
 declare(strict_types=1);
 
+if (basename($_SERVER['SCRIPT_FILENAME'] ?? '') === 'config.php') {
+    http_response_code(403);
+    exit('Acceso directo no permitido');
+}
+
 if (!defined('UPTEC_ACCESS')) {
     define('UPTEC_ACCESS', true);
 }
@@ -30,6 +35,15 @@ class Database
 
     private function __construct()
     {
+        // Soporte dinamico para variables de entorno
+        $this->host = getenv('DB_HOST') ?: $this->host;
+        $this->database = getenv('DB_NAME') ?: $this->database;
+        $this->username = getenv('DB_USER') ?: $this->username;
+        $envPass = getenv('DB_PASS');
+        if ($envPass !== false) {
+            $this->password = (string)$envPass;
+        }
+
         try {
             $dsn = "mysql:host={$this->host};dbname={$this->database};charset={$this->charset}";
 

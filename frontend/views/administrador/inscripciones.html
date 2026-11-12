@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="">
-    <title>Inscripciones - Administrador | UPTEC Cursos</title>
+    <title>Inscripciones - Administrador | UPTECMS Cursos</title>
+    <link rel="icon" type="image/png" href="../../img/logo-uptec.png">
     <link rel="stylesheet" href="../../../frontend/css/main.css">
 </head>
 <body>
@@ -16,13 +17,13 @@
     <main class="main">
         <header class="header">
             <button class="sidebar-toggle" id="sidebar-toggle">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
-            <h1 class="header__title">Gestion de Inscripciones</h1>
+            <h1 class="header__title">Gestión de Inscripciones</h1>
             <div class="header__actions">
                 <div class="header__search">
-                    <svg class="header__search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                    <input type="text" class="header__search-input" placeholder="Buscar inscripcion..." id="search-input">
+                    <svg class="header__search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" class="header__search-input" placeholder="Buscar por estudiante, cédula o curso..." id="search-input">
                 </div>
                 <div class="header__user">
                     <div class="header__user-avatar" id="header-avatar"></div>
@@ -31,8 +32,8 @@
                         <span class="header__user-role" id="header-role"></span>
                     </div>
                 </div>
-                <button class="header__logout" id="logout-btn" title="Cerrar Sesion">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                <button class="header__logout" id="logout-btn" title="Cerrar Sesión">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 </button>
             </div>
         </header>
@@ -40,28 +41,29 @@
         <div class="content">
             <div class="content__header">
                 <div>
-                    <h2 class="content__title">Inscripciones del Sistema</h2>
-                    <p class="content__subtitle">Administra las inscripciones de participantes a cursos</p>
+                    <h2 class="content__title">Registro de Inscripciones</h2>
+                    <p class="content__subtitle">Supervisa y administra la participación activa de los estudiantes en los cursos</p>
                 </div>
                 <button class="btn btn--primary" onclick="openInscripcionModal()">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    Nueva Inscripcion
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Nueva Inscripción
                 </button>
             </div>
 
+            <!-- Filtros -->
             <div class="card" style="margin-bottom: 1.5rem;">
                 <div class="card__body" style="padding: 1rem 1.5rem;">
                     <div class="d-flex gap-4 flex-wrap">
-                        <div>
-                            <label class="form-label" style="font-size: 0.8125rem;">Curso</label>
-                            <select class="form-select" id="filter-curso" style="width: 220px;" onchange="loadInscripciones()">
+                        <div style="flex: 1; min-width: 240px;">
+                            <label class="form-label" style="font-size: 0.8125rem;">Filtrar por Curso</label>
+                            <select class="form-select" id="filter-curso" onchange="loadInscripciones()">
                                 <option value="">Todos los cursos</option>
                             </select>
                         </div>
-                        <div>
-                            <label class="form-label" style="font-size: 0.8125rem;">Estado</label>
-                            <select class="form-select" id="filter-estado" style="width: 160px;" onchange="loadInscripciones()">
-                                <option value="">Todos</option>
+                        <div style="min-width: 180px;">
+                            <label class="form-label" style="font-size: 0.8125rem;">Estado de Inscripción</label>
+                            <select class="form-select" id="filter-estado" onchange="loadInscripciones()">
+                                <option value="">Todos los estados</option>
                                 <option value="Inscrito">Inscrito</option>
                                 <option value="En Progreso">En Progreso</option>
                                 <option value="Completado">Completado</option>
@@ -107,14 +109,18 @@ async function loadCursos() {
             opt.textContent = `${c.codigo} - ${c.nombre}`;
             select.appendChild(opt);
         });
-    } catch (e) { console.error(e); }
+    } catch (e) { 
+        console.error("Error cargando cursos:", e); 
+    }
 }
 
 async function loadParticipantes() {
     try {
         const data = await API.get('usuarios', { rol: 'Participante' });
         participantesList = data.usuarios || [];
-    } catch (e) { console.error(e); }
+    } catch (e) { 
+        console.error("Error cargando participantes:", e); 
+    }
 }
 
 async function loadInscripciones() {
@@ -127,7 +133,7 @@ async function loadInscripciones() {
         currentInscripciones = data.inscripciones || [];
         renderInscripciones(currentInscripciones);
     } catch (err) {
-        Toast.show('Error: ' + err.message, 'error');
+        Toast.show('Error cargando inscripciones: ' + err.message, 'error');
     }
 }
 
@@ -140,46 +146,85 @@ function renderInscripciones(inscripciones) {
         'Reprobado': 'badge--danger'
     };
 
+    // SVGs vectoriales profesionales para acciones
+    const iconEditar = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>`;
+    const iconEliminar = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>`;
+
     DataTable.render('inscripciones-table', inscripciones, [
-        { label: 'Participante', key: 'nombre_estudiante', format: (v, r) => `<strong>${Utils.escapeHtml(v)}</strong><br><small>${r.cedula}</small>` },
-        { label: 'Curso', key: 'nombre_curso', format: (v, r) => `<small>${Utils.escapeHtml(v)}<br>${r.codigo_curso}</small>` },
-        { label: 'Fecha Inscripcion', key: 'fecha_inscripcion', format: (v) => `<small>${Utils.formatDate(v)}</small>` },
-        { label: 'Nota Final', key: 'nota_final', format: (v) => v ? `<span class="badge ${v >= 10 ? 'badge--accent' : 'badge--danger'}">${v}</span>` : '<span class="badge badge--neutral">-</span>' },
-        { label: 'Estado', key: 'estado', badge: estadoBadge }
+        { 
+            label: 'Participante', 
+            key: 'nombre_estudiante', 
+            format: (v, r) => `<strong>${Utils.escapeHtml(v)}</strong><br><small style="color:var(--color-text-muted)">CI ${Utils.escapeHtml(r.cedula)}</small>` 
+        },
+        { 
+            label: 'Curso Asignado', 
+            key: 'nombre_curso', 
+            format: (v, r) => `<span class="badge badge--neutral" style="margin-bottom: 2px;">${Utils.escapeHtml(r.codigo_curso)}</span><br><small style="color:var(--color-text-secondary);">${Utils.escapeHtml(v)}</small>` 
+        },
+        { 
+            label: 'Fecha de Registro', 
+            key: 'fecha_inscripcion', 
+            format: (v) => `<small>${Utils.formatDate(v)}</small>` 
+        },
+        { 
+            label: 'Nota Final', 
+            key: 'nota_final', 
+            format: (v) => v !== null && v !== undefined 
+                ? `<span class="badge ${parseFloat(v) >= 10 ? 'badge--accent' : 'badge--danger'}">${parseFloat(v).toFixed(2)}</span>` 
+                : '<span style="color:var(--color-text-muted); font-size: 0.85rem;">En curso</span>' 
+        },
+        { 
+            label: 'Estado', 
+            key: 'estado', 
+            badge: estadoBadge 
+        }
     ], {
         actions: [
-            { icon: '✏️', title: 'Editar', class: 'btn btn--sm btn--ghost', onClick: (row) => `editInscripcion(${row.id})` },
-            { icon: '🗑️', title: 'Eliminar', class: 'btn btn--sm btn--danger', onClick: (row) => `deleteInscripcion(${row.id})` }
+            { icon: iconEditar, title: 'Modificar Estado', class: 'btn btn--sm btn--ghost', onClick: (row) => `editInscripcion(${row.id})` },
+            { icon: iconEliminar, title: 'Cancelar Inscripción', class: 'btn btn--sm btn--danger', onClick: (row) => `deleteInscripcion(${row.id})` }
         ]
     });
 }
 
 function openInscripcionModal() {
-    const cursoOptions = cursosList.map(c => `<option value="${c.id}">${c.codigo} - ${Utils.escapeHtml(c.nombre)}</option>`).join('');
-    const participanteOptions = participantesList.map(p => `<option value="${p.id}">${p.cedula} - ${Utils.escapeHtml(p.nombre)} ${Utils.escapeHtml(p.apellidos)}</option>`).join('');
+    const cursoOptions = cursosList
+        .filter(c => c.estado !== 'Cancelado' && c.estado !== 'Finalizado')
+        .map(c => `<option value="${c.id}">${c.codigo} - ${Utils.escapeHtml(c.nombre)}</option>`)
+        .join('');
+
+    const participanteOptions = participantesList
+        .map(p => `<option value="${p.id}">${p.cedula} - ${Utils.escapeHtml(p.nombre)} ${Utils.escapeHtml(p.apellidos)}</option>`)
+        .join('');
 
     const content = `
         <form id="inscripcion-form">
             <div class="form-group">
-                <label class="form-label form-label--required">Curso</label>
+                <label class="form-label form-label--required">Curso Disponible</label>
                 <select class="form-select" id="inscripcion-curso" required>
-                    <option value="">Selecciona un curso</option>${cursoOptions}
+                    <option value="">Selecciona el curso...</option>
+                    ${cursoOptions}
                 </select>
             </div>
             <div class="form-group">
-                <label class="form-label form-label--required">Participante</label>
+                <label class="form-label form-label--required">Estudiante / Participante</label>
                 <select class="form-select" id="inscripcion-usuario" required>
-                    <option value="">Selecciona un participante</option>${participanteOptions}
+                    <option value="">Selecciona al estudiante...</option>
+                    ${participanteOptions}
                 </select>
             </div>
             <div class="form-group">
-                <label class="form-label">Observaciones</label>
-                <textarea id="inscripcion-obs" class="form-textarea" rows="2" placeholder="Observaciones opcionales"></textarea>
+                <label class="form-label">Observaciones Adicionales</label>
+                <textarea id="inscripcion-obs" class="form-textarea" rows="2" placeholder="Notas sobre la inscripción (opcional)..."></textarea>
             </div>
         </form>
     `;
-    const footer = `<button class="btn btn--ghost" onclick="Modal.close()">Cancelar</button><button class="btn btn--primary" onclick="saveInscripcion()">Inscribir</button>`;
-    Modal.open(content, { title: 'Nueva Inscripcion', footer });
+
+    const footer = `
+        <button class="btn btn--ghost" onclick="Modal.close()">Cancelar</button>
+        <button class="btn btn--primary" onclick="saveInscripcion()">Registrar Inscripción</button>
+    `;
+
+    Modal.open(content, { title: 'Nueva Inscripción', footer });
 }
 
 function editInscripcion(id) {
@@ -190,15 +235,15 @@ function editInscripcion(id) {
         <form id="inscripcion-form">
             <input type="hidden" id="inscripcion-id" value="${id}">
             <div class="form-group">
-                <label class="form-label">Participante</label>
-                <input type="text" class="form-input" value="${Utils.escapeHtml(insc.nombre_estudiante)}" disabled>
+                <label class="form-label">Estudiante</label>
+                <input type="text" class="form-input" value="${Utils.escapeHtml(insc.nombre_estudiante)} (CI: ${Utils.escapeHtml(insc.cedula)})" disabled>
             </div>
             <div class="form-group">
                 <label class="form-label">Curso</label>
-                <input type="text" class="form-input" value="${Utils.escapeHtml(insc.nombre_curso)}" disabled>
+                <input type="text" class="form-input" value="${Utils.escapeHtml(insc.codigo_curso)} - ${Utils.escapeHtml(insc.nombre_curso)}" disabled>
             </div>
             <div class="form-group">
-                <label class="form-label form-label--required">Estado</label>
+                <label class="form-label form-label--required">Estado de la Inscripción</label>
                 <select class="form-select" id="inscripcion-estado">
                     <option value="Inscrito" ${insc.estado === 'Inscrito' ? 'selected' : ''}>Inscrito</option>
                     <option value="En Progreso" ${insc.estado === 'En Progreso' ? 'selected' : ''}>En Progreso</option>
@@ -213,45 +258,70 @@ function editInscripcion(id) {
             </div>
         </form>
     `;
-    const footer = `<button class="btn btn--ghost" onclick="Modal.close()">Cancelar</button><button class="btn btn--primary" onclick="updateInscripcion()">Guardar Cambios</button>`;
-    Modal.open(content, { title: 'Editar Inscripcion', footer });
+
+    const footer = `
+        <button class="btn btn--ghost" onclick="Modal.close()">Cancelar</button>
+        <button class="btn btn--primary" onclick="updateInscripcion()">Guardar Cambios</button>
+    `;
+
+    Modal.open(content, { title: 'Actualizar Inscripción', footer });
 }
 
 async function saveInscripcion() {
     const data = {
         usuario_id: document.getElementById('inscripcion-usuario').value,
         curso_id: document.getElementById('inscripcion-curso').value,
-        observaciones: document.getElementById('inscripcion-obs').value
+        observaciones: document.getElementById('inscripcion-obs').value.trim()
     };
-    if (!data.usuario_id || !data.curso_id) { Toast.show('Complete los campos requeridos', 'warning'); return; }
+
+    if (!data.usuario_id || !data.curso_id) { 
+        Toast.show('Debes seleccionar tanto el curso como el estudiante', 'warning'); 
+        return; 
+    }
+
     try {
         await API.post('inscripcion', data);
-        Toast.show('Inscripcion realizada', 'success');
-        Modal.close(); loadInscripciones();
-    } catch (err) { Toast.show(err.message, 'error'); }
+        Toast.show('Inscripción formalizada exitosamente', 'success');
+        Modal.close(); 
+        loadInscripciones();
+    } catch (err) { 
+        Toast.show(err.message || 'Error al procesar inscripción', 'error'); 
+    }
 }
 
 async function updateInscripcion() {
     const id = document.getElementById('inscripcion-id').value;
     const data = {
         estado: document.getElementById('inscripcion-estado').value,
-        observaciones: document.getElementById('inscripcion-obs').value
+        observaciones: document.getElementById('inscripcion-obs').value.trim()
     };
+
     try {
         await API.put('inscripcion', id, data);
-        Toast.show('Inscripcion actualizada', 'success');
-        Modal.close(); loadInscripciones();
-    } catch (err) { Toast.show(err.message, 'error'); }
+        Toast.show('Estado de inscripción actualizado', 'success');
+        Modal.close(); 
+        loadInscripciones();
+    } catch (err) { 
+        Toast.show(err.message || 'Error al actualizar inscripción', 'error'); 
+    }
 }
 
 function deleteInscripcion(id) {
-    ConfirmDialog.open('Eliminar esta inscripcion?', async () => {
-        try { await API.delete('inscripcion', id); Toast.show('Inscripcion eliminada', 'success'); loadInscripciones(); }
-        catch (err) { Toast.show(err.message, 'error'); }
+    ConfirmDialog.open('¿Estás seguro de anular esta inscripción? Pasará al estado Abandonado.', async () => {
+        try { 
+            await API.delete('inscripcion', id); 
+            Toast.show('Inscripción cancelada', 'success'); 
+            loadInscripciones(); 
+        } catch (err) { 
+            Toast.show(err.message || 'Error al anular inscripción', 'error'); 
+        }
     });
 }
 
-function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
+function debounce(fn, ms) { 
+    let t; 
+    return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; 
+}
 </script>
 
 </body>

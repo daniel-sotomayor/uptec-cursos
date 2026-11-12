@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="">
-    <title>Dashboard - Analista | UPTEC Cursos</title>
+    <title>Dashboard - Analista | UPTECMS Cursos</title>
     <link rel="stylesheet" href="../../../frontend/css/main.css">
+    <link rel="icon" type="image/png" href="../../img/logo-uptec.png">
 </head>
 <body>
 
@@ -16,9 +17,9 @@
     <main class="main">
         <header class="header">
             <button class="sidebar-toggle" id="sidebar-toggle">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
-            <h1 class="header__title">Panel de analista</h1>
+            <h1 class="header__title">Panel de Analista Académico</h1>
             <div class="header__actions">
                 <div class="header__user">
                     <div class="header__user-avatar" id="header-avatar"></div>
@@ -28,7 +29,7 @@
                     </div>
                 </div>
                 <button class="header__logout" id="logout-btn" title="Cerrar Sesión">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 </button>
             </div>
         </header>
@@ -36,11 +37,12 @@
         <div class="content">
             <div class="content__header">
                 <div>
-                    <h2 class="content__title">Bienvenido, <span id="user-name"></span></h2>
-                    <p class="content__subtitle">Verifica cursos y organiza facilitadores</p>
+                    <h2 class="content__title">Bienvenido, <span id="user-name">Analista</span></h2>
+                    <p class="content__subtitle">Verificación curricular, asignación de facilitadores y monitoreo académico</p>
                 </div>
             </div>
 
+            <!-- Estadísticas Principales -->
             <div class="grid grid--4" id="stats-container">
                 <div class="stat-card skeleton" style="height: 140px;"></div>
                 <div class="stat-card skeleton" style="height: 140px;"></div>
@@ -49,19 +51,21 @@
             </div>
 
             <div class="grid grid--2" style="margin-top: 1.5rem;">
+                <!-- Distribución por Área -->
                 <div class="card">
                     <div class="card__header">
-                        <h3 class="card__title">Cursos por área</h3>
+                        <h3 class="card__title">Cursos por Área Académica</h3>
                     </div>
                     <div class="card__body" id="cursos-area">
                         <div class="skeleton" style="height: 200px;"></div>
                     </div>
                 </div>
 
+                <!-- Cursos Pendientes de Docente -->
                 <div class="card">
                     <div class="card__header">
-                        <h3 class="card__title">Cursos sin Facilitador</h3>
-                        <a href="cursos.html" class="btn btn--sm btn--ghost">Ver todos</a>
+                        <h3 class="card__title">Cursos sin Facilitador Asignado</h3>
+                        <a href="cursos.html" class="btn btn--sm btn--ghost">Ver catálogo</a>
                     </div>
                     <div class="card__body" id="cursos-sin-facilitador">
                         <div class="skeleton" style="height: 200px;"></div>
@@ -91,57 +95,123 @@
             renderCursosSinFacilitador(data.cursos_sin_facilitador || []);
         }
     } catch (err) {
-        Toast.show('Error: ' + err.message, 'error');
+        Toast.show('Error al cargar datos del panel: ' + err.message, 'error');
     }
 })();
 
 function renderStats(data) {
     const stats = [
-        { icon: '📚', cls: 'stat-card__icon--primary', value: data.total_cursos || 0, label: 'Total cursos' },
-        { icon: '📋', cls: 'stat-card__icon--accent', value: data.cursos_planificados || 0, label: 'Planificados' },
-        { icon: '👨‍🏫', cls: 'stat-card__icon--secondary', value: data.total_facilitadores || 0, label: 'Facilitadores' },
-        { icon: '📝', cls: 'stat-card__icon--info', value: data.total_inscripciones || 0, label: 'Inscripciones' }
+        { 
+            icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10M6 10h10"/></svg>', 
+            cls: 'stat-card__icon--primary', 
+            value: data.total_cursos || 0, 
+            label: 'Total de Cursos' 
+        },
+        { 
+            icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>', 
+            cls: 'stat-card__icon--accent', 
+            value: data.cursos_planificados || 0, 
+            label: 'Cursos Planificados' 
+        },
+        { 
+            icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>', 
+            cls: 'stat-card__icon--secondary', 
+            value: data.total_facilitadores || 0, 
+            label: 'Facilitadores Activos' 
+        },
+        { 
+            icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>', 
+            cls: 'stat-card__icon--info', 
+            value: data.total_inscripciones || 0, 
+            label: 'Inscripciones Globales' 
+        }
     ];
 
     document.getElementById('stats-container').innerHTML = stats.map(s => `
-        <div class="stat-card">
-            <div class="stat-card__header"><div class="stat-card__icon ${s.cls}">${s.icon}</div></div>
+        <div class="stat-card" style="transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='var(--shadow-lg)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow=''">
+            <div class="stat-card__header">
+                <div class="stat-card__icon ${s.cls}" style="display:flex; align-items:center; justify-content:center;">${s.icon}</div>
+            </div>
             <div class="stat-card__value">${Utils.formatNumber(s.value)}</div>
-            <div class="stat-card__label">${s.label}</div>
+            <div class="stat-card__label" style="font-weight:600; color:var(--color-text-secondary);">${s.label}</div>
         </div>
     `).join('');
 }
 
 function renderCursosArea(areas) {
     const container = document.getElementById('cursos-area');
-    if (!areas || !areas.length) { container.innerHTML = '<div class="empty-state">Sin datos</div>'; return; }
-    const max = Math.max(...areas.map(a => a.cantidad));
-    container.innerHTML = `<div style="display:flex;flex-direction:column;gap:0.875rem">${areas.map(a => `
-        <div>
-            <div class="d-flex justify-between" style="margin-bottom:0.375rem">
-                <span style="font-weight:500;font-size:0.9375rem">${Utils.escapeHtml(a.area)}</span>
-                <span style="font-weight:600;color:var(--color-primary)">${a.cantidad}</span>
-            </div>
-            <div style="background:var(--color-border-light);border-radius:var(--radius-full);height:8px;overflow:hidden">
-                <div style="background:var(--color-primary);height:100%;border-radius:var(--radius-full);width:${(a.cantidad/max*100)}%;transition:width 0.5s"></div>
-            </div>
+    if (!areas || !areas.length) { 
+        container.innerHTML = `<div class="empty-state" style="padding:2.5rem;"><div class="empty-state__icon">${Icons.vacio(36)}</div><div class="empty-state__title">No hay cursos registrados por área</div></div>`; 
+        return; 
+    }
+
+    const max = Math.max(...areas.map(a => parseInt(a.cantidad || a.total || 0))) || 1;
+
+    container.innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            ${areas.map(a => {
+                const cantidad = parseInt(a.cantidad || a.total || 0);
+                const pct = ((cantidad / max) * 100).toFixed(1);
+                return `
+                <div>
+                    <div class="d-flex justify-between" style="margin-bottom:0.35rem;">
+                        <span style="font-weight:600; font-size:0.9rem; color:var(--color-text-primary);">${Utils.escapeHtml(a.area)}</span>
+                        <span style="font-weight:700; color:var(--color-primary); font-size:0.9rem;">${cantidad} cursos</span>
+                    </div>
+                    <div style="background:var(--color-border-light); border-radius:var(--radius-full); height:8px; overflow:hidden;">
+                        <div style="background:var(--color-primary); height:100%; border-radius:var(--radius-full); width:${pct}%; transition:width 0.5s;"></div>
+                    </div>
+                </div>
+            `}).join('')}
         </div>
-    `).join('')}</div>`;
+    `;
 }
 
 function renderCursosSinFacilitador(cursos) {
     const container = document.getElementById('cursos-sin-facilitador');
-    if (!cursos || !cursos.length) { container.innerHTML = '<div class="empty-state">Todos los cursos tienen facilitador asignado</div>'; return; }
+    if (!cursos || !cursos.length) { 
+        container.innerHTML = `
+            <div class="empty-state" style="padding:2.5rem; text-align:center;">
+                <div style="width:44px; height:44px; margin:0 auto 0.75rem; border-radius:50%; background:#ecfdf5; color:#059669; display:flex; align-items:center; justify-content:center;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div class="empty-state__title" style="font-weight:700;">Planta docente al 100%</div>
+                <div class="empty-state__text" style="font-size:0.875rem; color:var(--color-text-muted);">Todos los cursos cuentan con facilitador asignado</div>
+            </div>
+        `; 
+        return; 
+    }
+
     container.innerHTML = `
-        <div class="table-container"><table class="table">
-            <tbody>${cursos.map(c => `
-                <tr>
-                    <td><strong>${Utils.escapeHtml(c.codigo)}</strong><br><small style="color:var(--color-text-muted)">${Utils.escapeHtml(c.nombre)}</small></td>
-                    <td><span class="badge badge--primary">${c.estado}</span></td>
-                    <td style="text-align:right"><a href="cursos.html?id=${c.id}" class="btn btn--sm btn--primary">Asignar</a></td>
-                </tr>
-            `).join('')}</tbody>
-        </table></div>`;
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Código / Nombre</th>
+                        <th>Estado</th>
+                        <th style="text-align:right;">Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${cursos.map(c => `
+                        <tr>
+                            <td>
+                                <strong>${Utils.escapeHtml(c.codigo)}</strong>
+                                <div style="font-size:0.8rem; color:var(--color-text-muted);">${Utils.escapeHtml(c.nombre)}</div>
+                            </td>
+                            <td><span class="badge badge--primary">${c.estado}</span></td>
+                            <td style="text-align:right;">
+                                <a href="cursos.html?id=${c.id}" class="btn btn--sm btn--primary" style="display:inline-flex; align-items:center; gap:0.35rem;">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
+                                    Asignar
+                                </a>
+                            </td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        </div>
+    `;
 }
 </script>
 

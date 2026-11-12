@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="">
-    <title>Inscribirme - Participante | UPTEC Cursos</title>
+    <title>Inscribirme - Participante | UPTECMS Cursos</title>
     <link rel="stylesheet" href="../../../frontend/css/main.css">
+    <link rel="icon" type="image/png" href="../../img/logo-uptec.png">
 </head>
 <body>
 
@@ -16,13 +17,13 @@
     <main class="main">
         <header class="header">
             <button class="sidebar-toggle" id="sidebar-toggle">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
-            <h1 class="header__title">Inscripción a los cursos</h1>
+            <h1 class="header__title">Inscripción de Asignaturas</h1>
             <div class="header__actions">
                 <div class="header__search">
-                    <svg class="header__search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                    <input type="text" class="header__search-input" placeholder="Buscar curso..." id="search-input">
+                    <svg class="header__search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" class="header__search-input" placeholder="Buscar por código o nombre..." id="search-input">
                 </div>
                 <div class="header__user">
                     <div class="header__user-avatar" id="header-avatar"></div>
@@ -31,8 +32,8 @@
                         <span class="header__user-role" id="header-role"></span>
                     </div>
                 </div>
-                <button class="header__logout" id="logout-btn" title="Cerrar Sesion">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                <button class="header__logout" id="logout-btn" title="Cerrar Sesión">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 </button>
             </div>
         </header>
@@ -40,8 +41,8 @@
         <div class="content">
             <div class="content__header">
                 <div>
-                    <h2 class="content__title">Cursos disponibles</h2>
-                    <p class="content__subtitle">Inscríbase a los cursos donde desee instruirse</p>
+                    <h2 class="content__title">Oferta Académica Disponible</h2>
+                    <p class="content__subtitle">Selecciona e inscríbete en las asignaturas abiertas disponibles</p>
                 </div>
             </div>
 
@@ -71,66 +72,142 @@ async function loadCursosDisponibles() {
         cursosDisponibles = data.cursos || [];
         renderCursos(cursosDisponibles);
     } catch (err) {
-        Toast.show('Error: ' + err.message, 'error');
+        Toast.show('Error al consultar cursos disponibles: ' + err.message, 'error');
     }
 }
 
 function renderCursos(cursos) {
     const container = document.getElementById('cursos-disponibles');
-    const search = document.getElementById('search-input').value.toLowerCase();
+    const search = document.getElementById('search-input').value.toLowerCase().trim();
 
     const filtered = search ? cursos.filter(c =>
         c.nombre.toLowerCase().includes(search) ||
-        c.codigo.toLowerCase().includes(search) //||
-        //(c.area || '').toLowerCase().includes(search)
+        c.codigo.toLowerCase().includes(search) ||
+        (c.area || '').toLowerCase().includes(search)
     ) : cursos;
 
     if (!filtered.length) {
-        container.innerHTML = '<div class="empty-state"><div class="empty-state__icon">📭</div><div class="empty-state__title">No hay cursos disponibles</div><div class="empty-state__text">Todos los cursos estan llenos o ya estas inscrito</div></div>';
+        container.innerHTML = `
+            <div class="empty-state" style="padding: 3.5rem 1.5rem; text-align: center;">
+                <div class="empty-state__icon" style="display: flex; justify-content: center; margin-bottom: 1rem;">
+                    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
+                        <path d="M6 6h10M6 10h10"/>
+                    </svg>
+                </div>
+                <div class="empty-state__title" style="font-weight: 700;">No hay asignaturas disponibles</div>
+                <div class="empty-state__text" style="color: var(--color-text-muted); font-size: 0.9rem;">
+                    ${search ? 'No se encontraron cursos que coincidan con la búsqueda.' : 'No hay asignaturas abiertas disponibles para inscripción en este momento.'}
+                </div>
+            </div>
+        `;
         return;
     }
 
-    const estadoBadge = { 'Planificado': 'badge--primary', 'En Curso': 'badge--accent', 'Finalizado': 'badge--neutral' };
+    const estadoBadge = { 
+        'Planificado': 'badge--primary', 
+        'En Curso': 'badge--accent', 
+        'Verificado': 'badge--accent' 
+    };
 
-    container.innerHTML = `<div class="grid grid--auto">${filtered.map(c => `
+    container.innerHTML = `<div class="grid grid--auto">${filtered.map(c => {
+        const cupoLleno = (parseInt(c.total_inscritos) || 0) >= parseInt(c.cupo_maximo);
+        const yaInscrito = parseInt(c.ya_inscrito || 0) > 0;
+        const yaAprobado = parseInt(c.ya_aprobado || 0) > 0;
+        const areaLabel = (c.area && c.area.trim()) ? c.area.trim() : 'General';
+
+        let badgeInscrito = '';
+        if (yaInscrito) {
+            badgeInscrito = `<span class="badge badge--info" style="margin-bottom: 0.4rem; margin-left: 0.35rem; display: inline-block;">Inscrito</span>`;
+        } else if (yaAprobado) {
+            badgeInscrito = `<span class="badge badge--accent" style="margin-bottom: 0.4rem; margin-left: 0.35rem; display: inline-block;">Aprobado</span>`;
+        }
+
+        let botonAccion = '';
+        if (yaInscrito) {
+            botonAccion = `
+                <button class="btn btn--secondary w-full" disabled style="opacity: 0.85; cursor: not-allowed; display: flex; align-items: center; justify-content: center; gap: 0.35rem;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    Ya estás inscrito
+                </button>
+            `;
+        } else if (cupoLleno) {
+            botonAccion = `
+                <button class="btn btn--primary w-full" disabled style="opacity: 0.6; cursor: not-allowed; display: flex; align-items: center; justify-content: center; gap: 0.35rem;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    Cupo Lleno
+                </button>
+            `;
+        } else {
+            botonAccion = `
+                <button class="btn btn--primary w-full" onclick="inscribirse(${c.id})" style="display: flex; align-items: center; justify-content: center; gap: 0.35rem;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    ${yaAprobado ? 'Inscribirme de nuevo' : 'Inscribirme'}
+                </button>
+            `;
+        }
+
+        return `
         <div class="card" style="display: flex; flex-direction: column;">
-            <div class="card__header" style="flex: 1;">
+            <div class="card__header" style="padding-bottom: 0.75rem;">
                 <div>
-                    <span class="badge ${estadoBadge[c.estado] || 'badge--neutral'}" style="margin-bottom: 0.5rem; display: inline-block;">${c.estado}</span>
-                    <h3 class="card__title" style="font-size: 1.0625rem;">${Utils.escapeHtml(c.nombre)}</h3>
-                    <p style="color: var(--color-text-muted); font-size: 0.8125rem; margin-top: 0.25rem;">${c.codigo}</p>
+                    <span class="badge ${estadoBadge[c.estado] || 'badge--neutral'}" style="margin-bottom: 0.4rem; display: inline-block;">${c.estado}</span>
+                    <span class="badge badge--neutral" style="margin-bottom: 0.4rem; margin-left: 0.35rem; display: inline-block; background: var(--color-bg-secondary); border: 1px solid var(--color-border);">${areaLabel}</span>
+                    ${badgeInscrito}
+                    <h3 class="card__title" style="font-size: 1.05rem; font-weight: 700; color: var(--color-text-primary);">${Utils.escapeHtml(c.nombre)}</h3>
+                    <p style="color: var(--color-text-muted); font-size: 0.8rem; font-family: monospace; margin-top: 0.2rem;">${c.codigo}</p>
                 </div>
             </div>
             <div class="card__body" style="flex: 1;">
-                <p style="color: var(--color-text-secondary); font-size: 0.9375rem; line-height: 1.6; margin-bottom: 1rem;">${Utils.escapeHtml(c.descripcion || 'Sin descripcion')}</p>
-                <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.875rem; color: var(--color-text-muted);">
-                    <div class="d-flex justify-between"><span>Area:</span><strong style="color: var(--color-text-primary)">${c.area || 'N/A'}</strong></div>
-                    <div class="d-flex justify-between"><span>Nivel:</span><strong style="color: var(--color-text-primary)">${c.nivel}</strong></div>
-                    <div class="d-flex justify-between"><span>Duracion:</span><strong style="color: var(--color-text-primary)">${c.duracion_horas}h</strong></div>
-                    <div class="d-flex justify-between"><span>Facilitador:</span><strong style="color: var(--color-text-primary)">${Utils.escapeHtml(c.nombre_facilitador || 'Por asignar')}</strong></div>
-                    <div class="d-flex justify-between"><span>Cupos:</span><strong style="color: ${c.total_inscritos >= c.cupo_maximo ? 'var(--color-danger)' : 'var(--color-accent)'}">${c.total_inscritos || 0}/${c.cupo_maximo}</strong></div>
+                <p style="color: var(--color-text-secondary); font-size: 0.875rem; line-height: 1.5; margin-bottom: 1.25rem;">
+                    ${Utils.escapeHtml(c.descripcion || 'Sin descripción detallada')}
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 0.45rem; font-size: 0.85rem; border-top: 1px solid var(--color-border-light); padding-top: 0.75rem;">
+                    <div class="d-flex justify-between">
+                        <span style="color: var(--color-text-muted);">Área:</span>
+                        <strong>${areaLabel}</strong>
+                    </div>
+                    <div class="d-flex justify-between">
+                        <span style="color: var(--color-text-muted);">Nivel:</span>
+                        <strong>${c.nivel}</strong>
+                    </div>
+                    <div class="d-flex justify-between">
+                        <span style="color: var(--color-text-muted);">Duración:</span>
+                        <strong>${c.duracion_horas} horas</strong>
+                    </div>
+                    <div class="d-flex justify-between">
+                        <span style="color: var(--color-text-muted);">Docente:</span>
+                        <strong>${Utils.escapeHtml(c.nombre_facilitador || 'Por asignar')}</strong>
+                    </div>
+                    <div class="d-flex justify-between">
+                        <span style="color: var(--color-text-muted);">Disponibilidad:</span>
+                        <strong style="color: ${cupoLleno ? 'var(--color-danger)' : 'var(--color-accent)'};">
+                            ${c.total_inscritos || 0} / ${c.cupo_maximo} cupos
+                        </strong>
+                    </div>
                 </div>
             </div>
             <div class="card__footer">
-                <button class="btn btn--primary w-full" onclick="inscribirse(${c.id})" ${c.total_inscritos >= c.cupo_maximo ? 'disabled' : ''}>
-                    ${c.total_inscritos >= c.cupo_maximo ? 'Cupo Lleno' : 'Inscribirme'}
-                </button>
+                ${botonAccion}
             </div>
         </div>
-    `).join('')}</div>`;
+    `}).join('')}</div>`;
 }
 
 async function inscribirse(cursoId) {
     try {
         await API.post('inscripcion', { curso_id: cursoId });
-        Toast.show('Inscripcion exitosa', 'success');
+        Toast.show('Inscripción formalizada exitosamente', 'success');
         loadCursosDisponibles();
     } catch (err) {
-        Toast.show(err.message || 'Error al inscribirse', 'error');
+        Toast.show(err.message || 'Error al procesar la inscripción', 'error');
     }
 }
 
-function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
+function debounce(fn, ms) { 
+    let t; 
+    return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; 
+}
 </script>
 
 </body>

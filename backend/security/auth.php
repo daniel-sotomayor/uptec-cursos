@@ -25,6 +25,7 @@ class Auth
     private const INACTIVITY_LIMIT = 1800; // 30 minutos
     private const MAX_LOGIN_ATTEMPTS = 5;
     private const LOCKOUT_TIME = 180; // 3 minutos
+    private static bool $initialized = false;
 
     private static array $roleHierarchy = [
         'Administrador' => 4,
@@ -38,16 +39,24 @@ class Auth
      */
     public static function init(): void
     {
+        if (self::$initialized && session_status() === PHP_SESSION_ACTIVE) {
+            return;
+        }
+
         if (session_status() === PHP_SESSION_NONE) {
             ini_set('session.cookie_httponly', '1');
-            ini_set('session.cookie_secure', isset($_SERVER['HTTPS']) ? '1' : '0');
+            $isHttps = (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off')
+                    || (isset($_SERVER['SERVER_PORT']) && (int)$_SERVER['SERVER_PORT'] === 443)
+                    || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https');
+            ini_set('session.cookie_secure', $isHttps ? '1' : '0');
             ini_set('session.use_strict_mode', '1');
-            ini_set('session.cookie_samesite', 'Strict');
+            ini_set('session.cookie_samesite', 'Lax');
             ini_set('session.gc_maxlifetime', (string)self::INACTIVITY_LIMIT);
 
             session_start();
         }
 
+        self::$initialized = true;
         self::checkInactivity();
         $_SESSION[self::SESSION_LAST_ACTIVITY] = time();
     }
@@ -69,7 +78,7 @@ class Auth
             $stmt = $db->prepare("
                 SELECT id, cedula, nombre, apellidos, correo, telefono, password, rol, activo
                 FROM usuarios
-                WHERE correo = ? AND activo = 1
+                WHERE correo = ?
                 LIMIT 1
             ");
             $stmt->execute([$email]);
@@ -87,6 +96,14 @@ class Auth
             if (!password_verify($password, $user['password'])) {
                 self::recordFailedAttempt();
                 return false;
+            }
+
+            // Validar si el usuario está inactivo o pendiente de verificación
+            if ((int)$user['activo'] !== 1) {
+                if ($user['rol'] === 'Facilitador') {
+                    return ['error' => 'Su cuenta de facilitador está en espera de ser verificada por el analista o administrador. Por favor espere a ser verificado para poder acceder.'];
+                }
+                return ['error' => 'Su cuenta se encuentra inactiva. Comuníquese con la administración del sistema.'];
             }
 
             if (password_needs_rehash($user['password'], PASSWORD_BCRYPT)) {
@@ -110,26 +127,30 @@ class Auth
     /**
      * Cierra la sesion del usuario actual
      */
-    public static function logout(): void
+        public static function logout(): void
     {
-        if (self::check()) {
-            $user = self::user();
-            self::logActivity($user['id'], $user['nombre'] . ' ' . $user['apellidos'], 'LOGOUT', 'usuarios', $user['id']);
+        if (session_status() === PHP_SESSION_ACTIVE && !empty($_SESSION[self::SESSION_USER]['id'])) {
+            $user = $_SESSION[self::SESSION_USER];
+            self::logActivity((int)$user['id'], trim(($user['nombre'] ?? '') . ' ' . ($user['apellidos'] ?? '')), 'LOGOUT', 'usuarios', (int)$user['id']);
         }
 
         $_SESSION = [];
 
-        if (isset($_COOKIE[session_name()])) {
+        if (session_status() === PHP_SESSION_ACTIVE && isset($_COOKIE[session_name()])) {
             setcookie(session_name(), '', [
                 'expires' => time() - 3600,
                 'path' => '/',
-                'secure' => isset($_SERVER['HTTPS']),
+                'secure' => (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off'),
                 'httponly' => true,
-                'samesite' => 'Strict'
+                'samesite' => 'Lax'
             ]);
         }
 
-        session_destroy();
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            session_destroy();
+        }
+
+        self::$initialized = false;
     }
 
     /**
@@ -263,7 +284,11 @@ class Auth
     /** Crea la sesion del usuario */
     private static function createSession(array $user): void
     {
-        session_regenerate_id(true);
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        } else {
+            session_regenerate_id(true);
+        }
 
         $_SESSION[self::SESSION_USER] = [
             'id' => $user['id'],
@@ -278,15 +303,31 @@ class Auth
         $_SESSION[self::SESSION_LAST_ACTIVITY] = time();
     }
 
-    /** Verifica inactividad de sesion */
+        /** Verifica inactividad de sesion */
     private static function checkInactivity(): void
     {
         if (isset($_SESSION[self::SESSION_LAST_ACTIVITY])) {
-            $inactive = time() - $_SESSION[self::SESSION_LAST_ACTIVITY];
+            $inactive = time() - (int)$_SESSION[self::SESSION_LAST_ACTIVITY];
 
             if ($inactive > self::INACTIVITY_LIMIT) {
+                unset($_SESSION[self::SESSION_LAST_ACTIVITY]);
                 self::logout();
-                header('Location: /uptec-cursos/frontend/login.html?expired=1');
+
+                $isApi = (!empty($_SERVER['HTTP_ACCEPT']) && str_contains($_SERVER['HTTP_ACCEPT'], 'application/json'))
+                      || (!empty($_SERVER['REQUEST_URI']) && (str_contains($_SERVER['REQUEST_URI'], '/backend/api/') || str_contains($_SERVER['REQUEST_URI'], 'api.php')));
+
+                if ($isApi) {
+                    $endpoint = $_GET['endpoint'] ?? '';
+                    if ($endpoint === 'login') {
+                        return;
+                    }
+                    http_response_code(401);
+                    header('Content-Type: application/json; charset=utf-8');
+                    echo json_encode(['success' => false, 'error' => 'Sesion expirada por inactividad', 'expired' => true]);
+                    exit;
+                }
+
+                header('Location: /login.html?expired=1');
                 exit;
             }
         }
@@ -391,4 +432,4 @@ function auth_check(): bool { return Auth::check(); }
 function auth_user(): ?array { return Auth::user(); }
 function auth_role(): ?string { return Auth::role(); }
 function auth_is_admin(): bool { return Auth::isAdmin(); }
-function auth_require(string $redirect = '/uptec-cursos/frontend/login.html'): void { Auth::requireAuth($redirect); }
+function auth_require(string $redirect = '/login.html'): void { Auth::requireAuth($redirect); }

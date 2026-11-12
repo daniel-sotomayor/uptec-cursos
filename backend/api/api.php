@@ -20,12 +20,18 @@ require_once __DIR__ . '/../security/sanitizer.php';
 require_once __DIR__ . '/../security/validator.php';
 
 // Headers CORS y de seguridad
-header('Access-Control-Allow-Origin: *');
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+if (!empty($origin)) {
+    header("Access-Control-Allow-Origin: {$origin}");
+    header('Access-Control-Allow-Credentials: true');
+} else {
+    header('Access-Control-Allow-Origin: *');
+}
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization, X-CSRF-Token');
 header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
-header('X-Frame-Options: DENY');
+header('X-Frame-Options: SAMEORIGIN');
 header('X-XSS-Protection: 1; mode=block');
 header('Referrer-Policy: strict-origin-when-cross-origin');
 
@@ -206,13 +212,6 @@ function jsonResponse(bool $success, $data = null, ?string $error = null): array
 
 // Inicializar router
 $router = new Router();
-
-// Endpoint para importar y restaurar la base de datos (.sql)
-// Recibe un POST en ?endpoint=restore
-$router->register('POST', '/backend/api/api.php', function() {
-    require_once __DIR__ . '/backup.php';
-    return importarRestauracionBD();
-}, [requireAdmin(), validateCsrf()], 'restore');
 
 // ============================================
 // ENDPOINTS DE AUTENTICACION

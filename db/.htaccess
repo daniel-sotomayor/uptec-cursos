@@ -1,0 +1,2 @@
+# Bloquear todo el acceso web directo a la carpeta db
+Require all denied

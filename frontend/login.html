@@ -3,201 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Sistema de Control de Cursos UPTEC - Universidad Politécnica Territorial de Caracas">
-    <meta name="author" content="UPTEC - David Suarez">
-    <title>Login | UPTEC Cursos</title>
-    <link rel="icon" type="image/png" href="img\logo-uptec.png" >
+    <meta name="description" content="Portal de Acceso - Sistema de Control de Cursos | Universidad Politécnica Territorial de Caracas «Mariscal Sucre» (UPTECMS)">
+    <title>Acceso al Sistema | UPTECMS Cursos</title>
+    <link rel="icon" type="image/png" href="img/logo-uptec.png">
     <style>
         :root {
-            --uptec-blue: #0061f1;
-            --uptec-blue-dark: #004fa3;
-            --uptec-red: #e00000;
-            --uptec-orange: #ff5e00;
-            --uptec-green: #18ad72;
+            --uptec-navy: #0f172a;
+            --uptec-navy-light: #1e293b;
+            --uptec-blue-dark: #1e3a8a;
+            --uptec-blue: #1d4ed8;
+            --uptec-blue-hover: #2563eb;
+            --uptec-gold: #d97706;
+            --uptec-gold-light: #fbbf24;
+            --uptec-emerald: #059669;
             --white: #ffffff;
-            --black: #333333;
-            --gray: #666666;
-            --light-gray: #f8f9fa;
-            --error: #e74c3c;
-            --success: #2ecc71;
-            --shadow-sm: 0 2px 10px rgba(0,0,0,0.1);
-            --shadow-md: 0 10px 30px rgba(0,0,0,0.2);
-            --shadow-lg: 0 20px 50px rgba(0,0,0,0.3);
-            --transition-fast: 0.3s ease;
-            --transition-normal: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-bounce: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            --space-xs: 0.5rem;
-            --space-sm: 1rem;
-            --space-md: 1.5rem;
-            --space-lg: 2rem;
-            --space-xl: 3rem;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --bg-input: #f8fafc;
+            --border-color: #e2e8f0;
+            --border-focus: #3b82f6;
+            --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.08);
+            --shadow-md: 0 12px 30px rgba(15, 23, 42, 0.16);
+            --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.28);
+            --transition-fast: 0.25s ease;
+            --transition-smooth: 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: 0.55s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 22px;
         }
+
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         html { font-size: 16px; scroll-behavior: smooth; }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, var(--uptec-blue) 0%, var(--uptec-blue-dark) 100%);
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+            background: 
+                linear-gradient(135deg, rgba(15, 23, 42, 0.94) 0%, rgba(30, 58, 138, 0.88) 55%, rgba(15, 23, 42, 0.96) 100%),
+                url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat fixed;
             min-height: 100vh;
             min-height: 100dvh;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: var(--space-sm);
+            padding: 1.5rem 1rem;
             overflow-x: hidden;
             position: relative;
+            color: var(--text-primary);
         }
-        body::before {
-            content: '';
-            position: fixed;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-            animation: rotate 30s linear infinite;
-            z-index: -1;
-        }
-        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .uptec-logo {
-            position: absolute;
-            top: 20px; left: 50%;
-            transform: translateX(-50%);
+
+        /* ===== LOGO CABECERA ===== */
+        .uptec-header {
+            margin-bottom: 1.5rem;
             text-align: center;
-            z-index: 100;
+            z-index: 10;
         }
-        .uptec-logo img {
-            width: 60px; height: 60px;
+        .uptec-header__link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.9rem;
+            text-decoration: none;
+            transition: transform var(--transition-fast);
+        }
+        .uptec-header__link:hover {
+            transform: translateY(-2px);
+        }
+        .uptec-header__logo {
+            width: 52px;
+            height: 52px;
             border-radius: 50%;
-            background: white;
-            padding: 5px;
-            box-shadow: var(--shadow-md);
+            background: #ffffff;
+            padding: 4px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+            object-fit: contain;
         }
-        .uptec-logo h1 {
-            color: var(--white);
-            font-size: 1.2rem;
-            margin-top: 8px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-            
+        .uptec-header__text {
+            text-align: left;
         }
+        .uptec-header__title {
+            color: #ffffff;
+            font-size: 1.45rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            line-height: 1.1;
+        }
+        .uptec-header__subtitle {
+            color: var(--uptec-gold-light);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+        }
+
+        /* ===== CONTENEDOR PRINCIPAL ===== */
         .auth-wrapper {
             width: 100%;
-            max-width: 900px;
+            max-width: 940px;
             position: relative;
-            animation: fadeIn 0.8s ease;
-            margin-top: 80px;
+            animation: fadeIn 0.6s ease-out;
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(18px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
         .auth-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(15, 23, 42, 0.45);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-radius: 24px;
+            border-radius: var(--radius-lg);
             overflow: hidden;
             box-shadow: var(--shadow-lg);
-            border: 1px solid rgba(255,255,255,0.2);
-            min-height: 550px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            min-height: 560px;
             position: relative;
         }
+
+        /* Paneles informativos laterales */
         .info-panel {
-            padding: var(--space-xl);
+            padding: 3rem 2.5rem;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            color: var(--white);
-            transition: var(--transition-normal);
+            color: #ffffff;
+            transition: var(--transition-smooth);
             position: relative;
             z-index: 1;
         }
         .info-panel h2 {
-            font-size: clamp(1.5rem, 3vw, 2rem);
-            margin-bottom: var(--space-sm);
-            font-weight: 700;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+            margin-bottom: 0.75rem;
+            font-weight: 800;
+            letter-spacing: -0.3px;
         }
         .info-panel p {
-            font-size: clamp(0.9rem, 1.5vw, 1rem);
-            opacity: 0.9;
-            margin-bottom: var(--space-lg);
+            font-size: 0.95rem;
+            color: #e2e8f0;
+            margin-bottom: 2rem;
             line-height: 1.6;
-            max-width: 280px;
+            max-width: 290px;
         }
         .info-login {
-            background: linear-gradient(135deg, rgba(0, 97, 241, 0.3) 0%, transparent 100%);
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.4) 0%, rgba(15, 23, 42, 0.2) 100%);
         }
         .info-register {
-            background: linear-gradient(225deg, rgba(224, 0, 0, 0.3) 0%, transparent 100%);
+            background: linear-gradient(225deg, rgba(217, 119, 6, 0.25) 0%, rgba(15, 23, 42, 0.2) 100%);
         }
+
         .auth-container.register-mode .info-login {
-            opacity: 0.4;
-            transform: scale(0.95);
+            opacity: 0.35;
+            transform: scale(0.96);
         }
         .auth-container.login-mode .info-register {
-            opacity: 0.4;
-            transform: scale(0.95);
+            opacity: 0.35;
+            transform: scale(0.96);
         }
+
         .btn-switch {
-            padding: 12px 32px;
-            border: 2px solid var(--white);
-            background: transparent;
-            color: var(--white);
-            font-size: 0.9rem;
+            padding: 11px 28px;
+            border: 1.5px solid rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            font-size: 0.88rem;
             font-weight: 600;
-            border-radius: 25px;
+            border-radius: 50px;
             cursor: pointer;
             transition: var(--transition-fast);
-            position: relative;
-            overflow: hidden;
+            backdrop-filter: blur(8px);
             white-space: nowrap;
         }
-        .btn-switch::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: var(--white);
-            transition: left 0.3s ease;
-            z-index: -1;
-        }
-        .btn-switch:hover::before, .btn-switch:active::before { left: 0; }
-        .btn-switch:hover, .btn-switch:active {
-            color: var(--uptec-blue);
+        .btn-switch:hover {
+            background: #ffffff;
+            color: var(--uptec-navy);
             transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            border-color: #ffffff;
         }
+
+        /* ===== SLIDER DESLIZANTE CON FONDO BLANCO PULIDO ===== */
         .form-slider {
             position: absolute;
-            top: 50%; left: 5%;
+            top: 50%; left: 4%;
             transform: translateY(-50%);
-            width: 45%; height: 90%;
-            background: var(--white);
-            border-radius: 20px;
-            box-shadow: var(--shadow-lg);
+            width: 46%; height: 92%;
+            background: #ffffff;
+            border-radius: var(--radius-md);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
             transition: var(--transition-bounce);
             z-index: 10;
             overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.8);
         }
         .auth-container.register-mode .form-slider {
             left: 50%;
-            background: linear-gradient(135deg, var(--uptec-red) 0%, var(--uptec-orange) 100%);
         }
+
+        /* Contenedor interno del formulario */
         .form-wrapper {
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            padding: 1.5rem;
+            padding: 1.75rem 2rem;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
             overflow-y: auto;
-            transition: var(--transition-normal);
+            transition: var(--transition-smooth);
             opacity: 0;
             visibility: hidden;
-            transform: translateX(30px);
+            transform: translateX(25px);
+            background: #ffffff;
         }
         .form-wrapper.active {
             opacity: 1;
@@ -205,84 +226,80 @@
             transform: translateX(0);
         }
         .form-wrapper.inactive {
-            transform: translateX(-30px);
+            transform: translateX(-25px);
         }
+
         .form-header {
             text-align: center;
-            margin-bottom: 0.75rem;
+            margin-bottom: 1.25rem;
             flex-shrink: 0;
         }
         .form-header h2 {
-            font-size: clamp(1.5rem, 3vw, 1.8rem);
-            margin-bottom: var(--space-xs);
-            font-weight: 700;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--uptec-navy);
+            margin-bottom: 0.25rem;
         }
         .form-header p {
-            font-size: 0.9rem;
-            opacity: 0.7;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
         }
-        .form-login .form-header h2 { color: var(--uptec-blue); }
-        .form-login .form-header p { color: var(--gray); }
-        .form-register .form-header h2 { color: var(--white); }
-        .form-register .form-header p { color: rgba(255,255,255,0.8); }
+
+        /* Campos de Entrada */
         .input-group {
             position: relative;
-            margin-bottom: 0.6rem;
+            margin-bottom: 0.85rem;
             flex-shrink: 0;
         }
         .input-icon {
             position: absolute;
-            left: 15px;
+            left: 14px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 1.1rem;
-            transition: var(--transition-fast);
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
             pointer-events: none;
+            transition: color var(--transition-fast);
+        }
+        .input-icon svg {
+            width: 100%;
+            height: 100%;
         }
         .input-field {
             width: 100%;
-            padding: 10px 12px 10px 42px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 0.95rem;
+            padding: 11px 12px 11px 40px;
+            border: 1.5px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-size: 0.92rem;
             font-family: inherit;
-            transition: var(--transition-fast);
-            background: var(--light-gray);
+            transition: all var(--transition-fast);
+            background: var(--bg-input);
+            color: var(--text-primary);
             outline: none;
         }
-        .form-register .input-field {
-            background: rgba(255,255,255,0.15);
-            border-color: rgba(255,255,255,0.3);
-            color: var(--white);
-            padding: 10px 12px 10px 42px;
-            font-size: 0.9rem;
-        }
-        .form-register .input-field::placeholder {
-            color: rgba(255,255,255,0.6);
+        .input-field::placeholder {
+            color: #94a3b8;
             font-size: 0.85rem;
         }
-        .form-login .input-field:focus {
+        .input-field:focus {
             border-color: var(--uptec-blue);
-            background: var(--white);
-            box-shadow: 0 0 0 4px rgba(0, 97, 241, 0.1);
-            transform: translateY(-2px);
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
         }
-        .form-register .input-field:focus {
-            border-color: var(--white);
-            background: rgba(255,255,255,0.25);
-            box-shadow: 0 0 0 4px rgba(255,255,255,0.2);
-            transform: translateY(-2px);
+        .input-field:focus + .input-icon {
+            color: var(--uptec-blue);
         }
-        .form-login .input-icon { color: #999; }
-        .form-login .input-field:focus + .input-icon { color: var(--uptec-blue); }
-        .form-register .input-icon { color: rgba(255,255,255,0.7); }
-        .form-register .input-field:focus + .input-icon { color: var(--white); }
+
         /* Selector de Rol */
         .role-selector {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 0.6rem;
+            gap: 10px;
+            margin-bottom: 0.85rem;
             flex-shrink: 0;
         }
         .role-option {
@@ -294,51 +311,68 @@
             opacity: 0;
         }
         .role-card {
-            padding: 8px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 10px;
+            padding: 9px;
+            border: 1.5px solid var(--border-color);
+            border-radius: var(--radius-sm);
             text-align: center;
-            transition: var(--transition-fast);
-            background: rgba(255,255,255,0.1);
+            transition: all var(--transition-fast);
+            background: var(--bg-input);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+        .role-card:hover {
+            border-color: #cbd5e1;
         }
         .role-option input:checked + .role-card {
-            border-color: var(--white);
-            background: rgba(255,255,255,0.25);
-            transform: scale(1.02);
+            border-color: var(--uptec-blue);
+            background: #eff6ff;
+            box-shadow: 0 2px 8px rgba(29, 78, 216, 0.15);
         }
         .role-icon {
-            font-size: 1.5rem;
-            display: block;
-            margin-bottom: 4px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: color var(--transition-fast);
+        }
+        .role-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+        .role-option input:checked + .role-card .role-icon {
+            color: var(--uptec-blue);
         }
         .role-label {
-            font-size: 0.85rem;
-            color: var(--white);
-            font-weight: 600;
+            font-size: 0.825rem;
+            color: var(--uptec-navy);
+            font-weight: 700;
         }
-        /* Select de Area */
+
+        /* Select de Área / Carrera */
         .select-field {
             width: 100%;
-            padding: 10px 12px 10px 42px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 10px;
-            font-size: 0.9rem;
+            padding: 11px 12px 11px 40px;
+            border: 1.5px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-size: 0.88rem;
             font-family: inherit;
-            background: rgba(255,255,255,0.15);
-            color: var(--white);
+            background: var(--bg-input);
+            color: var(--text-primary);
             outline: none;
             cursor: pointer;
             appearance: none;
             -webkit-appearance: none;
-        }
-        .select-field option {
-            background: var(--uptec-blue-dark);
-            color: var(--white);
+            transition: all var(--transition-fast);
         }
         .select-field:focus {
-            border-color: var(--white);
-            background: rgba(255,255,255,0.25);
-            box-shadow: 0 0 0 4px rgba(255,255,255,0.2);
+            border-color: var(--uptec-blue);
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
         }
         .area-field {
             transition: var(--transition-fast);
@@ -351,45 +385,47 @@
             opacity: 0;
             display: none;
         }
+
+        /* Botón de Envío */
         .btn-submit {
             width: 100%;
             padding: 12px;
-            margin-top: 0.5rem;
+            margin-top: 0.6rem;
             border: none;
-            border-radius: 10px;
+            border-radius: var(--radius-sm);
             font-size: 0.95rem;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            transition: var(--transition-fast);
-            position: relative;
-            overflow: hidden;
+            transition: all var(--transition-fast);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            -webkit-tap-highlight-color: transparent;
             flex-shrink: 0;
         }
-        .btn-submit:active { transform: scale(0.98); }
         .form-login .btn-submit {
             background: linear-gradient(135deg, var(--uptec-blue) 0%, var(--uptec-blue-dark) 100%);
-            color: var(--white);
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(29, 78, 216, 0.3);
         }
-        .form-login .btn-submit:hover, .form-login .btn-submit:active {
-            box-shadow: 0 10px 25px rgba(0, 97, 241, 0.4);
+        .form-login .btn-submit:hover {
+            box-shadow: 0 6px 18px rgba(29, 78, 216, 0.45);
             transform: translateY(-2px);
         }
         .form-register .btn-submit {
-            background: var(--white);
-            color: var(--uptec-red);
+            background: linear-gradient(135deg, var(--uptec-gold) 0%, #b45309 100%);
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(217, 119, 6, 0.35);
         }
-        .form-register .btn-submit:hover, .form-register .btn-submit:active {
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        .form-register .btn-submit:hover {
+            box-shadow: 0 6px 18px rgba(217, 119, 6, 0.45);
             transform: translateY(-2px);
         }
+        .btn-submit:active { transform: scale(0.98); }
+
         .btn-submit.loading {
             pointer-events: none;
-            opacity: 0.8;
+            opacity: 0.85;
         }
         .spinner {
             width: 18px; height: 18px;
@@ -402,27 +438,26 @@
         .btn-submit.loading .spinner { display: block; }
         .btn-submit.loading .btn-text { opacity: 0.7; }
         @keyframes spin { to { transform: rotate(360deg); } }
+
         .form-footer {
-            margin-top: var(--space-md);
+            margin-top: 1.25rem;
             text-align: center;
-            font-size: 0.85rem;
+            font-size: 0.825rem;
+            color: var(--text-secondary);
         }
-        .form-login .form-footer { color: var(--gray); }
-        .form-register .form-footer { color: rgba(255,255,255,0.8); }
         .form-footer a {
             color: var(--uptec-blue);
             text-decoration: none;
             font-weight: 600;
             cursor: pointer;
-            transition: opacity 0.3s;
+            transition: color var(--transition-fast);
         }
-        .form-register .form-footer a {
-            color: var(--white);
+        .form-footer a:hover {
             text-decoration: underline;
+            color: var(--uptec-blue-dark);
         }
-        .form-register .form-footer a:hover { opacity: 0.8; }
 
-        /* ===== SISTEMA DE NOTIFICACIONES TOAST ===== */
+        /* ===== NOTIFICACIONES TOAST ===== */
         .toast-container {
             position: fixed;
             top: 20px;
@@ -434,235 +469,199 @@
             pointer-events: none;
         }
         .toast {
-            background: white;
-            border-radius: 12px;
-            padding: 16px 20px;
-            min-width: 320px;
-            max-width: 400px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            background: #ffffff;
+            border-radius: var(--radius-sm);
+            padding: 14px 18px;
+            min-width: 310px;
+            max-width: 380px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.22);
             display: flex;
             align-items: flex-start;
             gap: 12px;
-            animation: toastSlideIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            animation: toastSlideIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: all;
             border-left: 4px solid;
         }
         @keyframes toastSlideIn {
-            from { opacity: 0; transform: translateX(100%) scale(0.8); }
-            to { opacity: 1; transform: translateX(0) scale(1); }
-        }
-        @keyframes toastSlideOut {
-            from { opacity: 1; transform: translateX(0) scale(1); }
-            to { opacity: 0; transform: translateX(100%) scale(0.8); }
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
         }
         .toast.toast-exit {
             animation: toastSlideOut 0.3s ease forwards;
         }
+        @keyframes toastSlideOut {
+            to { opacity: 0; transform: translateX(100%); }
+        }
         .toast-icon {
-            width: 40px;
-            height: 40px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
             flex-shrink: 0;
         }
-        .toast-content {
-            flex: 1;
-        }
+        .toast-content { flex: 1; }
         .toast-title {
             font-weight: 700;
-            font-size: 1rem;
-            margin-bottom: 4px;
+            font-size: 0.92rem;
+            margin-bottom: 2px;
         }
         .toast-message {
-            font-size: 0.9rem;
-            opacity: 0.8;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
             line-height: 1.4;
         }
         .toast-close {
             background: none;
             border: none;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             cursor: pointer;
-            opacity: 0.5;
+            opacity: 0.45;
             transition: opacity 0.2s;
-            padding: 0;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            color: inherit;
         }
         .toast-close:hover { opacity: 1; }
         .toast-error {
-            border-color: #e74c3c;
-            background: linear-gradient(135deg, #fff 0%, #fff5f5 100%);
+            border-color: #ef4444;
         }
-        .toast-error .toast-icon { background: #fee; color: #e74c3c; }
-        .toast-error .toast-title { color: #c0392b; }
-        .toast-error .toast-message { color: #666; }
-        .toast-error .toast-close { color: #e74c3c; }
+        .toast-error .toast-icon { background: #fee2e2; color: #ef4444; }
+        .toast-error .toast-title { color: #b91c1c; }
         .toast-success {
-            border-color: #27ae60;
-            background: linear-gradient(135deg, #fff 0%, #f0fff4 100%);
+            border-color: var(--uptec-emerald);
         }
-        .toast-success .toast-icon { background: #efe; color: #27ae60; }
-        .toast-success .toast-title { color: #219a52; }
-        .toast-success .toast-message { color: #666; }
-        .toast-success .toast-close { color: #27ae60; }
+        .toast-success .toast-icon { background: #d1fae5; color: var(--uptec-emerald); }
+        .toast-success .toast-title { color: #047857; }
+        .toast-warning {
+            border-color: var(--uptec-gold);
+        }
+        .toast-warning .toast-icon { background: #fef3c7; color: var(--uptec-gold); }
+        .toast-warning .toast-title { color: #b45309; }
 
-        /* Ocultar alertas antiguas */
+        /* Legacy alert override */
         .alert { display: none !important; }
 
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             html { font-size: 14px; }
-            body { padding: 0; align-items: flex-start; min-height: 100vh; }
-            .uptec-logo { position: relative; top: 10px; margin-bottom: 20px; }
-            .auth-wrapper { max-width: 100%; animation: none; margin-top: 10px; }
+            body { padding: 1rem 0.5rem; justify-content: flex-start; }
+            .uptec-header { margin-bottom: 1rem; }
             .auth-container {
                 display: flex;
                 flex-direction: column;
-                border-radius: 0;
-                min-height: 100vh;
+                border-radius: var(--radius-md);
                 background: transparent;
-                backdrop-filter: none;
-                box-shadow: none;
                 border: none;
+                box-shadow: none;
             }
-            .info-panel { padding: var(--space-lg) var(--space-md); min-height: auto; }
-            .info-panel h2 { font-size: 1.5rem; }
-            .info-panel p { font-size: 0.9rem; margin-bottom: var(--space-md); }
-            .auth-container.login-mode .info-register, .auth-container.register-mode .info-login { display: none; }
-            .auth-container.login-mode .info-login, .auth-container.register-mode .info-register {
+            .info-panel { padding: 1.5rem 1rem; }
+            .auth-container.login-mode .info-register,
+            .auth-container.register-mode .info-login { display: none; }
+            .auth-container.login-mode .info-login,
+            .auth-container.register-mode .info-register {
                 opacity: 1;
                 transform: none;
-                background: rgba(255,255,255,0.1);
-                border-radius: 16px;
-                margin: var(--space-sm);
-                margin-bottom: 0;
+                background: rgba(15, 23, 42, 0.6);
+                border-radius: var(--radius-md);
+                margin-bottom: 1rem;
+                border: 1px solid rgba(255, 255, 255, 0.15);
             }
             .form-slider {
                 position: relative;
                 top: auto; left: auto !important;
                 transform: none;
-                width: calc(100% - var(--space-lg));
+                width: 100%;
                 height: auto;
-                min-height: 450px;
-                margin: var(--space-md) auto;
-                background: var(--white) !important;
-                border-radius: 20px;
-                box-shadow: var(--shadow-lg);
+                min-height: 480px;
+                border-radius: var(--radius-md);
             }
-            .form-register .form-header h2 { color: var(--uptec-blue); }
-            .form-register .form-header p { color: var(--gray); }
-            .form-register .input-field {
-                background: var(--light-gray);
-                border-color: #e0e0e0;
-                color: var(--black);
-            }
-            .form-register .input-field::placeholder { color: #999; }
-            .form-register .input-icon { color: #999; }
-            .form-register .btn-submit {
-                background: linear-gradient(135deg, var(--uptec-red) 0%, var(--uptec-orange) 100%);
-                color: var(--white);
-            }
-            .form-register .form-footer { color: var(--gray); }
-            .form-register .form-footer a { color: var(--uptec-blue); text-decoration: none; }
             .form-wrapper {
-                padding: var(--space-lg) var(--space-md);
+                padding: 2rem 1.5rem;
                 position: relative;
                 transform: none !important;
             }
             .form-wrapper.inactive { display: none; }
             .form-wrapper.active { opacity: 1; visibility: visible; }
-            .btn-switch { padding: 14px 28px; font-size: 1rem; }
-            .btn-submit { padding: 16px; font-size: 1.05rem; }
-            .input-field { padding: 16px 15px 16px 48px; font-size: 16px; }
-        }
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .auth-wrapper { max-width: 95%; }
-            .info-panel { padding: var(--space-lg); }
-            .form-slider { width: 48%; }
-            .auth-container.register-mode .form-slider { left: 48%; }
-        }
-        @media (min-width: 1400px) {
-            .auth-wrapper { max-width: 1000px; }
-            .form-slider { width: 40%; }
-            .auth-container.register-mode .form-slider { left: 55%; }
-        }
-        @media (max-height: 600px) and (orientation: landscape) {
-            .auth-container { min-height: auto; }
-            .info-panel { padding: var(--space-md); }
-            .form-slider { min-height: 380px; }
-            .form-wrapper { padding: var(--space-md); }
-            .input-group { margin-bottom: var(--space-sm); }
-        }
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Toast Container -->
+
+    <!-- Contenedor de Alertas Toast -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <div class="uptec-logo">
-        <a href="index.html" class="landing-nav__logo">
-            <img src="img/logo-uptec.png" alt="UPTEC" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>'">
+    <!-- Logotipo Institucional UPTECMS -->
+    <header class="uptec-header">
+        <a href="index.html" class="uptec-header__link" title="Regresar al inicio institucional">
+            <img class="uptec-header__logo" src="img/logo-uptec.png" alt="UPTECMS Logo" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%231d4ed8%22 stroke-width=%222%22><path d=%22M3 21h18M3 10h18M5 10v11M19 10v11M9 10v11M15 10v11M12 2L2 7h20L12 2z%22/></svg>'">
+            <div class="uptec-header__text">
+                <h1 class="uptec-header__title">UPTECMS</h1>
+                <span class="uptec-header__subtitle">Control de Cursos</span>
+            </div>
         </a>
-            <h1>UPTEC Cursos</h1>
-    </div>
+    </header>
 
-    <div class="auth-wrapper">
+    <!-- Caja Principal de Autenticación -->
+    <main class="auth-wrapper">
         <div class="auth-container login-mode" id="authContainer">
+            
+            <!-- Panel Lateral Izquierdo: Acceso -->
             <div class="info-panel info-login">
                 <h2>¿Ya tienes cuenta?</h2>
-                <p>Inicia sesión para acceder a tu panel de control y gestionar tus cursos</p>
+                <p>Inicia sesión para gestionar tus asignaturas, notas y constancias académicas.</p>
                 <button class="btn-switch" onclick="switchMode('login')" type="button">← Iniciar Sesión</button>
             </div>
+
+            <!-- Panel Lateral Derecho: Registro -->
             <div class="info-panel info-register">
-                <h2>¿Eres nuevo?</h2>
-                <p>Únete a la Universidad Politécnica Territorial de Caracas "Mariscal Sucre"</p>
+                <h2>¿Eres nuevo ingreso?</h2>
+                <p>Únete a la Universidad Politécnica Territorial de Caracas «Mariscal Sucre».</p>
                 <button class="btn-switch" onclick="switchMode('register')" type="button">Crear Cuenta →</button>
             </div>
+
+            <!-- Slider Deslizante de Formularios -->
             <div class="form-slider" id="formSlider">
+
+                <!-- 1. Formulario de Inicio de Sesión -->
                 <form class="form-wrapper form-login active" id="loginForm" onsubmit="handleLogin(event)" novalidate>
-                    <div class="alert error" id="loginAlert">
-                        <span>⚠️</span><span id="loginAlertText">Error en credenciales</span>
-                    </div>
                     <div class="form-header">
-                        <h2>Bienvenido</h2>
-                        <p>Ingresa tus credenciales de acceso</p>
+                        <h2>Iniciar Sesión</h2>
+                        <p>Ingresa tus credenciales institucionales</p>
                     </div>
+
                     <div class="input-group">
-                        <input type="email" class="input-field" id="loginEmail" placeholder="Correo electrónico" required autocomplete="email" inputmode="email">
-                        <span class="input-icon">✉️</span>
+                        <input type="email" class="input-field" id="loginEmail" placeholder="Correo electrónico (@uptec.edu.ve)" required autocomplete="email" inputmode="email">
+                        <span class="input-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                            </svg>
+                        </span>
                     </div>
+
                     <div class="input-group">
-                        <input type="password" class="input-field" id="loginPassword" placeholder="Contraseña" required autocomplete="current-password" minlength="6">
-                        <span class="input-icon">🔒</span>
+                        <input type="password" class="input-field" id="loginPassword" placeholder="Contraseña de acceso" required autocomplete="current-password" minlength="6">
+                        <span class="input-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                        </span>
                     </div>
+
                     <button type="submit" class="btn-submit" id="loginBtn">
                         <span class="btn-text">Entrar al Sistema</span>
                         <div class="spinner"></div>
                     </button>
+
                     <div class="form-footer">
-                        ¿Olvidaste tu contraseña? <a onclick="alert('Contacte al administrador del sistema')">Recuperar</a>
+                        ¿Olvidaste tu contraseña? <a onclick="showToast('Contacte al analista académico o al administrador', 'warning')">Recuperar</a>
                     </div>
                 </form>
+
+                <!-- 2. Formulario de Registro Público -->
                 <form class="form-wrapper form-register" id="registerForm" onsubmit="handleRegister(event)" novalidate>
-                    <div class="alert error" id="registerAlert">
-                        <span>⚠️</span><span id="registerAlertText">Error en el registro</span>
-                    </div>
-                    <div class="form-header" style="margin-bottom: 0.5rem;">
-                        <h2 style="font-size: 1.4rem; margin-bottom: 0.2rem;">Crear Cuenta</h2>
-                        <p style="font-size: 0.8rem;">Únete a UPTEC</p>
+                    <div class="form-header" style="margin-bottom: 0.85rem;">
+                        <h2 style="font-size: 1.45rem;">Crear Cuenta</h2>
+                        <p>Regístrate en la comunidad UPTECMS</p>
                     </div>
 
                     <!-- Selector de Rol -->
@@ -670,90 +669,130 @@
                         <label class="role-option">
                             <input type="radio" name="rol" value="Participante" checked onchange="toggleAreaField()">
                             <div class="role-card">
-                                <span class="role-icon">👨‍🎓</span>
+                                <span class="role-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                                    </svg>
+                                </span>
                                 <span class="role-label">Participante</span>
                             </div>
                         </label>
                         <label class="role-option">
                             <input type="radio" name="rol" value="Facilitador" onchange="toggleAreaField()">
                             <div class="role-card">
-                                <span class="role-icon">👨‍🏫</span>
+                                <span class="role-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                                    </svg>
+                                </span>
                                 <span class="role-label">Facilitador</span>
                             </div>
                         </label>
                     </div>
 
                     <div class="input-group">
-                        <input type="text" class="input-field" id="regCedula" placeholder="Cédula (32361670)" required autocomplete="off" maxlength="9" pattern="^\\d{6,9}$">
-                        <span class="input-icon">🆔</span>
+                        <input type="text" class="input-field" id="regCedula" placeholder="Cédula de Identidad (ej. 12345678)" required autocomplete="off" maxlength="9" pattern="[0-9]{6,9}">
+                        <span class="input-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="18" height="14" x="3" y="5" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M15 9h2M15 13h2M6 16c0-1.5 1.5-2 3-2s3 .5 3 2"/>
+                            </svg>
+                        </span>
                     </div>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                         <div class="input-group">
-                            <input type="text" class="input-field" id="regNombre" placeholder="Nombre" required autocomplete="given-name" minlength="2">
-                            <span class="input-icon">👤</span>
+                            <input type="text" class="input-field" id="regNombre" placeholder="Nombres" required autocomplete="given-name" minlength="2">
+                            <span class="input-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                                </svg>
+                            </span>
                         </div>
                         <div class="input-group">
                             <input type="text" class="input-field" id="regApellidos" placeholder="Apellidos" required autocomplete="family-name" minlength="2">
-                            <span class="input-icon">👤</span>
+                            <span class="input-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                                </svg>
+                            </span>
                         </div>
                     </div>
 
                     <div class="input-group">
-                        <input type="email" class="input-field" id="regEmail" placeholder="Correo electrónico" required autocomplete="email" inputmode="email">
-                        <span class="input-icon">✉️</span>
+                        <input type="email" class="input-field" id="regEmail" placeholder="Correo electrónico institucional" required autocomplete="email" inputmode="email">
+                        <span class="input-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                            </svg>
+                        </span>
                     </div>
 
                     <div class="input-group">
-                        <input type="tel" class="input-field" id="regTelefono" placeholder="Teléfono (04242987214)" required autocomplete="tel" inputmode="tel" pattern="^04\\d{9}$" maxlength="11">
-                        <span class="input-icon">📱</span>
+                        <input type="tel" class="input-field" id="regTelefono" placeholder="Teléfono móvil (04121234567)" required autocomplete="tel" inputmode="tel" pattern="04[0-9]{9}" maxlength="11">
+                        <span class="input-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/>
+                            </svg>
+                        </span>
                     </div>
 
-                    <!-- Campo de Area/Carrera - Solo para Participantes -->
+                    <!-- Carrera / Especialidad (Participantes) -->
                     <div class="input-group area-field" id="areaFieldGroup">
                         <select class="select-field" id="regArea" required>
-                            <option value="">Selecciona tu carrera</option>
+                            <option value="">Selecciona tu carrera o área</option>
                             <option value="Administracion">Administración</option>
                             <option value="Informatica">Informática</option>
                             <option value="Mecanica">Mecánica</option>
                             <option value="Electrica">Eléctrica</option>
                             <option value="Mantenimiento">Mantenimiento</option>
                             <option value="Transporte Ferroviario">Transporte Ferroviario</option>
-                            <option value="Externo">Externo</option>
+                            <option value="Externo">Comunidad / Externo</option>
                         </select>
-                        <span class="input-icon">🎓</span>
+                        <span class="input-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                            </svg>
+                        </span>
                     </div>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                         <div class="input-group">
-                            <input type="password" class="input-field" id="regPassword" placeholder="Contraseña" required minlength="6" autocomplete="new-password">
-                            <span class="input-icon">🔒</span>
+                            <input type="password" class="input-field" id="regPassword" placeholder="Contraseña (mín. 6)" required minlength="6" autocomplete="new-password">
+                            <span class="input-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                </svg>
+                            </span>
                         </div>
                         <div class="input-group">
                             <input type="password" class="input-field" id="regPasswordConfirm" placeholder="Confirmar" required minlength="6" autocomplete="new-password">
-                            <span class="input-icon">🔐</span>
+                            <span class="input-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="m9 12 2 2 4-4"/><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                </svg>
+                            </span>
                         </div>
                     </div>
 
                     <button type="submit" class="btn-submit" id="registerBtn">
-                        <span class="btn-text">Crear Cuenta</span>
+                        <span class="btn-text">Confirmar Registro</span>
                         <div class="spinner"></div>
                     </button>
+
                     <div class="form-footer">
-                        ¿Ya tienes cuenta? <a onclick="switchMode('login')">Iniciar sesión</a>
+                        ¿Ya formas parte? <a onclick="switchMode('login')">Iniciar sesión</a>
                     </div>
                 </form>
+
             </div>
         </div>
-    </div>
+    </main>
 
     <script>
         /**
-         * CONTROLADOR PRINCIPAL
-         * Gestiona el cambio entre login y registro
+         * CONTROLADOR DE ACCESO UPTECMS
          */
-        
-        const API_BASE_URL = '/uptec-cursos/backend/api/api.php';
+        const API_BASE_URL = '/backend/api/api.php';
         const container = document.getElementById('authContainer');
         const loginForm = document.getElementById('loginForm');
         const registerForm = document.getElementById('registerForm');
@@ -761,10 +800,6 @@
         let currentMode = 'login';
         let isAnimating = false;
 
-        /**
-         * Cambia entre modos login y register
-         * @param {string} mode - 'login' o 'register'
-         */
         function switchMode(mode) {
             if (isAnimating || mode === currentMode) return;
             
@@ -781,14 +816,9 @@
                 animateFormTransition(registerForm, loginForm);
             }
 
-            setTimeout(() => {
-                isAnimating = false;
-            }, 600);
+            setTimeout(() => { isAnimating = false; }, 550);
         }
 
-        /**
-         * Anima la transición entre formularios
-         */
         function animateFormTransition(fromForm, toForm) {
             fromForm.classList.remove('active');
             fromForm.classList.add('inactive');
@@ -799,39 +829,30 @@
                 
                 toForm.style.visibility = 'visible';
                 toForm.classList.add('active');
-                
-                hideAlerts();
             }, 200);
         }
 
-        /**
-         * Maneja el envío del formulario de login
-         */
         async function handleLogin(event) {
             event.preventDefault();
             
             const form = event.target;
             const btn = form.querySelector('.btn-submit');
-            const alertBox = form.querySelector('.alert');
-            const alertText = document.getElementById('loginAlertText');
             
-            // Validación básica
             if (!form.checkValidity()) {
-                showAlert(alertBox, alertText, 'Por favor completa todos los campos correctamente', 'error');
+                showToast('Por favor completa los campos requeridos', 'warning');
                 shakeElement(form);
                 return;
             }
 
-            // Estado de carga
             setLoading(btn, true);
-            showToast('Iniciando sesión...', 'success');
 
             try {
                 const response = await fetch(`${API_BASE_URL}?endpoint=login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
                     body: JSON.stringify({
-                        email: document.getElementById('loginEmail').value,
+                        email: document.getElementById('loginEmail').value.trim(),
                         password: document.getElementById('loginPassword').value
                     })
                 });
@@ -839,37 +860,32 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    // Guardar sesion
                     localStorage.setItem('uptec_token', data.token);
                     localStorage.setItem('uptec_user', JSON.stringify(data.user));
 
-                    showToast(`¡Bienvenido! ${data.user.nombre}`, 'success');
+                    showToast(`¡Bienvenido a UPTECMS! ${data.user.nombre}`, 'success');
 
-                    // Redirección según rol
                     setTimeout(() => {
                         window.location.href = data.redirect;
-                    }, 1000);
+                    }, 800);
                 } else {
-                    showToast(data.error || 'Credenciales incorrectas', 'error');
+                    showToast(data.error || 'Credenciales de acceso no válidas', 'error');
                     setLoading(btn, false);
                 }
             } catch (error) {
-                console.error('Login error:', error);
-                showToast('Error de conexión. Intente más tarde.', 'error');
+                console.error('Error de login:', error);
+                showToast('No fue posible conectar con el servidor', 'error');
                 setLoading(btn, false);
             }
         }
 
-        /**
-         * Valida el formulario de registro campo por campo
-         */
         function validateRegisterForm() {
             const fields = [
-                { id: 'regCedula', name: 'Cédula', pattern: /^\d{6,9}$/, example: '32361670' },
+                { id: 'regCedula', name: 'Cédula', pattern: /^\d{6,9}$/, example: '12345678' },
                 { id: 'regNombre', name: 'Nombre', minLength: 2 },
                 { id: 'regApellidos', name: 'Apellidos', minLength: 2 },
                 { id: 'regEmail', name: 'Correo electrónico', type: 'email' },
-                { id: 'regTelefono', name: 'Teléfono', pattern: /^04\d{9}$/, example: '04242987214' }
+                { id: 'regTelefono', name: 'Teléfono', pattern: /^04\d{9}$/, example: '04121234567' }
             ];
 
             for (const field of fields) {
@@ -877,41 +893,39 @@
                 const value = element.value.trim();
 
                 if (!value) {
-                    return { valid: false, message: `El campo "${field.name}" está vacío` };
+                    return { valid: false, message: `El campo "${field.name}" es obligatorio` };
                 }
 
                 if (field.pattern && !field.pattern.test(value)) {
-                    const exampleText = field.example ? ` (Ejemplo: ${field.example})` : '';
-                    return { valid: false, message: `El campo "${field.name}" tiene formato incorrecto${exampleText}` };
+                    const exampleText = field.example ? ` (ej. ${field.example})` : '';
+                    return { valid: false, message: `Formato incorrecto en "${field.name}"${exampleText}` };
                 }
 
                 if (field.minLength && value.length < field.minLength) {
-                    return { valid: false, message: `El campo "${field.name}" debe tener al menos ${field.minLength} caracteres` };
+                    return { valid: false, message: `"${field.name}" debe contener al menos ${field.minLength} caracteres` };
                 }
 
                 if (field.type === 'email' && !value.includes('@')) {
-                    return { valid: false, message: `El "${field.name}" debe contener @` };
+                    return { valid: false, message: 'Dirección de correo no válida' };
                 }
             }
 
-            // Validar área si es participante
             const rol = document.querySelector('input[name="rol"]:checked').value;
             if (rol === 'Participante') {
                 const area = document.getElementById('regArea').value;
                 if (!area) {
-                    return { valid: false, message: 'Debes seleccionar tu carrera/área' };
+                    return { valid: false, message: 'Por favor selecciona tu carrera o área académica' };
                 }
             }
 
-            // Validar contraseñas
             const password = document.getElementById('regPassword').value;
             const passwordConfirm = document.getElementById('regPasswordConfirm').value;
 
             if (!password) {
-                return { valid: false, message: 'El campo "Contraseña" está vacío' };
+                return { valid: false, message: 'Ingresa una contraseña' };
             }
             if (password.length < 6) {
-                return { valid: false, message: 'La contraseña debe tener al menos 6 caracteres' };
+                return { valid: false, message: 'La contraseña debe contener al menos 6 caracteres' };
             }
             if (password !== passwordConfirm) {
                 return { valid: false, message: 'Las contraseñas no coinciden' };
@@ -920,18 +934,12 @@
             return { valid: true };
         }
 
-        /**
-         * Maneja el envío del formulario de registro
-         */
         async function handleRegister(event) {
             event.preventDefault();
 
             const form = event.target;
             const btn = form.querySelector('.btn-submit');
-            const alertBox = form.querySelector('.alert');
-            const alertText = document.getElementById('registerAlertText');
 
-            // Validación específica campo por campo
             const validation = validateRegisterForm();
             if (!validation.valid) {
                 showToast(validation.message, 'error');
@@ -939,31 +947,19 @@
                 return;
             }
 
-            // Obtener rol seleccionado
             const rol = document.querySelector('input[name="rol"]:checked').value;
+            const area = (rol === 'Participante') ? document.getElementById('regArea').value : null;
 
-            // Validar area si es participante
-            let area = null;
-            if (rol === 'Participante') {
-                area = document.getElementById('regArea').value;
-            }
-
-            // Estado de carga
             setLoading(btn, true);
-            showToast('Procesando registro...', 'success');
-
-            // Obtener valores de contraseña
-            const password = document.getElementById('regPassword').value;
-            const passwordConfirm = document.getElementById('regPasswordConfirm').value;
 
             const regData = {
-                cedula: document.getElementById('regCedula').value,
-                nombre: document.getElementById('regNombre').value,
-                apellidos: document.getElementById('regApellidos').value,
-                correo: document.getElementById('regEmail').value,
-                telefono: document.getElementById('regTelefono').value,
-                password: password,
-                password_confirm: passwordConfirm,
+                cedula: document.getElementById('regCedula').value.trim(),
+                nombre: document.getElementById('regNombre').value.trim(),
+                apellidos: document.getElementById('regApellidos').value.trim(),
+                correo: document.getElementById('regEmail').value.trim(),
+                telefono: document.getElementById('regTelefono').value.trim(),
+                password: document.getElementById('regPassword').value,
+                password_confirm: document.getElementById('regPasswordConfirm').value,
                 rol: rol,
                 area: area
             };
@@ -971,27 +967,24 @@
             try {
                 const response = await fetch(`${API_BASE_URL}?endpoint=register`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
                     body: JSON.stringify(regData)
                 });
 
                 const data = await response.json();
 
                 if (data.success) {
-                    showToast('¡Cuenta creada exitosamente!', 'success');
+                    showToast('¡Cuenta creada exitosamente en UPTECMS!', 'success');
 
-                    // Volver al login después de registro exitoso
                     setTimeout(() => {
                         document.getElementById('loginEmail').value = regData.correo;
                         switchMode('login');
-                    }, 1500);
+                        setLoading(btn, false);
+                    }, 1400);
                 } else {
-                    // Manejar errores de validación (data.errors) o error general (data.error)
-                    let errorMsg = 'Error al crear cuenta';
+                    let errorMsg = 'No fue posible registrar la cuenta';
                     if (data.errors && Object.keys(data.errors).length > 0) {
-                        // Tomar el primer error de validación
                         errorMsg = Object.values(data.errors)[0];
                     } else if (data.error) {
                         errorMsg = data.error;
@@ -1000,14 +993,11 @@
                     setLoading(btn, false);
                 }
             } catch (error) {
-                showToast('Error de conexión. Intente más tarde.', 'error');
+                showToast('Error de conexión al procesar el registro', 'error');
                 setLoading(btn, false);
             }
         }
 
-        /**
-         * Muestra/oculta campo de area segun el rol seleccionado
-         */
         function toggleAreaField() {
             const rol = document.querySelector('input[name="rol"]:checked').value;
             const areaGroup = document.getElementById('areaFieldGroup');
@@ -1023,28 +1013,22 @@
             }
         }
 
-        /**
-         * Muestra notificación toast emergente
-         */
         function showToast(message, type = 'error') {
             const container = document.getElementById('toastContainer');
             
-            const icons = {
-                error: '❌',
-                success: '✅',
-                warning: '⚠️'
+            // Iconos vectoriales profesionales para Toasts
+            const toastIcons = {
+                error: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
+                success: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+                warning: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
             };
             
-            const titles = {
-                error: 'Error',
-                success: '¡Éxito!',
-                warning: 'Atención'
-            };
+            const titles = { error: 'Atención', success: 'Éxito', warning: 'Información' };
             
             const toast = document.createElement('div');
             toast.className = `toast toast-${type}`;
             toast.innerHTML = `
-                <div class="toast-icon">${icons[type]}</div>
+                <div class="toast-icon">${toastIcons[type] || toastIcons.warning}</div>
                 <div class="toast-content">
                     <div class="toast-title">${titles[type]}</div>
                     <div class="toast-message">${message}</div>
@@ -1054,37 +1038,12 @@
             
             container.appendChild(toast);
             
-            // Auto-eliminar después de 5 segundos
             setTimeout(() => {
                 toast.classList.add('toast-exit');
                 setTimeout(() => toast.remove(), 300);
-            }, 5000);
+            }, 4500);
         }
 
-        /**
-         * Función legacy compatible - ahora usa toast
-         */
-        function showAlert(alertBoxOrMessage, textElementOrType, messageOrNothing, typeOrNothing) {
-            // Detectar si es la forma antigua (4 params) o nueva (2 params)
-            if (typeof textElementOrType === 'string') {
-                // Nueva forma: showAlert(message, type)
-                showToast(alertBoxOrMessage, textElementOrType);
-            } else {
-                // Forma antigua: showAlert(alertBox, textElement, message, type)
-                showToast(messageOrNothing, typeOrNothing);
-            }
-        }
-
-        /**
-         * Oculta todas las alertas (legacy - no hace nada con toast)
-         */
-        function hideAlerts() {
-            // Las toasts se cierran solas o manualmente
-        }
-
-        /**
-         * Activa/desactiva estado de carga en botón
-         */
         function setLoading(btn, loading) {
             if (loading) {
                 btn.classList.add('loading');
@@ -1095,54 +1054,34 @@
             }
         }
 
-        /**
-         * Efecto shake para errores de validación
-         */
         function shakeElement(element) {
-            element.style.animation = 'shake 0.5s ease';
-            setTimeout(() => {
-                element.style.animation = '';
-            }, 500);
+            element.style.animation = 'shake 0.45s ease';
+            setTimeout(() => { element.style.animation = ''; }, 450);
         }
 
-        // Agregar keyframes de shake dinámicamente
         const style = document.createElement('style');
         style.textContent = `
             @keyframes shake {
                 0%, 100% { transform: translateX(0); }
-                25% { transform: translateX(-10px); }
-                75% { transform: translateX(10px); }
+                20% { transform: translateX(-8px); }
+                40% { transform: translateX(8px); }
+                60% { transform: translateX(-5px); }
+                80% { transform: translateX(5px); }
             }
         `;
         document.head.appendChild(style);
 
-        // ==========================================
-        // EVENTOS GLOBALES
-        // ==========================================
-
-        // Tecla ESC para volver al login
+        // Atajos y detección de URL
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && currentMode === 'register') {
                 switchMode('login');
             }
         });
 
-        // Detectar hash en URL para modo directo
         window.addEventListener('load', () => {
             if (window.location.hash === '#register') {
-                setTimeout(() => switchMode('register'), 100);
+                setTimeout(() => switchMode('register'), 120);
             }
-        });
-
-        // Prevenir zoom en inputs en iOS
-        document.addEventListener('gesturestart', (e) => e.preventDefault());
-
-        // Manejar cambio de orientación en móviles
-        window.addEventListener('orientationchange', () => {
-            // Forzar reflow para corregir posiciones
-            setTimeout(() => {
-                window.scrollTo(0, 0);
-            }, 100);
         });
     </script>
 </body>
