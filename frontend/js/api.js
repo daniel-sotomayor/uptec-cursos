@@ -29,7 +29,10 @@
 
 
     // Configuracion base
-    const API_BASE = '/backend/api/api.php';
+    // Detección dinámica de la ruta base (soporta subcarpetas como /uptec-cursos o raíz virtualhost)
+    const isSubfolder = window.location.pathname.toLowerCase().includes('/uptec-cursos');
+    const APP_BASE = isSubfolder ? '/uptec-cursos' : '';
+    const API_BASE = `${APP_BASE}/backend/api/api.php`;
 
     // Token CSRF en memoria
     let csrfToken = null;

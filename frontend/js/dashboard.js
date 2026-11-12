@@ -180,6 +180,18 @@ const Icons = {
     // ============================================
     // SIDEBAR CON ICONOS SVG EMBEBIDOS
     // ============================================
+    // Detección dinámica de la ruta base
+    const isSubfolder = window.location.pathname.toLowerCase().includes('/uptec-cursos');
+    const APP_BASE = isSubfolder ? '/uptec-cursos' : '';
+
+    function resolveUrl(url) {
+        if (!url) return url;
+        if (APP_BASE && url.startsWith('/') && !url.startsWith(APP_BASE)) {
+            return `${APP_BASE}${url}`;
+        }
+        return url;
+    }
+
     const Sidebar = {
         init(rol) {
             const sidebar = document.getElementById('sidebar');
@@ -187,38 +199,38 @@ const Icons = {
 
             const menus = {
                 'Administrador': [
-                    { label: 'Dashboard', icon: Icons.dashboard, href: '/administrador/', section: 'Principal' },
-                    { label: 'Usuarios', icon: Icons.usuarios, href: '/views/administrador/usuarios.html', section: 'Gestión' },
-                    { label: 'Egresados', icon: Icons.egresados, href: '/views/administrador/egresados.html', section: 'Gestión' },
-                    { label: 'Cursos', icon: Icons.cursos, href: '/views/administrador/cursos.html' },
-                    { label: 'Inscripciones', icon: Icons.inscripciones, href: '/views/administrador/inscripciones.html' },
-                    { label: 'Calificaciones', icon: Icons.calificaciones, href: '/views/administrador/calificaciones.html' },
-                    { label: 'Reportes', icon: Icons.reportes, href: '/views/administrador/reportes.html', section: 'Reportes' },
-                    { label: 'Auditoría', icon: Icons.auditoria, href: '/views/administrador/auditoria.html' },
-                    { label: 'Respaldo', icon: Icons.respaldo, href: '/views/administrador/backup.html' }
+                    { label: 'Dashboard', icon: Icons.dashboard, href: '/frontend/views/administrador/dashboard.html', section: 'Principal' },
+                    { label: 'Usuarios', icon: Icons.usuarios, href: '/frontend/views/administrador/usuarios.html', section: 'Gestión' },
+                    { label: 'Egresados', icon: Icons.egresados, href: '/frontend/views/administrador/egresados.html', section: 'Gestión' },
+                    { label: 'Cursos', icon: Icons.cursos, href: '/frontend/views/administrador/cursos.html' },
+                    { label: 'Inscripciones', icon: Icons.inscripciones, href: '/frontend/views/administrador/inscripciones.html' },
+                    { label: 'Calificaciones', icon: Icons.calificaciones, href: '/frontend/views/administrador/calificaciones.html' },
+                    { label: 'Reportes', icon: Icons.reportes, href: '/frontend/views/administrador/reportes.html', section: 'Reportes' },
+                    { label: 'Auditoría', icon: Icons.auditoria, href: '/frontend/views/administrador/auditoria.html' },
+                    { label: 'Respaldo', icon: Icons.respaldo, href: '/frontend/views/administrador/backup.html' }
                 ],
                 'Analista': [
-                    { label: 'Dashboard', icon: Icons.dashboard, href: '/analista/', section: 'Principal' },
-                    { label: 'Cursos', icon: Icons.cursos, href: '/views/analista/cursos.html', section: 'Gestión' },
-                    { label: 'Egresados', icon: Icons.egresados, href: '/views/analista/egresados.html', section: 'Gestión' },
-                    { label: 'Facilitadores', icon: Icons.facilitadores, href: '/views/analista/facilitadores.html' },
-                    { label: 'Usuarios', icon: Icons.usuarios, href: '/views/analista/usuarios.html' },
-                    { label: 'Verificación', icon: Icons.verificacion, href: '/views/analista/verificacion.html' },
-                    { label: 'Reportes', icon: Icons.reportes, href: '/views/analista/reportes.html', section: 'Reportes' }
+                    { label: 'Dashboard', icon: Icons.dashboard, href: '/frontend/views/analista/dashboard.html', section: 'Principal' },
+                    { label: 'Cursos', icon: Icons.cursos, href: '/frontend/views/analista/cursos.html', section: 'Gestión' },
+                    { label: 'Egresados', icon: Icons.egresados, href: '/frontend/views/analista/egresados.html', section: 'Gestión' },
+                    { label: 'Facilitadores', icon: Icons.facilitadores, href: '/frontend/views/analista/facilitadores.html' },
+                    { label: 'Usuarios', icon: Icons.usuarios, href: '/frontend/views/analista/usuarios.html' },
+                    { label: 'Verificación', icon: Icons.verificacion, href: '/frontend/views/analista/verificacion.html' },
+                    { label: 'Reportes', icon: Icons.reportes, href: '/frontend/views/analista/reportes.html', section: 'Reportes' }
                 ],
                 'Facilitador': [
-                    { label: 'Dashboard', icon: Icons.dashboard, href: '/facilitador/', section: 'Principal' },
-                    { label: 'Mis Cursos', icon: Icons.cursos, href: '/views/facilitador/mis-cursos.html', section: 'Gestión' },
-                    { label: 'Estudiantes', icon: Icons.usuarios, href: '/views/facilitador/estudiantes.html' },
-                    { label: 'Calificaciones', icon: Icons.calificaciones, href: '/views/facilitador/calificaciones.html' },
-                    { label: 'Reportes', icon: Icons.reportes, href: '/views/facilitador/reportes.html', section: 'Reportes' }
+                    { label: 'Dashboard', icon: Icons.dashboard, href: '/frontend/views/facilitador/dashboard.html', section: 'Principal' },
+                    { label: 'Mis Cursos', icon: Icons.cursos, href: '/frontend/views/facilitador/mis-cursos.html', section: 'Gestión' },
+                    { label: 'Estudiantes', icon: Icons.usuarios, href: '/frontend/views/facilitador/estudiantes.html' },
+                    { label: 'Calificaciones', icon: Icons.calificaciones, href: '/frontend/views/facilitador/calificaciones.html' },
+                    { label: 'Reportes', icon: Icons.reportes, href: '/frontend/views/facilitador/reportes.html', section: 'Reportes' }
                 ],
                 'Participante': [
-                    { label: 'Dashboard', icon: Icons.dashboard, href: '/participante/', section: 'Principal' },
-                    { label: 'Mis Cursos', icon: Icons.cursos, href: '/views/participante/mis-cursos.html', section: 'Gestión' },
-                    { label: 'Inscribirme', icon: Icons.inscripciones, href: '/views/participante/inscribir.html' },
-                    { label: 'Mis Notas', icon: Icons.calificaciones, href: '/views/participante/mis-notas.html' },
-                    { label: 'Certificados', icon: Icons.certificados, href: '/views/participante/certificados.html', section: 'Reportes' }
+                    { label: 'Dashboard', icon: Icons.dashboard, href: '/frontend/views/participante/dashboard.html', section: 'Principal' },
+                    { label: 'Mis Cursos', icon: Icons.cursos, href: '/frontend/views/participante/mis-cursos.html', section: 'Gestión' },
+                    { label: 'Inscribirme', icon: Icons.inscripciones, href: '/frontend/views/participante/inscribir.html' },
+                    { label: 'Mis Notas', icon: Icons.calificaciones, href: '/frontend/views/participante/mis-notas.html' },
+                    { label: 'Certificados', icon: Icons.certificados, href: '/frontend/views/participante/certificados.html', section: 'Reportes' }
                 ]
             };
 
@@ -226,7 +238,7 @@ const Icons = {
             let html = `
                 <div class="sidebar__brand">
                     <div class="sidebar__brand-icon">
-                        <img src="/img/logo-uptec-grande.png" alt="UPTECMS Cursos" />
+                        <img src="${resolveUrl('/frontend/img/logo-uptec-grande.png')}" alt="UPTECMS Cursos" />
                     </div>
                     <div>
                         <div class="sidebar__brand-text">UPTECMS</div>
@@ -249,7 +261,7 @@ const Icons = {
                 const isActive = isDashboardItem ? isCurrentDashboard : (window.location.pathname.endsWith(item.href) || window.location.pathname.includes(item.href.split('/').pop()));
                 html += `
                     <li>
-                        <a href="${item.href}" class="sidebar__link ${isActive ? 'active' : ''}">
+                        <a href="${resolveUrl(item.href)}" class="sidebar__link ${isActive ? 'active' : ''}">
                             <span class="sidebar__link-icon" style="display: inline-flex; align-items: center; justify-content: center;">
                                 ${item.icon}
                             </span>
@@ -431,7 +443,7 @@ const Icons = {
         const isAuth = await AUTH.check();
 
         if (!isAuth) {
-            window.location.href = '/login.html';
+            window.location.href = resolveUrl('/login.html');
             return;
         }
 

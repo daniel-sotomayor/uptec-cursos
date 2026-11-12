@@ -139,7 +139,9 @@ let currentPreviewBlobUrl = null;
 async function previsualizarReportePDF() {
     try {
         Toast.show('Cargando vista previa del informe institucional...', 'info');
-        const pdfUrl = `/backend/api/api.php?endpoint=reportes-pdf&preview=1&t=${Date.now()}`;
+        const isSubfolder = window.location.pathname.toLowerCase().includes('/uptec-cursos');
+        const APP_BASE = isSubfolder ? '/uptec-cursos' : '';
+        const pdfUrl = `${APP_BASE}/backend/api/api.php?endpoint=reportes-pdf&preview=1&t=${Date.now()}`;
 
         Modal.open(`
             <div style="display: flex; flex-direction: column; height: 75vh; min-height: 480px;">

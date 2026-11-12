@@ -1,5 +1,6 @@
-﻿# ============================================
-# UPTEC Cursos - Configuración Apache & URLs Limpias
+# ============================================
+# UPTEC Cursos - Configuración Apache & Redirecciones
+# Compatible tanto con subcarpeta (/uptec-cursos/) como con VirtualHost raíz
 # ============================================
 
 Options -Indexes +FollowSymLinks
@@ -7,69 +8,31 @@ DirectoryIndex index.php frontend/index.html
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /
 
-    # 1. Servir internamente recursos estáticos solicitados con o sin /frontend/
+    # 1. Si el archivo o directorio solicitado existe físicamente, servirlo directamente
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # 2. Servir internamente recursos estáticos si se piden directamente
     RewriteRule ^frontend/(css|js|img)/(.*)$ frontend/$1/$2 [L]
     RewriteRule ^(css|js|img)/(.*)$ frontend/$1/$2 [L]
 
-    # 2. Redirigir si la URL visible en el navegador tiene /uptec-cursos/
-    RewriteCond %{THE_REQUEST} \s/uptec-cursos/backend/([^\s]*) [NC]
-    RewriteRule ^uptec-cursos/backend/(.*)$ /backend/$1 [R=301,L]
+    # 3. Redirección de URLs cortas hacia las vistas físicas reales para preservar rutas relativas de CSS/JS
+    RewriteRule ^(administrador|analista|facilitador|participante)/?$ frontend/views/$1/dashboard.html [R=302,L]
+    RewriteRule ^views/(administrador|analista|facilitador|participante)/?$ frontend/views/$1/dashboard.html [R=302,L]
+    RewriteRule ^(administrador|analista|facilitador|participante)/([a-zA-Z0-9_-]+)\.html$ frontend/views/$1/$2.html [R=302,L]
+    RewriteRule ^(administrador|analista|facilitador|participante)/([a-zA-Z0-9_-]+)$ frontend/views/$1/$2.html [R=302,L]
+    RewriteRule ^views/(.*)$ frontend/views/$1 [R=302,L]
 
-    RewriteCond %{THE_REQUEST} \s/uptec-cursos/frontend/([^\s]*) [NC]
-    RewriteRule ^uptec-cursos/frontend/(.*)$ /$1 [R=301,L]
-
-    RewriteCond %{THE_REQUEST} \s/uptec-cursos/([^\s]*) [NC]
-    RewriteRule ^uptec-cursos/?$ / [R=301,L]
-    RewriteRule ^uptec-cursos/(.*)$ /$1 [R=301,L]
-
-    # 3. Ocultar dashboard.html de todas las vistas (participante, facilitador, analista, administrador)
-    RewriteCond %{THE_REQUEST} \s/(?:views/)?(administrador|analista|facilitador|participante)/dashboard(?:\.html)?[\s\?] [NC]
-    RewriteRule ^(?:views/)?(administrador|analista|facilitador|participante)/dashboard(?:\.html)?$ /$1/ [R=301,L]
-
-    # 4. Redirigir /views/(rol) a /(rol)/ para ocultar views/
-    RewriteCond %{THE_REQUEST} \s/views/(administrador|analista|facilitador|participante)/?[\s\?] [NC]
-    RewriteRule ^views/(administrador|analista|facilitador|participante)/?$ /$1/ [R=301,L]
-
-    # 5. Redirigir si la URL visible en el navegador tiene /frontend/
-    RewriteCond %{THE_REQUEST} \s/frontend/?[\s\?] [NC]
-    RewriteRule ^frontend/?$ / [R=301,L]
-
-    RewriteCond %{THE_REQUEST} \s/frontend/([^\s]*) [NC]
-    RewriteRule ^frontend/(.*)$ /$1 [R=301,L]
-
-    # 6. Normalizar roles sin barra final: /administrador -> /administrador/
-    RewriteRule ^(administrador|analista|facilitador|participante)$ /$1/ [R=301,L]
-
-    # 7. Servir los dashboards limpios (sin dashboard.html en la URL)
-    RewriteRule ^(administrador|analista|facilitador|participante)/?$ frontend/views/$1/dashboard.html [L]
-    RewriteRule ^views/(administrador|analista|facilitador|participante)/?$ frontend/views/$1/dashboard.html [L]
-
-    # 8. Rutas base
-    # Raíz -> frontend/index.html
+    # 4. Rutas base
     RewriteRule ^$ frontend/index.html [L]
     RewriteRule ^index(\.html)?$ frontend/index.html [L]
-
-    # Login -> frontend/login.html
     RewriteRule ^login(\.html)?$ frontend/login.html [L]
-
-    # Vistas generales (/views/...)
-    RewriteRule ^views/(.*)$ frontend/views/$1 [L]
-
-    # Vistas directas por rol (ej: /administrador/usuarios o /administrador/usuarios.html)
-    RewriteCond %{DOCUMENT_ROOT}/frontend/views/$1/$2.html -f
-    RewriteRule ^(administrador|analista|facilitador|participante)/([a-zA-Z0-9_-]+)$ frontend/views/$1/$2.html [L]
-
-    RewriteRule ^(administrador|analista|facilitador|participante)/(.*)$ frontend/views/$1/$2 [L]
-
-    # Cualquier otro archivo existente en frontend/
-    RewriteCond %{DOCUMENT_ROOT}/frontend/$1 -f
-    RewriteRule ^(.*)$ frontend/$1 [L]
 </IfModule>
 
 # --------------------------------------------
-# 9. Seguridad
+# 5. Seguridad
 # --------------------------------------------
 <FilesMatch "(^\.|\.(sql|env|ini|log|lnk|sh|bat|md)$)">
     Require all denied
@@ -78,7 +41,7 @@ DirectoryIndex index.php frontend/index.html
 RedirectMatch 404 /\.git
 
 # --------------------------------------------
-# 10. Cabeceras de seguridad
+# 6. Cabeceras de seguridad
 # --------------------------------------------
 <IfModule mod_headers.c>
     Header set X-Content-Type-Options "nosniff"

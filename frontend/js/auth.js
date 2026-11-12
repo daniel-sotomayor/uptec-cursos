@@ -69,7 +69,9 @@
                 // Ignorar error
             }
             this.user = null;
-            window.location.href = '/login.html';
+            const isSubfolder = window.location.pathname.toLowerCase().includes('/uptec-cursos');
+            const APP_BASE = isSubfolder ? '/uptec-cursos' : '';
+            window.location.href = APP_BASE ? `${APP_BASE}/frontend/login.html` : '/login.html';
         },
 
         // Cambiar password

@@ -792,7 +792,9 @@
         /**
          * CONTROLADOR DE ACCESO UPTECMS
          */
-        const API_BASE_URL = '/backend/api/api.php';
+        const isSubfolder = window.location.pathname.toLowerCase().includes('/uptec-cursos');
+        const APP_BASE = isSubfolder ? '/uptec-cursos' : '';
+        const API_BASE_URL = `${APP_BASE}/backend/api/api.php`;
         const container = document.getElementById('authContainer');
         const loginForm = document.getElementById('loginForm');
         const registerForm = document.getElementById('registerForm');
@@ -866,7 +868,11 @@
                     showToast(`¡Bienvenido a UPTECMS! ${data.user.nombre}`, 'success');
 
                     setTimeout(() => {
-                        window.location.href = data.redirect;
+                        let target = data.redirect || '/login.html';
+                        if (APP_BASE && target.startsWith('/') && !target.startsWith(APP_BASE)) {
+                            target = `${APP_BASE}${target}`;
+                        }
+                        window.location.href = target;
                     }, 800);
                 } else {
                     showToast(data.error || 'Credenciales de acceso no válidas', 'error');

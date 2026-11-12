@@ -253,7 +253,9 @@ async function previsualizarReportePDF() {
         Toast.show('Cargando vista previa institucional...', 'info');
 
         // URL directa al endpoint con disposición inline y bypass de caché
-        const pdfUrl = `/backend/api/api.php?endpoint=reportes-pdf&preview=1&t=${Date.now()}`;
+        const isSubfolder = window.location.pathname.toLowerCase().includes('/uptec-cursos');
+        const APP_BASE = isSubfolder ? '/uptec-cursos' : '';
+        const pdfUrl = `${APP_BASE}/backend/api/api.php?endpoint=reportes-pdf&preview=1&t=${Date.now()}`;
 
         const user = (typeof AUTH !== 'undefined' && AUTH.user) ? AUTH.user : {
             nombre: 'Administrador',
