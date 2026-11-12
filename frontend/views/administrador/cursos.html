@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="">
-    <title>Cursos - Administrador | UPTEC Cursos</title>
+    <title>Cursos - Administrador | UPTECMS Cursos</title>
+    <link rel="icon" type="image/png" href="../../img/logo-uptec.png">
     <link rel="stylesheet" href="../../../frontend/css/main.css">
 </head>
 <body>
@@ -16,13 +17,13 @@
     <main class="main">
         <header class="header">
             <button class="sidebar-toggle" id="sidebar-toggle">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
-            <h1 class="header__title">Gestion de Cursos</h1>
+            <h1 class="header__title">Gestión de Cursos</h1>
             <div class="header__actions">
                 <div class="header__search">
-                    <svg class="header__search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                    <input type="text" class="header__search-input" placeholder="Buscar curso..." id="search-input">
+                    <svg class="header__search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" class="header__search-input" placeholder="Buscar por código o nombre..." id="search-input">
                 </div>
                 <div class="header__user">
                     <div class="header__user-avatar" id="header-avatar"></div>
@@ -31,8 +32,8 @@
                         <span class="header__user-role" id="header-role"></span>
                     </div>
                 </div>
-                <button class="header__logout" id="logout-btn" title="Cerrar Sesion">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                <button class="header__logout" id="logout-btn" title="Cerrar Sesión">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 </button>
             </div>
         </header>
@@ -40,11 +41,11 @@
         <div class="content">
             <div class="content__header">
                 <div>
-                    <h2 class="content__title">Cursos del Sistema</h2>
-                    <p class="content__subtitle">Administra todos los cursos academicos</p>
+                    <h2 class="content__title">Catálogo de Cursos</h2>
+                    <p class="content__subtitle">Administra los programas de formación académica del sistema UPTECMS</p>
                 </div>
                 <button class="btn btn--primary" onclick="openCourseModal()">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                     Nuevo Curso
                 </button>
             </div>
@@ -53,13 +54,13 @@
                 <div class="card__body" style="padding: 1rem 1.5rem;">
                     <div class="d-flex gap-4 flex-wrap">
                         <div>
-                            <label class="form-label" style="font-size: 0.8125rem;">Estado</label>
-                            <select class="form-select" id="filter-estado" style="width: 160px;" onchange="loadCursos()">
-                                <option value="">Todos</option>
-                                <option value="Planificado">Planificado</option>
+                            <label class="form-label" style="font-size: 0.8125rem;">Estado del Curso</label>
+                            <select class="form-select" id="filter-estado" style="width: 170px;" onchange="loadCursos()">
+                                <option value="">Todos los estados</option>
+                                <option value="Planificado">Planificados</option>
                                 <option value="En Curso">En Curso</option>
-                                <option value="Finalizado">Finalizado</option>
-                                <option value="Cancelado">Cancelado</option>
+                                <option value="Finalizado">Finalizados</option>
+                                <option value="Cancelado">Cancelados</option>
                             </select>
                         </div>
                     </div>
@@ -78,12 +79,23 @@
 <script src="../../../frontend/js/dashboard.js"></script>
 <script>
 let currentCursos = [];
+let facilitadores = [];
 
 (async function() {
     await initDashboard();
+    await loadFacilitadores();
     loadCursos();
     document.getElementById('search-input').addEventListener('input', debounce(() => loadCursos(), 300));
 })();
+
+async function loadFacilitadores() {
+    try {
+        const data = await API.get('facilitadores');
+        facilitadores = data.facilitadores || [];
+    } catch (e) { 
+        console.error("Error cargando facilitadores:", e); 
+    }
+}
 
 async function loadCursos() {
     Loading.show('cursos-table');
@@ -106,56 +118,62 @@ function renderCursos(cursos) {
         'Cancelado': 'badge--danger'
     };
 
+    // Iconos vectoriales profesionales
+    const iconVer = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>`;
+    const iconEditar = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>`;
+    const iconEliminar = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>`;
+
     DataTable.render('cursos-table', cursos, [
-        { label: 'Codigo', key: 'codigo', format: (v, r) => `<strong>${v}</strong><br><small style="color:var(--color-text-muted)">${Utils.escapeHtml(r.nombre)}</small>` },
-        { label: 'Area/Nivel', key: 'area', format: (v, r) => `<small>${v || '-'}<br>${r.nivel}</small>` },
-        { label: 'Duracion', key: 'duracion_horas', format: (v) => `${v}h` },
-        { label: 'Facilitador', key: 'nombre_facilitador', format: (v) => `<small>${v || 'Sin asignar'}</small>` },
+        { label: 'Código / Nombre', key: 'codigo', format: (v, r) => `<strong>${v}</strong><br><small style="color:var(--color-text-muted)">${Utils.escapeHtml(r.nombre)}</small>` },
+        { label: 'Área / Nivel', key: 'area', format: (v, r) => `<small>${v || '-'}<br><span style="color:var(--color-text-muted)">${r.nivel}</span></small>` },
+        { label: 'Duración', key: 'duracion_horas', format: (v) => `${v} horas` },
+        { label: 'Facilitador', key: 'nombre_facilitador', format: (v) => `<small>${Utils.escapeHtml(v || 'Sin asignar')}</small>` },
         { label: 'Inscritos', key: 'total_inscritos', format: (v, r) => `${v || 0} / ${r.cupo_maximo}` },
         { label: 'Estado', key: 'estado', badge: estadoBadge },
-        { label: 'Fechas', key: 'fecha_inicio', format: (v, r) => `<small>${Utils.formatDate(v)}<br>${Utils.formatDate(r.fecha_fin)}</small>` }
+        { label: 'Período', key: 'fecha_inicio', format: (v, r) => `<small>${Utils.formatDate(v)}<br>${Utils.formatDate(r.fecha_fin)}</small>` }
     ], {
         actions: [
-            { icon: '👁️', title: 'Ver', class: 'btn btn--sm btn--ghost', onClick: (row) => `viewCourse(${row.id})` },
-            { icon: '✏️', title: 'Editar', class: 'btn btn--sm btn--ghost', onClick: (row) => `openCourseModal(${row.id})` },
-            { icon: '🗑️', title: 'Eliminar', class: 'btn btn--sm btn--danger', onClick: (row) => `deleteCourse(${row.id})` }
+            { icon: iconVer, title: 'Ver Detalles', class: 'btn btn--sm btn--ghost', onClick: (row) => `viewCourse(${row.id})` },
+            { icon: iconEditar, title: 'Editar Curso', class: 'btn btn--sm btn--ghost', onClick: (row) => `openCourseModal(${row.id})` },
+            { icon: iconEliminar, title: 'Eliminar Curso', class: 'btn btn--sm btn--danger', onClick: (row) => `deleteCourse(${row.id})` }
         ]
     });
 }
 
 function openCourseModal(id) {
     const curso = id ? currentCursos.find(c => c.id === id) : null;
+    const facilitadorOptions = facilitadores.map(f => `<option value="${f.id}" ${curso && curso.facilitador_id === f.id ? 'selected' : ''}>${Utils.escapeHtml(f.nombre_completo)}</option>`).join('');
 
     const content = `
         <form id="course-form">
             <input type="hidden" id="course-id" value="${curso ? curso.id : ''}">
             <div class="d-grid grid--2 gap-3">
                 <div class="form-group">
-                    <label class="form-label form-label--required">Codigo</label>
-                    <input type="text" id="course-codigo" class="form-input" placeholder="PROG-001" value="${curso ? curso.codigo : ''}" ${curso ? 'disabled' : ''} required>
+                    <label class="form-label form-label--required">Código Único</label>
+                    <input type="text" id="course-codigo" class="form-input" placeholder="ej. PROG-001" value="${curso ? curso.codigo : ''}" ${curso ? 'disabled' : ''} required>
                 </div>
                 <div class="form-group">
-                    <label class="form-label form-label--required">Nombre</label>
+                    <label class="form-label form-label--required">Nombre del Curso</label>
                     <input type="text" id="course-nombre" class="form-input" value="${curso ? Utils.escapeHtml(curso.nombre) : ''}" required>
                 </div>
             </div>
             <div class="form-group">
-                <label class="form-label">Descripcion</label>
-                <textarea id="course-descripcion" class="form-textarea" rows="3">${curso ? Utils.escapeHtml(curso.descripcion || '') : ''}</textarea>
+                <label class="form-label">Descripción del Contenido</label>
+                <textarea id="course-descripcion" class="form-textarea" rows="3" placeholder="Objetivos y alcance del programa...">${curso ? Utils.escapeHtml(curso.descripcion || '') : ''}</textarea>
             </div>
             <div class="d-grid grid--3 gap-3">
                 <div class="form-group">
-                    <label class="form-label form-label--required">Duracion (horas)</label>
+                    <label class="form-label form-label--required">Duración (horas)</label>
                     <input type="number" id="course-duracion" class="form-input" value="${curso ? curso.duracion_horas : ''}" min="1" required>
                 </div>
                 <div class="form-group">
-                    <label class="form-label form-label--required">Cupo Maximo</label>
+                    <label class="form-label form-label--required">Cupo Máximo</label>
                     <input type="number" id="course-cupo" class="form-input" value="${curso ? curso.cupo_maximo : '30'}" min="1" required>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Nivel</label>
+                    <label class="form-label">Nivel de Dificultad</label>
                     <select class="form-select" id="course-nivel">
-                        <option value="Basico" ${curso && curso.nivel === 'Basico' ? 'selected' : ''}>Basico</option>
+                        <option value="Basico" ${curso && curso.nivel === 'Basico' ? 'selected' : ''}>Básico</option>
                         <option value="Intermedio" ${curso && curso.nivel === 'Intermedio' ? 'selected' : ''}>Intermedio</option>
                         <option value="Avanzado" ${curso && curso.nivel === 'Avanzado' ? 'selected' : ''}>Avanzado</option>
                     </select>
@@ -163,29 +181,39 @@ function openCourseModal(id) {
             </div>
             <div class="d-grid grid--2 gap-3">
                 <div class="form-group">
-                    <label class="form-label">Fecha Inicio</label>
+                    <label class="form-label">Fecha de Inicio</label>
                     <input type="date" id="course-fecha-inicio" class="form-input" value="${curso ? curso.fecha_inicio : ''}">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Fecha Fin</label>
+                    <label class="form-label">Fecha de Finalización</label>
                     <input type="date" id="course-fecha-fin" class="form-input" value="${curso ? curso.fecha_fin : ''}">
                 </div>
             </div>
-            <div class="form-group">
-                <label class="form-label">Area</label>
-                <select class="form-select" id="course-area">
-                    <option value="">Seleccione un area</option>
-                    <option value="Administracion" ${curso && curso.area === 'Administracion' ? 'selected' : ''}>Administracion</option>
-                    <option value="Informatica" ${curso && curso.area === 'Informatica' ? 'selected' : ''}>Informatica</option>
-                    <option value="Mecanica" ${curso && curso.area === 'Mecanica' ? 'selected' : ''}>Mecanica</option>
-                    <option value="Electrica" ${curso && curso.area === 'Electrica' ? 'selected' : ''}>Electrica</option>
-                    <option value="Mantenimiento" ${curso && curso.area === 'Mantenimiento' ? 'selected' : ''}>Mantenimiento</option>
-                    <option value="Transporte Ferroviario" ${curso && curso.area === 'Transporte Ferroviario' ? 'selected' : ''}>Transporte Ferroviario</option>
-                </select>
+            <div class="d-grid grid--2 gap-3">
+                <div class="form-group">
+                    <label class="form-label">Área / Especialidad</label>
+                    <select class="form-select" id="course-area">
+                        <option value="">Seleccione un área...</option>
+                        <option value="Administracion" ${curso && curso.area === 'Administracion' ? 'selected' : ''}>Administración</option>
+                        <option value="Informatica" ${curso && curso.area === 'Informatica' ? 'selected' : ''}>Informática</option>
+                        <option value="Mecanica" ${curso && curso.area === 'Mecanica' ? 'selected' : ''}>Mecánica</option>
+                        <option value="Electrica" ${curso && curso.area === 'Electrica' ? 'selected' : ''}>Eléctrica</option>
+                        <option value="Mantenimiento" ${curso && curso.area === 'Mantenimiento' ? 'selected' : ''}>Mantenimiento</option>
+                        <option value="Transporte Ferroviario" ${curso && curso.area === 'Transporte Ferroviario' ? 'selected' : ''}>Transporte Ferroviario</option>
+                        <option value="Externo" ${curso && curso.area === 'Externo' ? 'selected' : ''}>Comunidad / Externo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Docente / Facilitador</label>
+                    <select class="form-select" id="course-facilitador">
+                        <option value="">Sin asignar</option>
+                        ${facilitadorOptions}
+                    </select>
+                </div>
             </div>
             ${curso ? `
             <div class="form-group">
-                <label class="form-label">Estado</label>
+                <label class="form-label">Estado Académico</label>
                 <select class="form-select" id="course-estado">
                     <option value="Planificado" ${curso.estado === 'Planificado' ? 'selected' : ''}>Planificado</option>
                     <option value="En Curso" ${curso.estado === 'En Curso' ? 'selected' : ''}>En Curso</option>
@@ -209,65 +237,102 @@ async function saveCourse() {
     const id = document.getElementById('course-id').value;
     const codigo = document.getElementById('course-codigo').value.trim();
     const nombre = document.getElementById('course-nombre').value.trim();
-    const descripcion = document.getElementById('course-descripcion').value;
-    const duracion_horas = document.getElementById('course-duracion').value;
-    const cupo_maximo = document.getElementById('course-cupo').value;
+    const descripcion = document.getElementById('course-descripcion').value.trim();
+    const duracion_horas = parseInt(document.getElementById('course-duracion').value) || 0;
+    const cupo_maximo = parseInt(document.getElementById('course-cupo').value) || 30;
     const nivel = document.getElementById('course-nivel').value;
     const fecha_inicio = document.getElementById('course-fecha-inicio').value;
     const fecha_fin = document.getElementById('course-fecha-fin').value;
     const area = document.getElementById('course-area').value;
+    const facilitador_id = document.getElementById('course-facilitador') ? document.getElementById('course-facilitador').value : null;
 
-    if (!codigo || !nombre || !duracion_horas || !cupo_maximo) {
-        Toast.show('Complete los campos requeridos', 'warning'); return;
+    if (!codigo || !nombre || duracion_horas < 1 || cupo_maximo < 1) {
+        Toast.show('Complete todos los campos obligatorios correctamente', 'warning'); 
+        return;
     }
+
+    const payload = { 
+        codigo, 
+        nombre, 
+        descripcion, 
+        duracion_horas, 
+        cupo_maximo, 
+        nivel, 
+        fecha_inicio, 
+        fecha_fin, 
+        area,
+        facilitador_id: facilitador_id || null
+    };
 
     try {
         if (id) {
-            const estado = document.getElementById('course-estado').value;
-            await API.put('curso', id, { nombre, descripcion, duracion_horas, cupo_maximo, nivel, fecha_inicio, fecha_fin, area, estado });
-            Toast.show('Curso actualizado', 'success');
+            payload.estado = document.getElementById('course-estado').value;
+            await API.put('curso', id, payload);
+            Toast.show('Curso actualizado exitosamente', 'success');
         } else {
-            await API.post('curso', { codigo, nombre, descripcion, duracion_horas, cupo_maximo, nivel, fecha_inicio, fecha_fin, area });
-            Toast.show('Curso creado', 'success');
+            await API.post('curso', payload);
+            Toast.show('Curso registrado exitosamente', 'success');
         }
-        Modal.close(); loadCursos();
-    } catch (err) { Toast.show(err.message || 'Error guardando curso', 'error'); }
+        Modal.close(); 
+        loadCursos();
+    } catch (err) { 
+        Toast.show(err.message || 'Error guardando curso', 'error'); 
+    }
 }
 
 async function viewCourse(id) {
     try {
         const data = await API.get('curso', { id });
         const curso = data.curso;
-        if (!curso) { Toast.show('Curso no encontrado', 'error'); return; }
+        if (!curso) { 
+            Toast.show('Curso no encontrado', 'error'); 
+            return; 
+        }
 
         const content = `
-            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem">
-                <div><strong>Codigo:</strong> ${Utils.escapeHtml(curso.codigo)}</div>
+            <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; font-size: 0.9rem;">
+                <div><strong>Código:</strong> ${Utils.escapeHtml(curso.codigo)}</div>
                 <div><strong>Nombre:</strong> ${Utils.escapeHtml(curso.nombre)}</div>
-                <div><strong>Area:</strong> ${curso.area || '-'}</div>
+                <div><strong>Área:</strong> ${curso.area || '-'}</div>
                 <div><strong>Nivel:</strong> ${curso.nivel}</div>
-                <div><strong>Duracion:</strong> ${curso.duracion_horas}h</div>
-                <div><strong>Cupo:</strong> ${curso.cupo_maximo}</div>
-                <div><strong>Inicio:</strong> ${Utils.formatDate(curso.fecha_inicio)}</div>
-                <div><strong>Fin:</strong> ${Utils.formatDate(curso.fecha_fin)}</div>
+                <div><strong>Duración:</strong> ${curso.duracion_horas} horas</div>
+                <div><strong>Cupo:</strong> ${curso.cupo_maximo} participantes</div>
+                <div><strong>Fecha de Inicio:</strong> ${Utils.formatDate(curso.fecha_inicio)}</div>
+                <div><strong>Fecha de Fin:</strong> ${Utils.formatDate(curso.fecha_fin)}</div>
                 <div><strong>Estado:</strong> <span class="badge badge--${curso.estado === 'En Curso' ? 'accent' : curso.estado === 'Planificado' ? 'primary' : 'neutral'}">${curso.estado}</span></div>
                 <div><strong>Inscritos:</strong> ${curso.total_inscritos || 0}</div>
             </div>
-            <div style="margin-top:1rem"><strong>Descripcion:</strong><br>${Utils.escapeHtml(curso.descripcion) || 'Sin descripcion'}</div>
-            ${curso.nombre_facilitador ? `<div style="margin-top:1rem"><strong>Facilitador:</strong> ${Utils.escapeHtml(curso.nombre_facilitador)}</div>` : ''}
+            <div style="margin-top:1.25rem; font-size: 0.9rem;">
+                <strong>Descripción:</strong><br>
+                <p style="color: var(--color-text-secondary); margin-top: 0.35rem; line-height: 1.5;">${Utils.escapeHtml(curso.descripcion) || 'Sin descripción detallada'}</p>
+            </div>
+            ${curso.nombre_facilitador ? `
+            <div style="margin-top:1rem; padding: 0.75rem; background: var(--color-bg-secondary); border-radius: var(--radius-sm); font-size: 0.85rem;">
+                <strong>Facilitador Asignado:</strong> ${Utils.escapeHtml(curso.nombre_facilitador)}
+            </div>` : ''}
         `;
-        Modal.open(content, { title: 'Detalle del Curso', footer: '<button class="btn btn--ghost" onclick="Modal.close()">Cerrar</button>' });
-    } catch (err) { Toast.show(err.message, 'error'); }
+        Modal.open(content, { title: 'Detalles del Curso', footer: '<button class="btn btn--ghost" onclick="Modal.close()">Cerrar</button>' });
+    } catch (err) { 
+        Toast.show(err.message, 'error'); 
+    }
 }
 
 function deleteCourse(id) {
-    ConfirmDialog.open('Eliminar este curso?', async () => {
-        try { await API.delete('curso', id); Toast.show('Curso eliminado', 'success'); loadCursos(); }
-        catch (err) { Toast.show(err.message, 'error'); }
+    ConfirmDialog.open('¿Estás seguro de eliminar este curso del catálogo?', async () => {
+        try { 
+            await API.delete('curso', id); 
+            Toast.show('Curso eliminado del sistema', 'success'); 
+            loadCursos(); 
+        } catch (err) { 
+            Toast.show(err.message, 'error'); 
+        }
     });
 }
 
-function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
+function debounce(fn, ms) { 
+    let t; 
+    return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; 
+}
 </script>
 
 </body>

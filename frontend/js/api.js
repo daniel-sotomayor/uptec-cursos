@@ -9,8 +9,27 @@
 (function() {
     'use strict';
 
+    // Inyección automática del Favicon / Logo en todo el frontend
+    (function injectFavicon() {
+        if (!document.querySelector("link[rel*='icon']")) {
+            const link = document.createElement('link');
+            link.rel = 'icon';
+            link.type = 'image/png';
+            const path = window.location.pathname;
+            if (path.includes('/views/')) {
+                link.href = '../../../frontend/img/logo-uptec.png';
+            } else if (path.includes('/frontend/')) {
+                link.href = 'img/logo-uptec.png';
+            } else {
+                link.href = '/img/logo-uptec.png';
+            }
+            document.head.appendChild(link);
+        }
+    })();
+
+
     // Configuracion base
-    const API_BASE = '/uptec-cursos/backend/api/api.php';
+    const API_BASE = '/backend/api/api.php';
 
     // Token CSRF en memoria
     let csrfToken = null;
@@ -18,7 +37,7 @@
     // Obtener token CSRF
     async function fetchCsrfToken() {
         try {
-            const response = await fetch(`${API_BASE}?endpoint=csrf`);
+            const response = await fetch(`${API_BASE}?endpoint=csrf`, { credentials: 'include' });
             const data = await response.json();
             if (data.success && data.token) {
                 csrfToken = data.token;
@@ -54,7 +73,7 @@
                     'Accept': 'application/json',
                     'X-CSRF-Token': getCsrfToken()
                 },
-                credentials: 'same-origin'
+                credentials: 'include'
             });
             return this._handleResponse(response);
         },
@@ -70,7 +89,7 @@
                     'X-CSRF-Token': getCsrfToken()
                 },
                 body: body,
-                credentials: 'same-origin'
+                credentials: 'include'
             });
             return this._handleResponse(response);
         },
@@ -86,7 +105,7 @@
                     'X-CSRF-Token': getCsrfToken()
                 },
                 body: JSON.stringify(data),
-                credentials: 'same-origin'
+                credentials: 'include'
             });
             return this._handleResponse(response);
         },
@@ -99,7 +118,7 @@
                     'Accept': 'application/json',
                     'X-CSRF-Token': getCsrfToken()
                 },
-                credentials: 'same-origin'
+                credentials: 'include'
             });
             return this._handleResponse(response);
         },
@@ -110,7 +129,7 @@
             const response = await fetch(`${API_BASE}?${queryParams}`, {
                 method: 'GET',
                 headers: { 'X-CSRF-Token': getCsrfToken() },
-                credentials: 'same-origin'
+                credentials: 'include'
             });
 
             if (!response.ok) {

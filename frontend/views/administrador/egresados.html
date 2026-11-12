@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="">
+    <title>Control de Egresados | UPTECMS Cursos</title>
+    <link rel="icon" type="image/png" href="../../img/logo-uptec.png">
+    <link rel="stylesheet" href="../../../frontend/css/main.css">
+</head>
+<body>
+
+<div class="layout">
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <main class="main">
+        <header class="header">
+            <button class="sidebar-toggle" id="sidebar-toggle">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
+            <h1 class="header__title">Histórico de Egresados</h1>
+            <div class="header__actions">
+                <!-- Buscador ubicado en la cabecera superior -->
+                <div class="header__search">
+                    <svg class="header__search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" class="header__search-input" placeholder="Buscar por estudiante, cédula o curso..." id="search-input">
+                </div>
+                <div class="header__user">
+                    <div class="header__user-avatar" id="header-avatar"></div>
+                    <div class="header__user-info">
+                        <span class="header__user-name" id="header-user"></span>
+                        <span class="header__user-role" id="header-role"></span>
+                    </div>
+                </div>
+                <button class="header__logout" id="logout-btn" title="Cerrar Sesión">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <div class="content">
+            <div class="content__header">
+                <div>
+                    <h2 class="content__title">Listado General de Egresados</h2>
+                    <p class="content__subtitle">Estudiantes que han culminado sus asignaturas y su condición académica definitiva</p>
+                </div>
+            </div>
+
+            <!-- Filtros de selección -->
+            <div class="card" style="margin-bottom: 1.5rem;">
+                <div class="card__body" style="padding: 1rem 1.5rem;">
+                    <div class="d-flex gap-4 flex-wrap">
+                        <div style="flex: 1; min-width: 240px;">
+                            <label class="form-label" style="font-size: 0.8125rem;">Filtrar por Curso</label>
+                            <select class="form-select" id="filter-curso" onchange="cargarEgresados()">
+                                <option value="">Todos los cursos</option>
+                            </select>
+                        </div>
+                        <div style="min-width: 180px;">
+                            <label class="form-label" style="font-size: 0.8125rem;">Condición Académica</label>
+                            <select class="form-select" id="filter-estado" onchange="cargarEgresados()">
+                                <option value="">Todos</option>
+                                <option value="Aprobado">Aprobados</option>
+                                <option value="Reprobado">Reprobados</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabla de datos -->
+            <div class="card">
+                <div class="card__body" style="padding: 0;">
+                    <div id="egresados-container">
+                        <div class="skeleton" style="height: 300px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="../../../frontend/js/api.js"></script>
+<script src="../../../frontend/js/auth.js"></script>
+<script src="../../../frontend/js/dashboard.js"></script>
+<script>
+let cursosDisponibles = [];
+
+(async function() {
+    await initDashboard();
+    await cargarFiltroCursos();
+    await cargarEgresados();
+
+    // Búsqueda en tiempo real desde la barra superior
+    document.getElementById('search-input').addEventListener('input', debounce(() => cargarEgresados(), 300));
+})();
+
+async function cargarFiltroCursos() {
+    try {
+        const res = await API.get('cursos');
+        cursosDisponibles = res.cursos || [];
+        const select = document.getElementById('filter-curso');
+        cursosDisponibles.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c.id;
+            opt.textContent = `${c.codigo} - ${c.nombre}`;
+            select.appendChild(opt);
+        });
+    } catch (e) {
+        console.error("Error cargando cursos en filtro:", e);
+    }
+}
+
+async function cargarEgresados() {
+    const buscar = document.getElementById('search-input').value;
+    const curso_id = document.getElementById('filter-curso').value;
+    const estado = document.getElementById('filter-estado').value;
+
+    const container = document.getElementById('egresados-container');
+    container.innerHTML = '<div class="skeleton" style="height: 250px; margin: 1.5rem;"></div>';
+
+    try {
+        const data = await API.get('egresados', { buscar, curso_id, estado });
+        const list = data.egresados || [];
+
+        if (list.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state" style="padding: 3.5rem 1.5rem; text-align: center;">
+                    <div class="empty-state__icon" style="display: flex; justify-content: center; margin-bottom: 1rem;">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                            <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                        </svg>
+                    </div>
+                    <div class="empty-state__title" style="font-weight: 700; color: var(--color-text-primary); margin-bottom: 0.35rem;">No hay registros de egresados</div>
+                    <div class="empty-state__text" style="color: var(--color-text-muted); font-size: 0.9rem;">No se encontraron estudiantes para los filtros seleccionados.</div>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = `
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Cédula</th>
+                            <th>Estudiante</th>
+                            <th>Curso Culminado</th>
+                            <th>Nota Final</th>
+                            <th>Condición</th>
+                            <th>Docente</th>
+                            <th>Fecha Egreso</th>
+                            <th>Certificado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${list.map(e => `
+                            <tr>
+                                <td><strong>${Utils.escapeHtml(e.cedula)}</strong></td>
+                                <td>
+                                    <div style="font-weight: 600;">${Utils.escapeHtml(e.nombre_estudiante)}</div>
+                                    <div style="font-size: 0.75rem; color: var(--color-text-muted);">${Utils.escapeHtml(e.correo)}</div>
+                                </td>
+                                <td>
+                                    <span class="badge badge--neutral">${Utils.escapeHtml(e.codigo_curso)}</span>
+                                    <div>${Utils.escapeHtml(e.nombre_curso)}</div>
+                                </td>
+                                <td><span style="font-size: 1.1rem; font-weight: 700;">${e.nota_final}</span> / 20</td>
+                                <td>
+                                    <span class="badge ${e.estado_academico === 'Aprobado' ? 'badge--accent' : 'badge--danger'}" style="${e.estado_academico === 'Reprobado' ? 'background: #e53e3e; color: white;' : ''}">
+                                        ${e.estado_academico}
+                                    </span>
+                                </td>
+                                <td>${Utils.escapeHtml(e.facilitador_nombre || '-')}</td>
+                                <td>${Utils.formatDate(e.fecha_egreso)}</td>
+                                <td>
+                                    ${e.codigo_certificado 
+                                        ? `<span style="font-family: monospace; font-size: 0.8rem; background: var(--color-bg); padding: 0.2rem 0.4rem; border-radius: 4px;">${e.codigo_certificado}</span>` 
+                                        : '<span style="color: var(--color-text-muted); font-size: 0.8rem;">No aplica</span>'
+                                    }
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        `;
+    } catch (err) {
+        container.innerHTML = `<div class="p-4 text-center text-danger">Error: ${Utils.escapeHtml(err.message)}</div>`;
+    }
+}
+
+function debounce(fn, ms) { 
+    let t; 
+    return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; 
+}
+</script>
+
+</body>
+</html>

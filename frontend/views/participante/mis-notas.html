@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="">
-    <title>Mis Notas - Participante | UPTEC Cursos</title>
+    <title>Mis Notas - Participante | UPTECMS Cursos</title>
     <link rel="stylesheet" href="../../../frontend/css/main.css">
+    <link rel="icon" type="image/png" href="../../img/logo-uptec.png">
 </head>
 <body>
 
@@ -16,9 +17,9 @@
     <main class="main">
         <header class="header">
             <button class="sidebar-toggle" id="sidebar-toggle">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
-            <h1 class="header__title">Mis calificaciones</h1>
+            <h1 class="header__title">Mis Calificaciones</h1>
             <div class="header__actions">
                 <div class="header__user">
                     <div class="header__user-avatar" id="header-avatar"></div>
@@ -27,8 +28,8 @@
                         <span class="header__user-role" id="header-role"></span>
                     </div>
                 </div>
-                <button class="header__logout" id="logout-btn" title="Cerrar Sesion">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                <button class="header__logout" id="logout-btn" title="Cerrar Sesión">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 </button>
             </div>
         </header>
@@ -36,12 +37,12 @@
         <div class="content">
             <div class="content__header">
                 <div>
-                    <h2 class="content__title">Mis notas y plan de evaluación</h2>
-                    <p class="content__subtitle">Consulte sus calificaciones detalladas por curso</p>
+                    <h2 class="content__title">Calificaciones y Plan de Evaluación</h2>
+                    <p class="content__subtitle">Consulta el desglose de notas parciales y avance evaluativo por asignatura</p>
                 </div>
-                <button class="btn btn--primary" onclick="descargarNotasPDF()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 0.5rem;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    Descargar PDF
+                <button class="btn btn--primary" onclick="descargarNotasPDF()" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Descargar Boletín PDF
                 </button>
             </div>
 
@@ -67,21 +68,43 @@ async function loadNotas() {
         const data = await API.get('mis-notas');
         renderNotas(data.inscripciones || []);
     } catch (err) {
-        Toast.show('Error: ' + err.message, 'error');
+        Toast.show('Error al obtener calificaciones: ' + err.message, 'error');
     }
 }
 
 function renderNotas(inscripciones) {
     const container = document.getElementById('notas-container');
     if (!inscripciones.length) {
-        container.innerHTML = '<div class="empty-state"><div class="empty-state__icon">📭</div><div class="empty-state__title">No tienes notas registradas</div><div class="empty-state__text">Inscribete en un curso para comenzar</div></div>';
+        container.innerHTML = `
+            <div class="empty-state" style="padding: 3.5rem 1.5rem; text-align: center;">
+                <div class="empty-state__icon" style="display: flex; justify-content: center; margin-bottom: 1rem;">
+                    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+                    </svg>
+                </div>
+                <div class="empty-state__title" style="font-weight: 700; color: var(--color-text-primary);">No tienes calificaciones registradas</div>
+                <div class="empty-state__text" style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 1.25rem;">
+                    Inscríbete en una asignatura abierta para comenzar a registrar tu progreso académico.
+                </div>
+                <a href="inscribir.html" class="btn btn--primary" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Ver Asignaturas Disponibles
+                </a>
+            </div>
+        `;
         return;
     }
 
-    container.innerHTML = inscripciones.map(insc => {
-        const estadoBadge = { 'Inscrito': 'badge--primary', 'En Progreso': 'badge--accent', 'Completado': 'badge--accent', 'Reprobado': 'badge--danger' };
+    const estadoBadge = { 
+        'Inscrito': 'badge--primary', 
+        'En Progreso': 'badge--accent', 
+        'Completado': 'badge--accent', 
+        'Reprobado': 'badge--danger',
+        'Abandonado': 'badge--neutral'
+    };
 
-        // Plan de evaluacion vs calificaciones reales
+    container.innerHTML = inscripciones.map(insc => {
+        // Plan de evaluación cruzado con notas registradas
         const planRows = (insc.plan_evaluacion || []).map(eva => {
             const cal = (insc.calificaciones || []).find(c => c.evaluacion_id == eva.id);
             return {
@@ -94,90 +117,96 @@ function renderNotas(inscripciones) {
             };
         });
 
-        // 1 y 2. Lógica para la barra de progreso
+        // Cálculo del porcentaje de avance evaluado
         let totalPeso = 0;
         let pesoEvaluado = 0;
 
         planRows.forEach(p => {
             const peso = parseFloat(p.peso) || 0;
             totalPeso += peso;
-            // Si la nota no es nula, sumamos el peso al progreso actual
-            if (p.nota !== null) {
+            if (p.nota !== null && p.nota !== undefined && p.nota !== '') {
                 pesoEvaluado += peso;
             }
         });
 
-        // 3. Cálculo del porcentaje
-        const porcentaje = totalPeso > 0 ? (pesoEvaluado / totalPeso) * 100 : 0;
-        // Asignamos un color (acento si llegó al 100%, primario si está en progreso)
-        const color = { bg: porcentaje >= 100 ? 'var(--color-accent)' : 'var(--color-primary)' };
-
-        // Calificaciones que no estan en el plan
-        const otrasNotas = (insc.calificaciones || []).filter(c => !planRows.some(p => p.tieneNota && p.nombre === c.descripcion));
+        const porcentaje = totalPeso > 0 ? Math.min(100, Math.round((pesoEvaluado / totalPeso) * 100)) : 0;
+        const colorBg = porcentaje >= 100 ? 'var(--color-accent)' : 'var(--color-primary)';
 
         return `
         <div class="card" style="margin-bottom: 1.5rem;">
-            <div class="card__header">
+            <div class="card__header" style="align-items: flex-start;">
                 <div>
-                    <h3 class="card__title">${Utils.escapeHtml(insc.codigo)} - ${Utils.escapeHtml(insc.nombre)}</h3>
-                    <p style="color: var(--color-text-muted); font-size: 0.875rem; margin-top: 0.25rem;">
-                        ${insc.area || ''} | Facilitador: ${Utils.escapeHtml(insc.nombre_facilitador || 'N/A')}
+                    <h3 class="card__title" style="font-size: 1.15rem; color: var(--color-text-primary); font-weight: 700;">
+                        <span class="badge badge--neutral" style="margin-right: 0.35rem;">${Utils.escapeHtml(insc.codigo)}</span>
+                        ${Utils.escapeHtml(insc.nombre)}
+                    </h3>
+                    <p style="color: var(--color-text-muted); font-size: 0.85rem; margin-top: 0.35rem;">
+                        <strong>Área:</strong> ${insc.area || 'General'} &middot; <strong>Docente:</strong> ${Utils.escapeHtml(insc.nombre_facilitador || 'Por asignar')}
                     </p>
                 </div>
                 <div style="text-align: right;">
                     <span class="badge ${estadoBadge[insc.estado] || 'badge--neutral'}">${insc.estado}</span>
-                    ${insc.nota_final ? `<div style="margin-top: 0.5rem; font-size: 1.5rem; font-weight: 700; color: ${insc.nota_final >= 10 ? 'var(--color-accent)' : 'var(--color-danger)'}">${insc.nota_final}</div>` : ''}
+                    ${insc.nota_final ? `
+                        <div style="margin-top: 0.4rem; font-size: 1.4rem; font-weight: 800; color: ${parseFloat(insc.nota_final) >= 10 ? 'var(--color-accent)' : 'var(--color-danger)'};">
+                            ${parseFloat(insc.nota_final).toFixed(2)} pts
+                        </div>
+                    ` : ''}
                 </div>
             </div>
+            
             <div class="card__body" style="padding: 0;">
                 ${planRows.length ? `
-                <div style="padding: 1rem 1.5rem;">
-                    <h4 style="font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); margin-bottom: 0.75rem;">Plan de Evaluacion</h4>
-                    <div class="table-container"><table class="table">
-                        <thead><tr><th>Evaluacion</th><th>Tipo</th><th>Peso</th><th>Nota</th><th>Fecha</th></tr></thead>
-                        <tbody>
-                            ${planRows.map(p => `
+                <div style="padding: 1.25rem 1.5rem;">
+                    <h4 style="font-size: 0.825rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); margin-bottom: 0.75rem;">
+                        Plan de Evaluación y Calificaciones Parciales
+                    </h4>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
                                 <tr>
-                                    <td><strong>${Utils.escapeHtml(p.nombre)}</strong></td>
-                                    <td><span class="badge badge--neutral">${p.tipo}</span></td>
-                                    <td>${p.peso}%</td>
-                                    <td>${p.nota !== null ? `<span class="badge ${p.nota >= 10 ? 'badge--accent' : 'badge--warning'}" style="font-size:0.9375rem">${p.nota}</span>` : '<span class="badge badge--neutral">Pendiente</span>'}</td>
-                                    <td><small>${Utils.formatDate(p.fecha)}</small></td>
+                                    <th>Evaluación</th>
+                                    <th>Tipo</th>
+                                    <th style="text-align: center;">Ponderación</th>
+                                    <th style="text-align: center;">Nota Obtenida</th>
+                                    <th style="text-align: right;">Fecha</th>
                                 </tr>
-                            `).join('')}
-                        </tbody>
-                    </table></div>
+                            </thead>
+                            <tbody>
+                                ${planRows.map(p => `
+                                    <tr>
+                                        <td><strong>${Utils.escapeHtml(p.nombre)}</strong></td>
+                                        <td><span class="badge badge--neutral">${p.tipo || 'Evaluación'}</span></td>
+                                        <td style="text-align: center; font-weight: 600;">${parseFloat(p.peso).toFixed(1)}%</td>
+                                        <td style="text-align: center;">
+                                            ${p.nota !== null && p.nota !== undefined && p.nota !== '' ? `
+                                                <span class="badge ${parseFloat(p.nota) >= 10 ? 'badge--accent' : 'badge--warning'}" style="font-size: 0.9rem; font-weight: 700;">
+                                                    ${parseFloat(p.nota).toFixed(2)} pts
+                                                </span>
+                                            ` : '<span class="badge badge--neutral" style="font-size: 0.75rem;">Pendiente</span>'}
+                                        </td>
+                                        <td style="text-align: right;"><small>${Utils.formatDate(p.fecha)}</small></td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
                     
-                    <!-- BARRA DE PROGRESO INYECTADA AQUI -->
-                    <div style="margin-top: 1.5rem;">
-                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 0.25rem; font-weight: 600; text-transform: uppercase;">
-                            <span>Progreso del Curso</span>
-                            <span>${pesoEvaluado}% / ${totalPeso}%</span>
+                    <!-- Barra de progreso evaluativo -->
+                    <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--color-border-light);">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 0.35rem; font-weight: 700; text-transform: uppercase;">
+                            <span>Avance Calificado del Curso</span>
+                            <span>${pesoEvaluado}% / ${totalPeso}% (${porcentaje}%)</span>
                         </div>
-                        <div style="margin-top: 0.5rem; background: var(--color-border-light); border-radius: var(--radius-full); height: 6px; overflow: hidden;">
-                            <div style="background: ${color.bg}; height: 100%; border-radius: var(--radius-full); width: ${porcentaje}%; transition: width 0.4s ease;"></div>
+                        <div style="background: var(--color-border-light); border-radius: var(--radius-full); height: 7px; overflow: hidden;">
+                            <div style="background: ${colorBg}; height: 100%; border-radius: var(--radius-full); width: ${porcentaje}%; transition: width 0.4s ease;"></div>
                         </div>
                     </div>
                     
-                </div>` : ''}
-
-                ${otrasNotas.length ? `
-                <div style="padding: 1rem 1.5rem; border-top: 1px solid var(--color-border-light);">
-                    <h4 style="font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); margin-bottom: 0.75rem;">Otras Calificaciones</h4>
-                    <div class="table-container"><table class="table">
-                        <thead><tr><th>Tipo</th><th>Descripción</th><th>Nota</th><th>Fecha</th></tr></thead>
-                        <tbody>
-                            ${otrasNotas.map(n => `
-                                <tr>
-                                    <td><span class="badge badge--neutral">${n.tipo_evaluacion}</span></td>
-                                    <td>${Utils.escapeHtml(n.descripcion || '-')}</td>
-                                    <td><span class="badge ${n.nota >= 10 ? 'badge--accent' : 'badge--warning'}" style="font-size:0.9375rem">${n.nota}</span></td>
-                                    <td><small>${Utils.formatDate(n.fecha_evaluacion)}</small></td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table></div>
-                </div>` : ''}
+                </div>` : `
+                <div style="padding: 1.5rem; text-align: center; color: var(--color-text-muted); font-size: 0.875rem;">
+                    El facilitador docente aún no ha estructurado el plan de evaluación para esta asignatura.
+                </div>
+                `}
             </div>
         </div>`;
     }).join('');
@@ -185,11 +214,11 @@ function renderNotas(inscripciones) {
 
 async function descargarNotasPDF() {
     try {
-        Toast.show('Generando PDF...', 'info');
-        await API.download('mis-notas-pdf', {}, `mis-notas.pdf`);
-        Toast.show('PDF descargado exitosamente', 'success');
+        Toast.show('Generando boletín oficial en PDF...', 'info');
+        await API.download('mis-notas-pdf', {}, `mis-notas-uptecms.pdf`);
+        Toast.show('Boletín descargado exitosamente', 'success');
     } catch (err) {
-        Toast.show('Error al descargar PDF: ' + err.message, 'error');
+        Toast.show('Error al descargar el boletín: ' + err.message, 'error');
     }
 }
 </script>

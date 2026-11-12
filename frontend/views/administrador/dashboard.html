@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="">
-    <title>Dashboard - Administrador | UPTEC Cursos</title>
+    <title>Dashboard - Administrador | UPTECMS Cursos</title>
     <link rel="stylesheet" href="../../../frontend/css/main.css">
+    <link rel="icon" type="image/png" href="../../img/logo-uptec.png">
 </head>
 <body>
 
@@ -16,9 +17,9 @@
     <main class="main">
         <header class="header">
             <button class="sidebar-toggle" id="sidebar-toggle">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
-            <h1 class="header__title">Panel de Administracion</h1>
+            <h1 class="header__title">Panel de Administración</h1>
             <div class="header__actions">
                 <div class="header__user">
                     <div class="header__user-avatar" id="header-avatar"></div>
@@ -27,8 +28,8 @@
                         <span class="header__user-role" id="header-role"></span>
                     </div>
                 </div>
-                <button class="header__logout" id="logout-btn" title="Cerrar Sesion">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                <button class="header__logout" id="logout-btn" title="Cerrar Sesión">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 </button>
             </div>
         </header>
@@ -37,11 +38,11 @@
             <div class="content__header">
                 <div>
                     <h2 class="content__title">Resumen General</h2>
-                    <p class="content__subtitle">Estadisticas y estado del sistema</p>
+                    <p class="content__subtitle">Estadísticas y estado operativo del sistema UPTECMS</p>
                 </div>
             </div>
 
-            <!-- Estadisticas Principales -->
+            <!-- Estadísticas Principales -->
             <div class="grid grid--4" id="stats-container">
                 <div class="stat-card skeleton" style="height: 140px;"></div>
                 <div class="stat-card skeleton" style="height: 140px;"></div>
@@ -49,14 +50,16 @@
                 <div class="stat-card skeleton" style="height: 140px;"></div>
             </div>
 
-            <!-- Estudiantes por Area (Carrera) -->
+            <!-- Estudiantes por Área (Carrera) -->
             <div class="card" style="margin-top: 1.5rem; background: linear-gradient(135deg, var(--color-bg-card) 0%, var(--color-bg-secondary) 100%);">
                 <div class="card__header">
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
-                        <div style="background: var(--color-primary); color: white; padding: 0.5rem; border-radius: var(--radius-lg); font-size: 1.25rem;">👨‍🎓</div>
+                        <div style="background: var(--color-primary); color: white; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-md);">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                        </div>
                         <div>
-                            <h3 class="card__title" style="margin: 0;">Estudiantes por Area / Carrera</h3>
-                            <p class="card__subtitle" style="margin: 0; font-size: 0.875rem; color: var(--color-text-muted);">Distribucion de participantes segun su carrera</p>
+                            <h3 class="card__title" style="margin: 0;">Estudiantes por Área / Especialidad</h3>
+                            <p class="card__subtitle" style="margin: 0; font-size: 0.875rem; color: var(--color-text-muted);">Distribución de participantes según su carrera académica</p>
                         </div>
                     </div>
                 </div>
@@ -67,13 +70,15 @@
                 </div>
             </div>
 
-            <!-- Cursos con Estudiantes por Area -->
+            <!-- Cursos con Estudiantes por Área -->
             <div class="card" style="margin-top: 1.5rem;">
                 <div class="card__header">
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
-                        <div style="background: var(--color-accent); color: white; padding: 0.5rem; border-radius: var(--radius-lg); font-size: 1.25rem;">📚</div>
+                        <div style="background: var(--color-accent); color: white; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-md);">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10M6 10h10"/></svg>
+                        </div>
                         <div>
-                            <h3 class="card__title" style="margin: 0;">Cursos y Estudiantes por Area</h3>
+                            <h3 class="card__title" style="margin: 0;">Cursos y Participantes por Área</h3>
                             <p class="card__subtitle" style="margin: 0; font-size: 0.875rem; color: var(--color-text-muted);">Cursos agrupados por carrera con cantidad de inscritos</p>
                         </div>
                     </div>
@@ -83,14 +88,16 @@
                 </div>
             </div>
 
-            <!-- Top 5 Cursos con mas Estudiantes -->
+            <!-- Top 5 Cursos con más Estudiantes -->
             <div class="card" style="margin-top: 1.5rem; border-left: 4px solid var(--color-secondary);">
                 <div class="card__header">
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
-                        <div style="background: var(--color-secondary); color: white; padding: 0.5rem; border-radius: var(--radius-lg); font-size: 1.25rem;">🏆</div>
+                        <div style="background: var(--color-secondary); color: white; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-md);">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+                        </div>
                         <div>
-                            <h3 class="card__title" style="margin: 0;">Top 5 Cursos mas Populares</h3>
-                            <p class="card__subtitle" style="margin: 0; font-size: 0.875rem; color: var(--color-text-muted);">Cursos con mayor numero de estudiantes inscritos</p>
+                            <h3 class="card__title" style="margin: 0;">Top 5 Cursos Más Populares</h3>
+                            <p class="card__subtitle" style="margin: 0; font-size: 0.875rem; color: var(--color-text-muted);">Asignaturas con mayor número de estudiantes inscritos</p>
                         </div>
                     </div>
                 </div>
@@ -99,7 +106,7 @@
                 </div>
             </div>
 
-            <!-- Seccion de Recientes -->
+            <!-- Sección de Recientes -->
             <div class="grid grid--2" style="margin-top: 1.5rem;">
                 <div class="card">
                     <div class="card__header">
@@ -126,7 +133,7 @@
             <div class="card" style="margin-top: 1.5rem;">
                 <div class="card__header">
                     <h3 class="card__title">Actividad Reciente del Sistema</h3>
-                    <a href="auditoria.html" class="btn btn--sm btn--ghost">Ver auditoria completa</a>
+                    <a href="auditoria.html" class="btn btn--sm btn--ghost">Ver auditoría completa</a>
                 </div>
                 <div class="card__body" id="actividad-reciente">
                     <div class="skeleton" style="height: 250px;"></div>
@@ -143,17 +150,34 @@
 (async function() {
     await initDashboard();
 
-    // Colores para cada area - DEFINIR PRIMERO
+    // Iconos vectoriales profesionales para cada área técnica
     const areaColors = {
-        'Administracion': { bg: '#3b82f6', icon: '📊' },
-        'Informatica': { bg: '#10b981', icon: '💻' },
-        'Mecanica': { bg: '#f59e0b', icon: '⚙️' },
-        'Electrica': { bg: '#ef4444', icon: '⚡' },
-        'Mantenimiento': { bg: '#8b5cf6', icon: '🔧' },
-        'Transporte Ferroviario': { bg: '#06b6d4', icon: '🚂' }
+        'Administracion': { 
+            bg: '#3b82f6', 
+            icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>' 
+        },
+        'Informatica': { 
+            bg: '#10b981', 
+            icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="12" x="3" y="4" rx="2" ry="2"/><line x1="2" x2="22" y1="20" y2="20"/></svg>' 
+        },
+        'Mecanica': { 
+            bg: '#f59e0b', 
+            icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>' 
+        },
+        'Electrica': { 
+            bg: '#ef4444', 
+            icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>' 
+        },
+        'Mantenimiento': { 
+            bg: '#8b5cf6', 
+            icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>' 
+        },
+        'Transporte Ferroviario': { 
+            bg: '#06b6d4', 
+            icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="3" rx="2"/><path d="M4 11h16"/><path d="M12 3v8"/><path d="m8 19-2 3"/><path d="m18 22-2-3"/><circle cx="8" cy="15" r="1"/><circle cx="16" cy="15" r="1"/></svg>' 
+        }
     };
 
-    // Cargar datos del dashboard
     try {
         const data = await API.get('resumen');
         if (data.success) {
@@ -172,16 +196,40 @@
 
     function renderStats(data) {
         const stats = [
-            { icon: '👨‍🎓', cls: 'stat-card__icon--accent', value: data.total_estudiantes || 0, label: 'Participantes', change: 'activos' },
-            { icon: '👨‍🏫', cls: 'stat-card__icon--secondary', value: data.total_facilitadores || 0, label: 'Facilitadores', change: 'activos' },
-            { icon: '🔍', cls: 'stat-card__icon--info', value: data.total_analistas || 0, label: 'Analistas', change: 'activos' },
-            { icon: '📚', cls: 'stat-card__icon--primary', value: data.total_cursos || 0, label: 'Cursos', change: 'en sistema' }
+            { 
+                icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>', 
+                cls: 'stat-card__icon--accent', 
+                value: data.total_estudiantes || 0, 
+                label: 'Participantes', 
+                change: 'activos' 
+            },
+            { 
+                icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>', 
+                cls: 'stat-card__icon--secondary', 
+                value: data.total_facilitadores || 0, 
+                label: 'Facilitadores', 
+                change: 'activos' 
+            },
+            { 
+                icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>', 
+                cls: 'stat-card__icon--info', 
+                value: data.total_analistas || 0, 
+                label: 'Analistas', 
+                change: 'activos' 
+            },
+            { 
+                icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10M6 10h10"/></svg>', 
+                cls: 'stat-card__icon--primary', 
+                value: data.total_cursos || 0, 
+                label: 'Cursos', 
+                change: 'en sistema' 
+            }
         ];
 
         document.getElementById('stats-container').innerHTML = stats.map(s => `
             <div class="stat-card" style="transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='var(--shadow-lg)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow=''">
                 <div class="stat-card__header">
-                    <div class="stat-card__icon ${s.cls}">${s.icon}</div>
+                    <div class="stat-card__icon ${s.cls}" style="display: flex; align-items: center; justify-content: center;">${s.icon}</div>
                 </div>
                 <div class="stat-card__value">${Utils.formatNumber(s.value)}</div>
                 <div class="d-flex items-center justify-between">
@@ -195,20 +243,20 @@
     function renderEstudiantesPorArea(data) {
         const container = document.getElementById('estudiantes-por-area');
         if (!data.length) {
-            container.innerHTML = '<div class="empty-state"><div class="empty-state__icon">📭</div><div class="empty-state__title">No hay estudiantes por area</div></div>';
+            container.innerHTML = `<div class="empty-state"><div class="empty-state__icon">${Icons.vacio(40)}</div><div class="empty-state__title">No hay estudiantes por área</div></div>`;
             return;
         }
 
         const total = data.reduce((sum, item) => sum + parseInt(item.total_estudiantes), 0);
 
         container.innerHTML = data.map(item => {
-            const color = areaColors[item.area] || { bg: '#6b7280', icon: '📚' };
-            const porcentaje = ((item.total_estudiantes / total) * 100).toFixed(1);
+            const color = areaColors[item.area] || { bg: '#6b7280', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/></svg>' };
+            const porcentaje = total > 0 ? ((item.total_estudiantes / total) * 100).toFixed(1) : 0;
 
             return `
                 <div style="background: white; border-radius: var(--radius-lg); padding: 1rem; box-shadow: var(--shadow-sm); border-left: 4px solid ${color.bg}; transition: transform 0.2s;" onmouseover="this.style.transform='translateX(4px)'" onmouseout="this.style.transform='translateX(0)'">
                     <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
-                        <div style="background: ${color.bg}20; color: ${color.bg}; padding: 0.5rem; border-radius: var(--radius-md); font-size: 1.25rem;">
+                        <div style="background: ${color.bg}20; color: ${color.bg}; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-md);">
                             ${color.icon}
                         </div>
                         <div style="flex: 1;">
@@ -231,11 +279,10 @@
     function renderCursosPorArea(data) {
         const container = document.getElementById('cursos-por-area-container');
         if (!data.length) {
-            container.innerHTML = '<div class="empty-state"><div class="empty-state__icon">📭</div><div class="empty-state__title">No hay cursos por area</div></div>';
+            container.innerHTML = `<div class="empty-state"><div class="empty-state__icon">${Icons.vacio(40)}</div><div class="empty-state__title">No hay cursos registrados por área</div></div>`;
             return;
         }
 
-        // Agrupar cursos por area
         const cursosPorArea = {};
         data.forEach(curso => {
             if (!cursosPorArea[curso.area]) cursosPorArea[curso.area] = [];
@@ -243,13 +290,13 @@
         });
 
         container.innerHTML = Object.entries(cursosPorArea).map(([area, cursos]) => {
-            const color = areaColors[area] || { bg: '#6b7280', icon: '📚' };
+            const color = areaColors[area] || { bg: '#6b7280', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/></svg>' };
             const totalEstudiantesArea = cursos.reduce((sum, c) => sum + parseInt(c.total_estudiantes || 0), 0);
 
             return `
                 <div style="margin-bottom: 1.5rem; border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden;">
                     <div style="background: ${color.bg}10; padding: 0.875rem 1rem; display: flex; align-items: center; gap: 0.75rem; border-bottom: 1px solid var(--color-border);">
-                        <span style="font-size: 1.25rem;">${color.icon}</span>
+                        <span style="color: ${color.bg}; display: flex; align-items: center;">${color.icon}</span>
                         <span style="font-weight: 600; color: ${color.bg};">${area}</span>
                         <span style="margin-left: auto; background: ${color.bg}; color: white; padding: 0.25rem 0.75rem; border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 500;">
                             ${cursos.length} cursos · ${totalEstudiantesArea} estudiantes
@@ -296,24 +343,37 @@
     function renderTopCursos(data) {
         const container = document.getElementById('top-cursos');
         if (!data.length) {
-            container.innerHTML = '<div class="empty-state"><div class="empty-state__icon">📭</div><div class="empty-state__title">No hay cursos con estudiantes</div></div>';
+            container.innerHTML = `<div class="empty-state"><div class="empty-state__icon">${Icons.vacio(40)}</div><div class="empty-state__title">No hay cursos con estudiantes activos</div></div>`;
             return;
         }
 
-        const medals = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'];
+        // Medallas y puestos representados con distintivos elegantes
+        const rankStyles = [
+            { bg: '#d97706', text: '#ffffff', label: '1' }, // Oro
+            { bg: '#64748b', text: '#ffffff', label: '2' }, // Plata
+            { bg: '#b45309', text: '#ffffff', label: '3' }, // Bronce
+            { bg: '#e2e8f0', text: '#334155', label: '4' },
+            { bg: '#e2e8f0', text: '#334155', label: '5' }
+        ];
 
         container.innerHTML = `
             <div style="display: flex; flex-direction: column; gap: 0.75rem;">
                 ${data.map((c, i) => {
                     const color = areaColors[c.area] || { bg: '#6b7280' };
+                    const rank = rankStyles[i] || { bg: '#e2e8f0', text: '#334155', label: (i + 1) };
                     return `
                         <div style="display: flex; align-items: center; gap: 1rem; padding: 0.875rem; background: var(--color-bg-secondary); border-radius: var(--radius-lg); transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateX(8px)';this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.transform='translateX(0)';this.style.boxShadow=''">
-                            <div style="font-size: 1.5rem;">${medals[i] || (i + 1)}</div>
+                            <div style="width: 32px; height: 32px; border-radius: 50%; background: ${rank.bg}; color: ${rank.text}; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.875rem; flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+                                #${rank.label}
+                            </div>
                             <div style="flex: 1;">
                                 <div style="font-weight: 600; color: var(--color-text-primary);">${c.codigo} · ${Utils.escapeHtml(c.nombre)}</div>
                                 <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.25rem;">
                                     <span style="background: ${color.bg}20; color: ${color.bg}; padding: 0.125rem 0.5rem; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 500;">${c.area}</span>
-                                    <span style="color: var(--color-text-muted); font-size: 0.75rem;">👨‍🏫 ${c.facilitador || 'Sin asignar'}</span>
+                                    <span style="color: var(--color-text-muted); font-size: 0.75rem; display: inline-flex; align-items: center; gap: 0.25rem;">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                        ${c.facilitador || 'Sin asignar'}
+                                    </span>
                                 </div>
                             </div>
                             <div style="text-align: center; min-width: 80px;">
@@ -330,7 +390,7 @@
     function renderCursosRecientes(cursos) {
         const container = document.getElementById('cursos-recientes');
         if (!cursos.length) {
-            container.innerHTML = '<div class="empty-state"><div class="empty-state__icon">📭</div><div class="empty-state__title">No hay cursos</div></div>';
+            container.innerHTML = `<div class="empty-state"><div class="empty-state__icon">${Icons.vacio(40)}</div><div class="empty-state__title">No hay cursos registrados</div></div>`;
             return;
         }
         container.innerHTML = `
@@ -351,7 +411,7 @@
     function renderUsuariosRecientes(usuarios) {
         const container = document.getElementById('usuarios-recientes');
         if (!usuarios.length) {
-            container.innerHTML = '<div class="empty-state"><div class="empty-state__icon">📭</div><div class="empty-state__title">No hay usuarios</div></div>';
+            container.innerHTML = `<div class="empty-state"><div class="empty-state__icon">${Icons.vacio(40)}</div><div class="empty-state__title">No hay usuarios recientes</div></div>`;
             return;
         }
         container.innerHTML = `
@@ -372,29 +432,52 @@
     function renderActividadReciente(actividades) {
         const container = document.getElementById('actividad-reciente');
         if (!actividades.length) {
-            container.innerHTML = '<div class="empty-state"><div class="empty-state__icon">📭</div><div class="empty-state__title">Sin actividad reciente</div></div>';
+            container.innerHTML = `<div class="empty-state"><div class="empty-state__icon">${Icons.vacio(40)}</div><div class="empty-state__title">Sin actividad reciente registrada</div></div>`;
             return;
         }
 
+        // Iconos vectoriales específicos por acción de auditoría
         const acciones = {
-            'CREATE': { icon: '✅', color: 'var(--color-accent)' },
-            'UPDATE': { icon: '✏️', color: 'var(--color-info)' },
-            'DELETE': { icon: '🗑️', color: 'var(--color-danger)' },
-            'LOGIN': { icon: '🔑', color: 'var(--color-secondary)' },
-            'LOGOUT': { icon: '🚪', color: 'var(--color-text-muted)' },
-            'INSCRIBIR': { icon: '📝', color: 'var(--color-primary)' },
-            'BACKUP': { icon: '💾', color: 'var(--color-accent)' },
-            'PASSWORD_CHANGE': { icon: '🔐', color: 'var(--color-warning)' }
+            'CREATE': { 
+                icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>'
+            },
+            'UPDATE': { 
+                icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>'
+            },
+            'DELETE': { 
+                icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>'
+            },
+            'LOGIN': { 
+                icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>'
+            },
+            'LOGOUT': { 
+                icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>'
+            },
+            'INSCRIBIR': { 
+                icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>'
+            },
+            'BACKUP': { 
+                icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'
+            },
+            'PASSWORD_CHANGE': { 
+                icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>'
+            }
         };
 
         container.innerHTML = `
             <div class="table-container"><table class="table">
                 <tbody>
                     ${actividades.map(a => {
-                        const acc = acciones[a.accion] || { icon: '📌', color: 'var(--color-text-muted)' };
+                        const acc = acciones[a.accion] || { 
+                            icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>' 
+                        };
                         return `
                         <tr>
-                            <td style="width:40px;font-size:1.125rem;text-align:center">${acc.icon}</td>
+                            <td style="width:36px; text-align:center; vertical-align:middle;">
+                                <div style="display:flex; align-items:center; justify-content:center;">
+                                    ${acc.icon}
+                                </div>
+                            </td>
                             <td>
                                 <strong>${a.usuario_nombre || 'Sistema'}</strong>
                                 <span style="color:var(--color-text-muted)"> &middot; ${a.accion}</span>

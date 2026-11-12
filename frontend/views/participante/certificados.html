@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="">
-    <title>Mis Certificados - Participante | UPTEC Cursos</title>
+    <title>Mis Certificados - Participante | UPTECMS Cursos</title>
     <link rel="stylesheet" href="../../../frontend/css/main.css">
+    <link rel="icon" type="image/png" href="../../img/logo-uptec.png">
 </head>
 <body>
 
@@ -16,9 +17,9 @@
     <main class="main">
         <header class="header">
             <button class="sidebar-toggle" id="sidebar-toggle">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
-            <h1 class="header__title">Mis certificados</h1>
+            <h1 class="header__title">Mis Certificados</h1>
             <div class="header__actions">
                 <div class="header__user">
                     <div class="header__user-avatar" id="header-avatar"></div>
@@ -27,8 +28,8 @@
                         <span class="header__user-role" id="header-role"></span>
                     </div>
                 </div>
-                <button class="header__logout" id="logout-btn" title="Cerrar Sesion">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                <button class="header__logout" id="logout-btn" title="Cerrar Sesión">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 </button>
             </div>
         </header>
@@ -36,8 +37,8 @@
         <div class="content">
             <div class="content__header">
                 <div>
-                    <h2 class="content__title">Certificados obtenidos</h2>
-                    <p class="content__subtitle">Descargue sus certificados de los cursos completados</p>
+                    <h2 class="content__title">Certificados Obtenidos</h2>
+                    <p class="content__subtitle">Descarga tus constancias académicas oficiales y certificaciones de aprobación</p>
                 </div>
             </div>
 
@@ -65,7 +66,7 @@ async function loadCertificados() {
         certificadosList = data.certificados || [];
         renderCertificados(certificadosList);
     } catch (err) {
-        Toast.show('Error: ' + err.message, 'error');
+        Toast.show('Error al consultar certificados: ' + err.message, 'error');
     }
 }
 
@@ -74,68 +75,99 @@ function renderCertificados(certificados) {
     
     if (!certificados.length) {
         container.innerHTML = `
-            <div class="empty-state">
-                <div class="empty-state__icon">🏆</div>
-                <div class="empty-state__title">No tienes certificados aun</div>
-                <div class="empty-state__text">Completa un curso con nota aprobatoria para obtener tu certificado</div>
-                <a href="mis-cursos.html" class="btn btn--primary" style="margin-top: 1rem;">Ver Mis Cursos</a>
+            <div class="empty-state" style="padding: 3.5rem 1.5rem; text-align: center;">
+                <div class="empty-state__icon" style="display: flex; justify-content: center; margin-bottom: 1rem;">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="8" r="6"/>
+                        <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
+                    </svg>
+                </div>
+                <div class="empty-state__title" style="font-weight: 700; color: var(--color-text-primary);">Aún no tienes certificados emitidos</div>
+                <div class="empty-state__text" style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 1.25rem;">
+                    Completa satisfactoriamente una asignatura con nota aprobatoria (10 pts o más) para obtener tu diploma oficial.
+                </div>
+                <a href="mis-cursos.html" class="btn btn--primary" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/></svg>
+                    Ver Mis Cursos Activos
+                </a>
             </div>`;
         return;
     }
 
-    container.innerHTML = `<div class="grid grid--2" style="gap: 1.5rem;">${certificados.map(c => `
+    container.innerHTML = `<div class="grid grid--2" style="gap: 1.5rem;">${certificados.map(c => {
+        // Normalización infalible de datos de la BD
+        const codigoCurso = c.codigo || c.codigo_curso || 'CURSO';
+        const nombreCurso = c.curso_nombre || c.nombre_curso || c.nombre || 'Asignatura Aprobada';
+        const facilitador = c.facilitador_nombre || c.nombre_facilitador || 'Docente UPTECMS';
+        const codigoCert = c.codigo_certificado || c.certificado_codigo || ('UPTECMS-' + c.id.toString().padStart(6, '0'));
+        const duracion = c.duracion_horas || 40;
+
+        return `
         <div class="card" style="border-left: 4px solid var(--color-accent); position: relative; overflow: hidden;">
-            <div style="position: absolute; top: 1rem; right: 1rem; font-size: 3rem; opacity: 0.1;">🏆</div>
-            <div class="card__header">
+            <!-- Marca de agua vectorial institucional -->
+            <div style="position: absolute; top: 1rem; right: 1rem; opacity: 0.06; pointer-events: none;">
+                <svg width="68" height="68" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="8" r="6"/>
+                    <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
+                </svg>
+            </div>
+
+            <div class="card__header" style="padding-bottom: 0.5rem;">
                 <div>
-                    <span class="badge badge--accent">Completado</span>
-                    <h3 class="card__title" style="margin-top: 0.5rem;">${Utils.escapeHtml(c.codigo_curso)}</h3>
+                    <span class="badge badge--accent">Culminado y Aprobado</span>
+                    <h3 class="card__title" style="margin-top: 0.4rem; font-family: monospace; font-size: 1rem;">${Utils.escapeHtml(codigoCurso)}</h3>
                 </div>
             </div>
+
             <div class="card__body">
-                <h4 style="font-size: 1.125rem; margin-bottom: 0.75rem; color: var(--color-primary);">${Utils.escapeHtml(c.nombre_curso)}</h4>
+                <h4 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.85rem; color: var(--color-primary);">${Utils.escapeHtml(nombreCurso)}</h4>
                 
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-bottom: 1rem; font-size: 0.875rem;">
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-bottom: 1rem; font-size: 0.85rem;">
                     <div>
-                        <strong style="display: block; color: var(--color-text-muted); font-size: 0.75rem; text-transform: uppercase;">Nota Final</strong>
-                        <span style="font-size: 1.25rem; font-weight: 700; color: ${c.nota_final >= 10 ? 'var(--color-accent)' : 'var(--color-warning)'};">${c.nota_final}</span>
+                        <strong style="display: block; color: var(--color-text-muted); font-size: 0.72rem; text-transform: uppercase;">Calificación Definitiva</strong>
+                        <span style="font-size: 1.25rem; font-weight: 800; color: var(--color-accent);">${parseFloat(c.nota_final || 0).toFixed(2)} pts</span>
                     </div>
                     <div>
-                        <strong style="display: block; color: var(--color-text-muted); font-size: 0.75rem; text-transform: uppercase;">Fecha Completado</strong>
-                        <span>${Utils.formatDate(c.fecha_completado)}</span>
+                        <strong style="display: block; color: var(--color-text-muted); font-size: 0.72rem; text-transform: uppercase;">Fecha de Emisión</strong>
+                        <span style="font-weight: 600;">${Utils.formatDate(c.fecha_completado)}</span>
                     </div>
                     <div>
-                        <strong style="display: block; color: var(--color-text-muted); font-size: 0.75rem; text-transform: uppercase;">Duración</strong>
-                        <span>${c.duracion_horas} horas</span>
+                        <strong style="display: block; color: var(--color-text-muted); font-size: 0.72rem; text-transform: uppercase;">Carga Horaria</strong>
+                        <span style="font-weight: 600;">${duracion} horas</span>
                     </div>
                     <div>
-                        <strong style="display: block; color: var(--color-text-muted); font-size: 0.75rem; text-transform: uppercase;">Facilitador</strong>
-                        <span>${Utils.escapeHtml(c.nombre_facilitador)}</span>
+                        <strong style="display: block; color: var(--color-text-muted); font-size: 0.72rem; text-transform: uppercase;">Docente Facilitador</strong>
+                        <span style="font-weight: 600;">${Utils.escapeHtml(facilitador)}</span>
                     </div>
                 </div>
 
-                <div style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1rem; text-align: center; border: 1px dashed var(--color-border);">
-                    <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-text-muted); margin-bottom: 0.25rem;">Certificado No.</div>
-                    <div style="font-family: monospace; font-size: 1rem; font-weight: 600; color: var(--color-text-primary);">${c.certificado_codigo || 'UPTEC-' + c.id.toString().padStart(6, '0')}</div>
+                <div style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 0.75rem 1rem; border-radius: var(--radius-md); margin-bottom: 1rem; text-align: center; border: 1px dashed var(--color-border);">
+                    <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-muted); margin-bottom: 0.2rem;">Identificador Oficial</div>
+                    <div style="font-family: monospace; font-size: 0.95rem; font-weight: 700; color: var(--color-text-primary);">${codigoCert}</div>
                 </div>
             </div>
-            <div class="card__footer">
-                <button class="btn btn--primary" onclick="descargarCertificado(${c.id})">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 0.5rem;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+
+            <div class="card__footer" style="display: flex; gap: 0.5rem;">
+                <button class="btn btn--primary" onclick="descargarCertificado(${c.id})" style="display: inline-flex; align-items: center; gap: 0.35rem;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                     Descargar PDF
                 </button>
-                <button class="btn btn--ghost" onclick="verCertificado(${c.id})">Vista Previa</button>
+                <button class="btn btn--ghost" onclick="verCertificado(${c.id})" style="display: inline-flex; align-items: center; gap: 0.35rem;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                    Vista Previa
+                </button>
             </div>
         </div>
-    `).join('')}</div>`;
+    `}).join('')}</div>`;
 }
 
 async function descargarCertificado(id) {
     try {
-        await API.download('certificado', { id }, `certificado-${id}.pdf`);
-        Toast.show('Certificado descargado', 'success');
+        Toast.show('Generando certificado en PDF oficial...', 'info');
+        await API.download('certificado', { id }, `certificado_uptecms_${id}.pdf`);
+        Toast.show('Certificado descargado exitosamente', 'success');
     } catch (err) {
-        Toast.show(err.message, 'error');
+        Toast.show(err.message || 'Error al descargar certificado', 'error');
     }
 }
 
@@ -143,45 +175,74 @@ function verCertificado(id) {
     const cert = certificadosList.find(c => c.id === id);
     if (!cert) return;
 
+    // Normalización de datos para la vista previa
+    const nombreCurso = cert.curso_nombre || cert.nombre_curso || cert.nombre || 'Asignatura Aprobada';
+    const facilitador = cert.facilitador_nombre || cert.nombre_facilitador || 'Docente UPTECMS';
+    const fechaFormat = cert.fecha_completado ? Utils.formatDate(cert.fecha_completado) : 'Reciente';
+    
+    let cedula = (AUTH.user && AUTH.user.cedula) ? AUTH.user.cedula : (cert.cedula || '');
+    if (cedula && !cedula.startsWith('V-') && !cedula.startsWith('V')) {
+        cedula = 'V-' + cedula;
+    }
+    
+    const estudiante = `${AUTH.user.nombre || ''} ${AUTH.user.apellidos || ''}`.trim() || 'Estudiante UPTECMS';
+
     const content = `
-        <div style="text-align: center; padding: 2rem; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: var(--radius-lg);">
-            <div style="font-size: 4rem; margin-bottom: 1rem;">🏆</div>
-            <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem; color: var(--color-primary);">Universidad Politecnica Territorial de Caracas</h3>
-            <h4 style="font-size: 1rem; color: var(--color-text-secondary); margin-bottom: 2rem;">Mariscal Sucre</h4>
+        <div style="max-width: 760px; margin: 5px auto; background: #fffcf5; border: 8px solid #daa520; border-radius: 6px; box-shadow: 0 6px 25px rgba(0,0,0,0.12); position: relative; overflow: hidden; padding: 1.75rem 2rem; font-family: 'Times New Roman', serif;">
+            <!-- Franja tricolor decorativa lateral -->
+            <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 14px; background: linear-gradient(to right, #ffd700 33%, #0033a0 33%, #0033a0 66%, #ce1126 66%);"></div>
             
-            <div style="font-size: 1.125rem; margin-bottom: 1rem;">Otorga el presente certificado a:</div>
-            <div style="font-size: 1.5rem; font-weight: 700; color: var(--color-accent); margin-bottom: 1rem;">${Utils.escapeHtml(AUTH.user.nombre)} ${Utils.escapeHtml(AUTH.user.apellidos)}</div>
-            
-            <div style="font-size: 1rem; margin-bottom: 1rem;">Por haber completado satisfactoriamente el curso:</div>
-            <div style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">${Utils.escapeHtml(cert.nombre_curso)}</div>
-            
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 2rem 0; padding: 1rem; background: white; border-radius: var(--radius-md);">
-                <div>
-                    <div style="font-size: 0.75rem; color: var(--color-text-muted);">Duracion</div>
-                    <div style="font-weight: 600;">${cert.duracion_horas} horas</div>
+            <div style="text-align: center; margin-left: 14px;">
+                <h4 style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #555; margin: 0 0 2px 0;">República Bolivariana de Venezuela</h4>
+                <h5 style="font-size: 0.7rem; color: #777; margin: 0 0 1rem 0;">Universidad Politécnica Territorial de Caracas «Mariscal Sucre»</h5>
+
+                <h2 style="font-size: 1.8rem; font-weight: 900; letter-spacing: 2px; color: #222; margin: 0 0 2px 0; font-family: sans-serif;">CERTIFICADO</h2>
+                <h3 style="font-size: 1rem; color: #b8860b; font-weight: 700; margin: 0 0 0.8rem 0; font-family: sans-serif;">POR HABER APROBADO</h3>
+
+                <p style="font-style: italic; color: #555; margin: 0 0 0.35rem 0; font-size: 0.9rem;">Otorgado a:</p>
+                <div style="font-size: 1.6rem; font-weight: bold; color: #111; border-bottom: 2px solid #daa520; display: inline-block; padding: 0 1.5rem 0.2rem; margin-bottom: 0.4rem; font-family: 'Georgia', serif;">
+                    ${Utils.escapeHtml(estudiante)}
                 </div>
-                <div>
-                    <div style="font-size: 0.75rem; color: var(--color-text-muted);">Nota Final</div>
-                    <div style="font-weight: 600; color: ${cert.nota_final >= 10 ? 'var(--color-accent)' : 'var(--color-warning)'};">${cert.nota_final}</div>
+                <div style="font-weight: 700; font-size: 0.85rem; color: #444; margin-bottom: 0.85rem; font-family: sans-serif;">
+                    CI ${Utils.escapeHtml(cedula)}
                 </div>
-                <div>
-                    <div style="font-size: 0.75rem; color: var(--color-text-muted);">Fecha</div>
-                    <div style="font-weight: 600;">${Utils.formatDate(cert.fecha_completado)}</div>
+
+                <p style="font-size: 0.95rem; color: #333; margin: 0 0 0.5rem 0;">
+                    Satisfactoriamente el Diplomado / Curso de: <strong style="color: #000;">${Utils.escapeHtml(nombreCurso)}</strong>
+                </p>
+
+                <p style="font-size: 0.8rem; color: #b8860b; font-weight: 700; margin: 0 0 1.5rem 0; font-family: sans-serif;">
+                    Fecha de Culminación: ${fechaFormat} | Nota Final: ${parseFloat(cert.nota_final || 0).toFixed(2)} pts
+                </p>
+
+                <!-- Firmas oficiales -->
+                <div style="display: flex; justify-content: space-around; margin-top: 1.25rem; font-family: sans-serif;">
+                    <div style="text-align: center;">
+                        <div style="width: 170px; border-top: 1.5px solid #daa520; padding-top: 0.35rem; font-size: 0.75rem; font-weight: 700; color: #222;">
+                            MSC. JAIME MÁRQUEZ<br>
+                            <span style="font-size: 0.7rem; font-weight: normal; color: #666;">Rector UPTECMS</span>
+                        </div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="width: 170px; border-top: 1.5px solid #daa520; padding-top: 0.35rem; font-size: 0.75rem; font-weight: 700; color: #222;">
+                            ${Utils.escapeHtml(facilitador)}<br>
+                            <span style="font-size: 0.7rem; font-weight: normal; color: #666;">Docente Facilitador</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            
-            <div style="font-family: monospace; font-size: 0.875rem; color: var(--color-text-muted);">
-                Certificado No. ${cert.certificado_codigo || 'UPTEC-' + cert.id.toString().padStart(6, '0')}
             </div>
         </div>
     `;
-    
+
     const footer = `
         <button class="btn btn--ghost" onclick="Modal.close()">Cerrar</button>
-        <button class="btn btn--primary" onclick="descargarCertificado(${id}); Modal.close();">Descargar PDF</button>
+        <button class="btn btn--primary" onclick="descargarCertificado(${id}); Modal.close();" style="display:inline-flex; align-items:center; gap:0.35rem;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Descargar PDF Oficial
+        </button>
     `;
-    
-    Modal.open(content, { title: 'Vista Previa del Certificado', footer, size: 'modal--lg' });
+
+    Modal.open(content, { title: 'Vista Previa del Certificado Oficial', footer, size: 'modal--lg' });
 }
 </script>
 

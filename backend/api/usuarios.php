@@ -136,13 +136,19 @@ $router->register('POST', '/backend/api/api.php', function($params) {
             return jsonResponse(false, null, 'La cedula o correo ya existen');
         }
 
-        // Generar contrasena temporal
-        $tempPass = bin2hex(random_bytes(4)); // 8 caracteres
+        // Si se envio contrasena valida se usa, sino se genera temporal
+        $userPass = (!empty($data['password']) && strlen(trim((string)$data['password'])) >= 6) ? trim((string)$data['password']) : null;
+        $tempPass = $userPass ?: bin2hex(random_bytes(4));
         $hash = password_hash($tempPass, PASSWORD_BCRYPT, ['cost' => 12]);
 
+        $area = $data['area'] ?? null;
+        if ($data['rol'] === 'Participante' && empty($area)) {
+            $area = 'Informatica';
+        }
+
         $stmt = $db->prepare("
-            INSERT INTO usuarios (cedula, nombre, apellidos, correo, telefono, password, rol, activo)
-            VALUES (?, ?, ?, ?, ?, ?, ?, 1)
+            INSERT INTO usuarios (cedula, nombre, apellidos, correo, telefono, password, rol, area, activo)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)
         ");
         $stmt->execute([
             $data['cedula'],
@@ -151,7 +157,8 @@ $router->register('POST', '/backend/api/api.php', function($params) {
             $data['correo'],
             $data['telefono'],
             $hash,
-            $data['rol']
+            $data['rol'],
+            $area
         ]);
 
         $userId = (int)$db->lastInsertId();
@@ -209,6 +216,12 @@ $router->register('PUT', '/backend/api/api.php', function($params) {
             return jsonResponse(false, null, 'Usuario no encontrado');
         }
 
+        // SEGURIDAD: Un Analista no puede editar a un Administrador ni a otros Analistas
+        if ($currentUser['rol'] === 'Analista' && in_array($anterior['rol'], ['Administrador', 'Analista'], true)) {
+            http_response_code(403);
+            return jsonResponse(false, null, 'No tiene permiso para modificar este usuario');
+        }
+
         // Campos permitidos
         $campos = [];
         $values = [];
@@ -219,10 +232,13 @@ $router->register('PUT', '/backend/api/api.php', function($params) {
         if (isset($data['activo']) && Auth::isAnalystOrAbove()) { $campos[] = "activo = ?"; $values[] = $data['activo']; }
         if (isset($data['rol']) && Auth::isAdmin()) { $campos[] = "rol = ?"; $values[] = $data['rol']; }
         if (isset($data['area']) && Auth::isAdmin()) { $campos[] = "area = ?"; $values[] = $data['area']; }
-        // Actualizar contraseña si se proporciona (solo Admin o Analista puede cambiar)
-        // Solo procesar la contraseña si viene definida, no está vacía y tiene al menos 6 caracteres
-        if (isset($data['password']) && trim($data['password']) !== '') {
-            $password = trim($data['password']);
+        // Actualizar contrasena: Solo Admin o el propio usuario puede cambiarla
+        if (isset($data['password']) && trim((string)$data['password']) !== '') {
+            if ($currentUser['rol'] !== 'Administrador' && $currentUser['id'] !== $id) {
+                http_response_code(403);
+                return jsonResponse(false, null, 'No tiene permiso para cambiar la contrasena de este usuario');
+            }
+            $password = trim((string)$data['password']);
             if (strlen($password) >= 6) {
                 $hash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
                 $campos[] = "password = ?";
@@ -234,7 +250,6 @@ $router->register('PUT', '/backend/api/api.php', function($params) {
             http_response_code(400);
             return jsonResponse(false, null, 'No hay campos para actualizar');
         }
-        error_log("[DEBUG UPTEC] Campos a actualizar: " . print_r($campos, true));
         $sql = "UPDATE usuarios SET " . implode(', ', $campos) . " WHERE id = ?";
         $values[] = $id;
 

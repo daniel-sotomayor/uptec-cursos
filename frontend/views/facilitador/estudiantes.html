@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="">
-    <title>Estudiantes - Facilitador | UPTEC Cursos</title>
+    <title>Estudiantes - Facilitador | UPTECMS Cursos</title>
     <link rel="stylesheet" href="../../../frontend/css/main.css">
+    <link rel="icon" type="image/png" href="../../img/logo-uptec.png">
 </head>
 <body>
 
@@ -16,14 +17,10 @@
     <main class="main">
         <header class="header">
             <button class="sidebar-toggle" id="sidebar-toggle">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
-            <h1 class="header__title">Mis estudiantes</h1>
+            <h1 class="header__title">Estudiantes Asignados</h1>
             <div class="header__actions">
-                <div class="header__search">
-                    <svg class="header__search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                    <input type="text" class="header__search-input" placeholder="Buscar..." id="search-input">
-                </div>
                 <div class="header__user">
                     <div class="header__user-avatar" id="header-avatar"></div>
                     <div class="header__user-info">
@@ -31,8 +28,8 @@
                         <span class="header__user-role" id="header-role"></span>
                     </div>
                 </div>
-                <button class="header__logout" id="logout-btn" title="Cerrar Sesion">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                <button class="header__logout" id="logout-btn" title="Cerrar Sesión">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 </button>
             </div>
         </header>
@@ -40,18 +37,19 @@
         <div class="content">
             <div class="content__header">
                 <div>
-                    <h2 class="content__title">Estudiantes por curso</h2>
-                    <p class="content__subtitle">Visualice los estudiantes inscritos en sus cursos</p>
+                    <h2 class="content__title">Progreso de Estudiantes por Curso</h2>
+                    <p class="content__subtitle">Visualiza el avance del plan de evaluación, notas asentadas y estado de los participantes</p>
                 </div>
             </div>
 
+            <!-- Selector de Curso -->
             <div class="card" style="margin-bottom: 1.5rem;">
                 <div class="card__body" style="padding: 1rem 1.5rem;">
                     <div class="d-flex gap-4 flex-wrap items-end">
-                        <div>
-                            <label class="form-label" style="font-size: 0.8125rem;">Curso</label>
-                            <select class="form-select" id="filter-curso" style="width: 280px;" onchange="loadEstudiantes()">
-                                <option value="">Selecciona un curso</option>
+                        <div style="flex: 1; max-width: 420px;">
+                            <label class="form-label" style="font-size: 0.8125rem;">Seleccionar Asignatura</label>
+                            <select class="form-select" id="filter-curso" onchange="loadEstudiantes()">
+                                <option value="">Selecciona un curso asignado...</option>
                             </select>
                         </div>
                     </div>
@@ -59,10 +57,15 @@
             </div>
 
             <div id="estudiantes-container">
-                <div class="empty-state">
-                    <div class="empty-state__icon">📚</div>
-                    <div class="empty-state__title">Selecciona un curso</div>
-                    <div class="empty-state__text">Elige un curso del menu para ver los estudiantes inscritos</div>
+                <div class="empty-state" style="padding: 3.5rem 1.5rem; text-align: center;">
+                    <div class="empty-state__icon" style="display: flex; justify-content: center; margin-bottom: 1rem;">
+                        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
+                            <path d="M6 6h10M6 10h10"/>
+                        </svg>
+                    </div>
+                    <div class="empty-state__title" style="font-weight: 700;">Selecciona una asignatura</div>
+                    <div class="empty-state__text" style="color: var(--color-text-muted); font-size: 0.9rem;">Elige un curso del menú superior para ver sus estudiantes inscritos y el avance de sus notas</div>
                 </div>
             </div>
         </div>
@@ -79,7 +82,7 @@ let cursosList = [];
     await initDashboard();
     await loadCursos();
 
-    // Si viene con parametro ?curso=X en URL
+    // Detección automática por URL: ?curso=X
     const params = new URLSearchParams(window.location.search);
     const cursoId = params.get('curso');
     if (cursoId) {
@@ -99,7 +102,9 @@ async function loadCursos() {
             opt.textContent = `${c.codigo} - ${c.nombre}`;
             select.appendChild(opt);
         });
-    } catch (e) { console.error(e); }
+    } catch (e) { 
+        console.error("Error cargando asignaturas:", e); 
+    }
 }
 
 async function loadEstudiantes() {
@@ -107,7 +112,17 @@ async function loadEstudiantes() {
     const container = document.getElementById('estudiantes-container');
 
     if (!cursoId) {
-        container.innerHTML = '<div class="empty-state"><div class="empty-state__icon">📚</div><div class="empty-state__title">Selecciona un curso</div></div>';
+        container.innerHTML = `
+            <div class="empty-state" style="padding: 3.5rem 1.5rem; text-align: center;">
+                <div class="empty-state__icon" style="display: flex; justify-content: center; margin-bottom: 1rem;">
+                    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
+                        <path d="M6 6h10M6 10h10"/>
+                    </svg>
+                </div>
+                <div class="empty-state__title" style="font-weight: 700;">Selecciona una asignatura</div>
+                <div class="empty-state__text" style="color: var(--color-text-muted); font-size: 0.9rem;">Elige un curso del menú superior para ver sus estudiantes</div>
+            </div>`;
         return;
     }
 
@@ -117,7 +132,7 @@ async function loadEstudiantes() {
         const data = await API.get('estudiantes-curso', { id: cursoId });
         renderEstudiantes(data);
     } catch (err) {
-        Toast.show('Error: ' + err.message, 'error');
+        Toast.show('Error al obtener la lista de estudiantes: ' + err.message, 'error');
     }
 }
 
@@ -127,37 +142,145 @@ function renderEstudiantes(data) {
     const plan = data.plan_evaluacion || [];
 
     if (!estudiantes.length) {
-        container.innerHTML = '<div class="empty-state"><div class="empty-state__icon">📭</div><div class="empty-state__title">No hay estudiantes inscritos</div></div>';
+        container.innerHTML = `
+            <div class="empty-state" style="padding: 3.5rem 1.5rem; text-align: center;">
+                <div class="empty-state__icon" style="display: flex; justify-content: center; margin-bottom: 1rem;">
+                    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+                <div class="empty-state__title" style="font-weight: 700;">No hay estudiantes inscritos</div>
+                <div class="empty-state__text" style="color: var(--color-text-muted); font-size: 0.9rem;">Aún no se han registrado participantes activos en esta asignatura</div>
+            </div>`;
         return;
     }
 
-    // Mostrar plan de evaluacion
-    let planHtml = '';
-    if (plan.length) {
-        planHtml = `<div style="margin-bottom: 1.5rem;"><h4 style="font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); margin-bottom: 0.5rem;">Plan de Evaluacion</h4><div class="d-flex gap-2 flex-wrap">${plan.map(p => `<span class="badge badge--primary">${Utils.escapeHtml(p.nombre)} (${p.peso}%)</span>`).join('')}</div></div>`;
-    }
-
-    // Tabla de estudiantes con calificaciones
-    let tableHtml = `<div class="table-container"><table class="table"><thead><tr><th>Estudiante</th><th>Cedula</th><th>Estado</th>`;
-    plan.forEach(p => { tableHtml += `<th style="text-align:center">${Utils.escapeHtml(p.nombre)}</th>`; });
-    tableHtml += `<th style="text-align:center">Nota Final</th></tr></thead><tbody>`;
-
-    estudiantes.forEach(est => {
-        tableHtml += `<tr><td><strong>${Utils.escapeHtml(est.nombre_estudiante)}</strong><br><small>${est.correo}</small></td>`;
-        tableHtml += `<td>${est.cedula}</td>`;
-        tableHtml += `<td><span class="badge ${est.estado === 'Completado' ? 'badge--accent' : est.estado === 'En Progreso' ? 'badge--primary' : 'badge--neutral'}">${est.estado}</span></td>`;
-
-        plan.forEach(p => {
-            const cal = (est.calificaciones || []).find(c => c.tipo_evaluacion === p.tipo);
-            tableHtml += `<td style="text-align:center">${cal ? `<span class="badge ${cal.nota >= 10 ? 'badge--accent' : 'badge--warning'}">${cal.nota}</span>` : '<span class="badge badge--neutral">-</span>'}</td>`;
-        });
-
-        tableHtml += `<td style="text-align:center">${est.nota_final ? `<span class="badge ${est.nota_final >= 10 ? 'badge--accent' : 'badge--danger'}" style="font-size:1rem">${est.nota_final}</span>` : '<span class="badge badge--neutral">-</span>'}</td></tr>`;
+    // Calcular peso acumulado del plan
+    let totalPesoPlan = 0;
+    plan.forEach(p => {
+        totalPesoPlan += parseFloat(p.peso) || 0;
     });
 
-    tableHtml += '</tbody></table></div>';
+    // Encabezado del Plan de Evaluación con Barra de Progreso
+    let planHeaderHtml = `
+        <div class="card" style="margin-bottom: 1.5rem;">
+            <div class="card__body" style="padding: 1.25rem 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 0.75rem;">
+                    <div>
+                        <h4 style="font-size: 0.9375rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-primary); margin: 0 0 0.25rem 0;">
+                            Plan de Evaluación Académica
+                        </h4>
+                        <span style="font-size: 0.8125rem; color: var(--color-text-muted);">
+                            Ponderación total estructurada: <strong>${totalPesoPlan}% de 100%</strong> ${totalPesoPlan < 100 ? `<span style="color: var(--color-warning); font-weight: 600;">(${100 - totalPesoPlan}% por definir)</span>` : '<span style="color: var(--color-accent); font-weight: 700;">(Completo 100%)</span>'}
+                        </span>
+                    </div>
+                    <span class="badge ${totalPesoPlan >= 100 ? 'badge--accent' : 'badge--primary'}">
+                        ${plan.length} Evaluación${plan.length === 1 ? '' : 'es'}
+                    </span>
+                </div>
 
-    container.innerHTML = planHtml + tableHtml;
+                <!-- Barra de progreso general del plan -->
+                <div style="background: var(--color-border-light); border-radius: var(--radius-full); height: 8px; overflow: hidden; margin-bottom: 1rem;">
+                    <div style="background: ${totalPesoPlan >= 100 ? 'var(--color-accent)' : 'var(--color-primary)'}; height: 100%; border-radius: var(--radius-full); width: ${Math.min(100, totalPesoPlan)}%; transition: width 0.4s ease;"></div>
+                </div>
+
+                <div class="d-flex gap-2 flex-wrap">
+                    ${plan.map(p => `
+                        <span class="badge badge--primary" style="font-size: 0.8125rem; padding: 0.35rem 0.65rem;">
+                            ${Utils.escapeHtml(p.nombre)} (${p.peso}%)
+                        </span>
+                    `).join('')}
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Tabla de estudiantes con Barra de Progreso individual
+    let tableHtml = `
+        <div class="card">
+            <div class="card__header">
+                <h3 class="card__title">Listado de Participantes Activos (${estudiantes.length})</h3>
+            </div>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Estudiante</th>
+                            <th>Cédula</th>
+                            <th>Estado</th>
+                            ${plan.map(p => `<th style="text-align: center;">${Utils.escapeHtml(p.nombre)}<br><small style="color: var(--color-text-muted); font-weight: normal;">${p.peso}%</small></th>`).join('')}
+                            <th style="text-align: center; min-width: 130px;">Avance Notas</th>
+                            <th style="text-align: center;">Nota Final</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+    `;
+
+    estudiantes.forEach(est => {
+        let pesoCalificado = 0;
+        const califs = est.calificaciones || [];
+
+        plan.forEach(p => {
+            const cal = califs.find(c => c.tipo_evaluacion === p.tipo || c.descripcion === p.nombre);
+            if (cal && cal.nota !== null && cal.nota !== undefined && cal.nota !== '') {
+                pesoCalificado += parseFloat(p.peso) || 0;
+            }
+        });
+
+        const porcentajeEstudiante = totalPesoPlan > 0 ? Math.min(100, Math.round((pesoCalificado / totalPesoPlan) * 100)) : 0;
+        const estadoClass = est.estado === 'Completado' ? 'badge--accent' : est.estado === 'En Progreso' ? 'badge--primary' : 'badge--neutral';
+
+        tableHtml += `
+            <tr>
+                <td>
+                    <strong>${Utils.escapeHtml(est.nombre_estudiante)}</strong>
+                    <br><small style="color: var(--color-text-muted);">${Utils.escapeHtml(est.correo)}</small>
+                </td>
+                <td><strong>CI ${Utils.escapeHtml(est.cedula)}</strong></td>
+                <td><span class="badge ${estadoClass}">${est.estado}</span></td>
+        `;
+
+        // Columnas por cada evaluación configurada
+        plan.forEach(p => {
+            const cal = califs.find(c => c.tipo_evaluacion === p.tipo || c.descripcion === p.nombre);
+            if (cal && cal.nota !== null && cal.nota !== undefined && cal.nota !== '') {
+                const notaNum = parseFloat(cal.nota);
+                tableHtml += `<td style="text-align: center;"><span class="badge ${notaNum >= 10 ? 'badge--accent' : 'badge--warning'}" style="font-weight: 700;">${notaNum.toFixed(2)}</span></td>`;
+            } else {
+                tableHtml += `<td style="text-align: center;"><span class="badge badge--neutral">-</span></td>`;
+            }
+        });
+
+        // Barra de avance individual de notas
+        tableHtml += `
+                <td style="text-align: center;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.6875rem; color: var(--color-text-muted); margin-bottom: 0.2rem; font-weight: 600;">
+                        <span>${pesoCalificado}% calc.</span>
+                        <span>${porcentajeEstudiante}%</span>
+                    </div>
+                    <div style="background: var(--color-border-light); border-radius: var(--radius-full); height: 6px; overflow: hidden;">
+                        <div style="background: ${porcentajeEstudiante >= 100 ? 'var(--color-accent)' : 'var(--color-primary)'}; height: 100%; border-radius: var(--radius-full); width: ${porcentajeEstudiante}%; transition: width 0.4s ease;"></div>
+                    </div>
+                </td>
+                <td style="text-align: center;">
+                    ${est.nota_final ? `
+                        <span class="badge ${parseFloat(est.nota_final) >= 10 ? 'badge--accent' : 'badge--danger'}" style="font-size: 0.95rem; font-weight: 800;">
+                            ${parseFloat(est.nota_final).toFixed(2)}
+                        </span>
+                    ` : '<span class="badge badge--neutral" style="font-size: 0.75rem;">Pendiente</span>'}
+                </td>
+            </tr>
+        `;
+    });
+
+    tableHtml += `
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+
+    container.innerHTML = planHeaderHtml + tableHtml;
 }
 </script>
 

@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="">
-    <title>Auditoria - Administrador | UPTEC Cursos</title>
+    <title>Auditoría - Administrador | UPTECMS Cursos</title>
     <link rel="stylesheet" href="../../../frontend/css/main.css">
+    <link rel="icon" type="image/png" href="../../img/logo-uptec.png">
 </head>
 <body>
 
@@ -16,9 +17,9 @@
     <main class="main">
         <header class="header">
             <button class="sidebar-toggle" id="sidebar-toggle">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
-            <h1 class="header__title">Auditoria del Sistema</h1>
+            <h1 class="header__title">Auditoría del Sistema</h1>
             <div class="header__actions">
                 <div class="header__user">
                     <div class="header__user-avatar" id="header-avatar"></div>
@@ -27,8 +28,8 @@
                         <span class="header__user-role" id="header-role"></span>
                     </div>
                 </div>
-                <button class="header__logout" id="logout-btn" title="Cerrar Sesion">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                <button class="header__logout" id="logout-btn" title="Cerrar Sesión">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 </button>
             </div>
         </header>
@@ -36,24 +37,28 @@
         <div class="content">
             <div class="content__header">
                 <div>
-                    <h2 class="content__title">Logs de Actividad</h2>
-                    <p class="content__subtitle">Registro completo de todas las acciones del sistema</p>
+                    <h2 class="content__title">Trazabilidad y Logs de Actividad</h2>
+                    <p class="content__subtitle">Registro cronológico de todas las transacciones y eventos ejecutados en la plataforma UPTECMS</p>
                 </div>
             </div>
 
+            <!-- Filtros de Auditoría -->
             <div class="card" style="margin-bottom: 1.5rem;">
                 <div class="card__body" style="padding: 1rem 1.5rem;">
                     <div class="d-flex gap-4 flex-wrap items-end">
-                        <div>
-                            <label class="form-label" style="font-size: 0.8125rem;">Accion</label>
-                            <select class="form-select" id="filter-accion" style="width: 160px;" onchange="loadAuditoria()">
-                                <option value="">Todas</option>
-                                <option value="CREATE">Crear</option>
-                                <option value="UPDATE">Actualizar</option>
-                                <option value="DELETE">Eliminar</option>
-                                <option value="LOGIN">Login</option>
-                                <option value="LOGOUT">Logout</option>
-                                <option value="BACKUP">Backup</option>
+                        <div style="min-width: 190px;">
+                            <label class="form-label" style="font-size: 0.8125rem;">Tipo de Acción</label>
+                            <select class="form-select" id="filter-accion" onchange="loadAuditoria()">
+                                <option value="">Todas las acciones</option>
+                                <option value="CREATE">Creación (CREATE)</option>
+                                <option value="UPDATE">Actualización (UPDATE)</option>
+                                <option value="DELETE">Eliminación (DELETE)</option>
+                                <option value="INSCRIBIR">Inscripción</option>
+                                <option value="FINALIZAR_CURSO">Cierre de Curso</option>
+                                <option value="LOGIN">Inicio de Sesión</option>
+                                <option value="LOGOUT">Cierre de Sesión</option>
+                                <option value="BACKUP">Respaldo de BD</option>
+                                <option value="PASSWORD_CHANGE">Cambio de Clave</option>
                             </select>
                         </div>
                         <div>
@@ -94,29 +99,98 @@ async function loadAuditoria() {
         const data = await API.get('auditoria', { accion, fecha_desde, fecha_hasta });
         renderAuditoria(data.logs || []);
     } catch (err) {
-        Toast.show('Error: ' + err.message, 'error');
+        Toast.show('Error cargando auditoría: ' + err.message, 'error');
     }
 }
 
 function renderAuditoria(logs) {
+    // Mapeo estilizado con micro-vectores SVG
     const accionMap = {
-        'CREATE': { badge: 'badge--accent', label: 'CREAR' },
-        'UPDATE': { badge: 'badge--info', label: 'ACTUALIZAR' },
-        'DELETE': { badge: 'badge--danger', label: 'ELIMINAR' },
-        'LOGIN': { badge: 'badge--secondary', label: 'LOGIN' },
-        'LOGOUT': { badge: 'badge--neutral', label: 'LOGOUT' },
-        'BACKUP': { badge: 'badge--primary', label: 'BACKUP' },
-        'INSCRIBIR': { badge: 'badge--accent', label: 'INSCRIBIR' },
-        'PASSWORD_CHANGE': { badge: 'badge--warning', label: 'CAMBIO PASS' }
+        'CREATE': { 
+            badge: 'badge--accent', 
+            label: 'CREACIÓN',
+            icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>'
+        },
+        'UPDATE': { 
+            badge: 'badge--info', 
+            label: 'EDICIÓN',
+            icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>'
+        },
+        'DELETE': { 
+            badge: 'badge--danger', 
+            label: 'ELIMINACIÓN',
+            icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>'
+        },
+        'LOGIN': { 
+            badge: 'badge--secondary', 
+            label: 'ACCESO',
+            icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/></svg>'
+        },
+        'LOGOUT': { 
+            badge: 'badge--neutral', 
+            label: 'SALIDA',
+            icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/></svg>'
+        },
+        'BACKUP': { 
+            badge: 'badge--primary', 
+            label: 'RESPALDO',
+            icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/></svg>'
+        },
+        'INSCRIBIR': { 
+            badge: 'badge--accent', 
+            label: 'INSCRIPCIÓN',
+            icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>'
+        },
+        'FINALIZAR_CURSO': {
+            badge: 'badge--primary',
+            label: 'CIERRE CURSO',
+            icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>'
+        },
+        'PASSWORD_CHANGE': { 
+            badge: 'badge--warning', 
+            label: 'CLAVE MODIF.',
+            icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>'
+        }
     };
 
     DataTable.render('auditoria-table', logs, [
-        { label: 'Fecha/Hora', key: 'fecha_hora', format: (v) => `<small style="white-space:nowrap">${Utils.formatDateTime(v)}</small>` },
-        { label: 'Usuario', key: 'usuario_nombre', format: (v) => `<strong>${Utils.escapeHtml(v || 'Sistema')}</strong>` },
-        { label: 'Accion', key: 'accion', format: (v) => { const a = accionMap[v] || { badge: 'badge--neutral', label: v }; return `<span class="badge ${a.badge}">${a.label}</span>`; } },
-        { label: 'Tabla', key: 'tabla_afectada', format: (v) => `<code style="background:var(--color-bg);padding:0.125rem 0.375rem;border-radius:var(--radius-sm);font-size:0.8125rem">${v || '-'}</code>` },
-        { label: 'Registro ID', key: 'registro_id', format: (v) => `<small>${v || '-'}</small>` },
-        { label: 'IP', key: 'ip_address', format: (v) => `<small style="color:var(--color-text-muted)">${v || '-'}</small>` }
+        { 
+            label: 'Fecha y Hora', 
+            key: 'fecha_hora', 
+            format: (v) => `<small style="white-space:nowrap; font-weight:600;">${Utils.formatDateTime(v)}</small>` 
+        },
+        { 
+            label: 'Usuario Responsable', 
+            key: 'usuario_nombre', 
+            format: (v) => `<strong>${Utils.escapeHtml(v || 'Sistema Automático')}</strong>` 
+        },
+        { 
+            label: 'Acción Ejecutada', 
+            key: 'accion', 
+            format: (v) => { 
+                const a = accionMap[v] || { 
+                    badge: 'badge--neutral', 
+                    label: v,
+                    icon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>'
+                }; 
+                return `<span class="badge ${a.badge}" style="display:inline-flex; align-items:center; gap:0.35rem; font-size:0.75rem; letter-spacing:0.3px;">${a.icon} ${a.label}</span>`; 
+            } 
+        },
+        { 
+            label: 'Módulo / Tabla', 
+            key: 'tabla_afectada', 
+            format: (v) => `<code style="background:var(--color-bg-secondary, #f1f5f9); padding:0.2rem 0.5rem; border-radius:4px; font-size:0.8rem; font-weight:600;">${v || '-'}</code>` 
+        },
+        { 
+            label: 'ID Registro', 
+            key: 'registro_id', 
+            format: (v) => `<small style="font-family:monospace; font-weight:600;">${v ? '#' + v : '-'}</small>` 
+        },
+        { 
+            label: 'Dirección IP', 
+            key: 'ip_address', 
+            format: (v) => `<small style="color:var(--color-text-muted); font-family:monospace;">${v || '127.0.0.1'}</small>` 
+        }
     ]);
 }
 </script>

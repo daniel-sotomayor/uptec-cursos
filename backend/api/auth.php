@@ -34,12 +34,12 @@ $router->register('POST', '/backend/api/api.php', function($params) {
     return jsonResponse(true, [
         'user' => $user,
         'token' => CSRF::regenerate(),
-        'redirect' => '/uptec-cursos/frontend/views/' . match($user['rol']) {
-            'Administrador' => 'administrador/dashboard.html',
-            'Analista' => 'analista/dashboard.html',
-            'Facilitador' => 'facilitador/dashboard.html',
-            'Participante' => 'participante/dashboard.html',
-            default => 'login.html'
+        'redirect' => match($user['rol']) {
+            'Administrador' => '/administrador/',
+            'Analista' => '/analista/',
+            'Facilitador' => '/facilitador/',
+            'Participante' => '/participante/',
+            default => '/login.html'
         }
     ]);
 }, [], 'login');

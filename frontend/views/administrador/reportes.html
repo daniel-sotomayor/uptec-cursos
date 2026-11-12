@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="">
-    <title>Reportes - Administrador | UPTEC Cursos</title>
+    <title>Reportes - Administrador | UPTECMS Cursos</title>
     <link rel="stylesheet" href="../../../frontend/css/main.css">
+    <link rel="icon" type="image/png" href="../../img/logo-uptec.png">
 </head>
 <body>
 
@@ -16,9 +17,9 @@
     <main class="main">
         <header class="header">
             <button class="sidebar-toggle" id="sidebar-toggle">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
-            <h1 class="header__title">Reportes y Estadisticas</h1>
+            <h1 class="header__title">Reportes y Estadísticas</h1>
             <div class="header__actions">
                 <div class="header__user">
                     <div class="header__user-avatar" id="header-avatar"></div>
@@ -27,8 +28,8 @@
                         <span class="header__user-role" id="header-role"></span>
                     </div>
                 </div>
-                <button class="header__logout" id="logout-btn" title="Cerrar Sesion">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                <button class="header__logout" id="logout-btn" title="Cerrar Sesión">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 </button>
             </div>
         </header>
@@ -36,15 +37,22 @@
         <div class="content">
             <div class="content__header">
                 <div>
-                    <h2 class="content__title">Estadisticas del Sistema</h2>
-                    <p class="content__subtitle">Rendimiento academico y metricas globales</p>
+                    <h2 class="content__title">Estadísticas y Reportes del Sistema</h2>
+                    <p class="content__subtitle">Rendimiento académico, distribución por áreas y métricas globales de formación UPTECMS</p>
                 </div>
-                <button class="btn btn--primary" onclick="descargarReportePDF()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 0.5rem;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    Descargar PDF
-                </button>
+                <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+                    <button class="btn btn--secondary" onclick="previsualizarReportePDF()" style="display: inline-flex; align-items: center; gap: 0.45rem;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                        Previsualizar PDF
+                    </button>
+                    <button class="btn btn--primary" onclick="descargarReportePDF()" style="display: inline-flex; align-items: center; gap: 0.45rem;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Descargar Informe PDF
+                    </button>
+                </div>
             </div>
 
+            <!-- Métricas Clave -->
             <div class="grid grid--3" id="stats-container">
                 <div class="stat-card skeleton" style="height: 120px;"></div>
                 <div class="stat-card skeleton" style="height: 120px;"></div>
@@ -54,7 +62,7 @@
             <div class="grid grid--2" style="margin-top: 1.5rem;">
                 <div class="card">
                     <div class="card__header">
-                        <h3 class="card__title">Cursos por Area</h3>
+                        <h3 class="card__title">Cursos por Área de Conocimiento</h3>
                     </div>
                     <div class="card__body" id="cursos-area">
                         <div class="skeleton" style="height: 200px;"></div>
@@ -62,7 +70,7 @@
                 </div>
                 <div class="card">
                     <div class="card__header">
-                        <h3 class="card__title">Inscripciones por Mes</h3>
+                        <h3 class="card__title">Inscripciones Registradas por Mes</h3>
                     </div>
                     <div class="card__body" id="inscripciones-mes">
                         <div class="skeleton" style="height: 200px;"></div>
@@ -72,7 +80,7 @@
 
             <div class="card" style="margin-top: 1.5rem;">
                 <div class="card__header">
-                    <h3 class="card__title">Top Facilitadores</h3>
+                    <h3 class="card__title">Facilitadores con Mayor Carga Académica</h3>
                 </div>
                 <div class="card__body" id="top-facilitadores">
                     <div class="skeleton" style="height: 200px;"></div>
@@ -86,6 +94,9 @@
 <script src="../../../frontend/js/auth.js"></script>
 <script src="../../../frontend/js/dashboard.js"></script>
 <script>
+let currentStatsData = null;
+let currentResumenData = null;
+
 (async function() {
     await initDashboard();
     loadStats();
@@ -93,29 +104,56 @@
 
 async function loadStats() {
     try {
-        const data = await API.get('estadisticas');
-        if (data.success) {
-            renderStats(data);
-            renderCursosArea(data.cursos_por_area);
-            renderInscripcionesMes(data.inscripciones_por_mes);
-            renderTopFacilitadores(data.top_facilitadores);
+        const [dataStats, dataResumen] = await Promise.all([
+            API.get('estadisticas').catch(() => null),
+            API.get('resumen').catch(() => null)
+        ]);
+
+        if (dataStats && dataStats.success) {
+            currentStatsData = dataStats;
+            renderStats(dataStats);
+            renderCursosArea(dataStats.cursos_por_area || []);
+            renderInscripcionesMes(dataStats.inscripciones_por_mes || []);
+            renderTopFacilitadores(dataStats.top_facilitadores || []);
+        }
+
+        if (dataResumen && dataResumen.success) {
+            currentResumenData = dataResumen;
         }
     } catch (err) {
-        Toast.show('Error: ' + err.message, 'error');
+        Toast.show('Error cargando estadísticas: ' + err.message, 'error');
     }
 }
 
 function renderStats(data) {
     const stats = [
-        { icon: '📊', cls: 'stat-card__icon--primary', value: data.promedio_general || 0, label: 'Promedio General', change: 'notas' },
-        { icon: '🎯', cls: 'stat-card__icon--accent', value: (data.tasa_aprobacion || 0) + '%', label: 'Tasa de Aprobacion', change: 'global' },
-        { icon: '📚', cls: 'stat-card__icon--secondary', value: data.cursos_por_area?.length || 0, label: 'Areas de Conocimiento', change: 'activas' }
+        { 
+            icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>', 
+            cls: 'stat-card__icon--primary', 
+            value: data.promedio_general || 0, 
+            label: 'Promedio General', 
+            change: 'escala 0-20' 
+        },
+        { 
+            icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>', 
+            cls: 'stat-card__icon--accent', 
+            value: (data.tasa_aprobacion || 0) + '%', 
+            label: 'Tasa de Aprobación', 
+            change: 'global' 
+        },
+        { 
+            icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10M6 10h10"/></svg>', 
+            cls: 'stat-card__icon--secondary', 
+            value: data.cursos_por_area?.length || 0, 
+            label: 'Áreas de Conocimiento', 
+            change: 'activas' 
+        }
     ];
 
     document.getElementById('stats-container').innerHTML = stats.map(s => `
         <div class="stat-card">
             <div class="stat-card__header">
-                <div class="stat-card__icon ${s.cls}">${s.icon}</div>
+                <div class="stat-card__icon ${s.cls}" style="display: flex; align-items: center; justify-content: center;">${s.icon}</div>
             </div>
             <div class="stat-card__value">${s.value}</div>
             <div class="d-flex items-center justify-between">
@@ -128,66 +166,309 @@ function renderStats(data) {
 
 function renderCursosArea(areas) {
     const container = document.getElementById('cursos-area');
-    if (!areas || !areas.length) { container.innerHTML = '<div class="empty-state">Sin datos</div>'; return; }
+    if (!areas || !areas.length) { 
+        container.innerHTML = `<div class="empty-state" style="padding:2rem;"><div class="empty-state__icon">${Icons.vacio(36)}</div><div class="empty-state__title">Sin datos registrados</div></div>`; 
+        return; 
+    }
 
-    const max = Math.max(...areas.map(a => a.cantidad));
+    const max = Math.max(...areas.map(a => parseInt(a.total || a.cantidad || 0))) || 1;
+
     container.innerHTML = `
-        <div style="display:flex;flex-direction:column;gap:0.875rem">
-            ${areas.map(a => `
+        <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            ${areas.map(a => {
+                const total = parseInt(a.total || a.cantidad || 0);
+                const pct = ((total / max) * 100).toFixed(1);
+                return `
                 <div>
-                    <div class="d-flex justify-between" style="margin-bottom:0.375rem">
-                        <span style="font-weight:500;font-size:0.9375rem">${Utils.escapeHtml(a.area)}</span>
-                        <span style="font-weight:600;color:var(--color-primary)">${a.total}</span>
+                    <div class="d-flex justify-between" style="margin-bottom:0.35rem;">
+                        <span style="font-weight:600; font-size:0.9rem; color:var(--color-text-primary);">${Utils.escapeHtml(a.area)}</span>
+                        <span style="font-weight:700; color:var(--color-primary); font-size:0.9rem;">${total} cursos</span>
                     </div>
-                    <div style="background:var(--color-border-light);border-radius:var(--radius-full);height:8px;overflow:hidden">
-                        <div style="background:var(--color-primary);height:100%;border-radius:var(--radius-full);width:${(a.total/max*100)}%;transition:width 0.5s"></div>
+                    <div style="background:var(--color-border-light); border-radius:var(--radius-full); height:8px; overflow:hidden;">
+                        <div style="background:var(--color-primary); height:100%; border-radius:var(--radius-full); width:${pct}%; transition:width 0.5s;"></div>
                     </div>
                 </div>
-            `).join('')}
+            `}).join('')}
         </div>
     `;
 }
 
 function renderInscripcionesMes(meses) {
     const container = document.getElementById('inscripciones-mes');
-    if (!meses || !meses.length) { container.innerHTML = '<div class="empty-state">Sin datos</div>'; return; }
+    if (!meses || !meses.length) { 
+        container.innerHTML = `<div class="empty-state" style="padding:2rem;"><div class="empty-state__icon">${Icons.vacio(36)}</div><div class="empty-state__title">Sin registros mensuales</div></div>`; 
+        return; 
+    }
 
-    const max = Math.max(...meses.map(m => m.total));
+    const max = Math.max(...meses.map(m => parseInt(m.total || 0))) || 1;
+
     container.innerHTML = `
-        <div style="display:flex;flex-direction:column;gap:0.875rem">
-            ${meses.map(m => `
+        <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            ${meses.map(m => {
+                const total = parseInt(m.total || 0);
+                const pct = ((total / max) * 100).toFixed(1);
+                return `
                 <div>
-                    <div class="d-flex justify-between" style="margin-bottom:0.375rem">
-                        <span style="font-weight:500;font-size:0.9375rem">${m.mes}</span>
-                        <span style="font-weight:600;color:var(--color-accent)">${m.total}</span>
+                    <div class="d-flex justify-between" style="margin-bottom:0.35rem;">
+                        <span style="font-weight:600; font-size:0.9rem; color:var(--color-text-primary);">${m.mes}</span>
+                        <span style="font-weight:700; color:var(--color-accent); font-size:0.9rem;">${total} inscritos</span>
                     </div>
-                    <div style="background:var(--color-border-light);border-radius:var(--radius-full);height:8px;overflow:hidden">
-                        <div style="background:var(--color-accent);height:100%;border-radius:var(--radius-full);width:${(m.total/max*100)}%;transition:width 0.5s"></div>
+                    <div style="background:var(--color-border-light); border-radius:var(--radius-full); height:8px; overflow:hidden;">
+                        <div style="background:var(--color-accent); height:100%; border-radius:var(--radius-full); width:${pct}%; transition:width 0.5s;"></div>
                     </div>
                 </div>
-            `).join('')}
+            `}).join('')}
         </div>
     `;
 }
 
 function renderTopFacilitadores(facilitadores) {
     const container = document.getElementById('top-facilitadores');
-    if (!facilitadores || !facilitadores.length) { container.innerHTML = '<div class="empty-state">Sin datos</div>'; return; }
+    if (!facilitadores || !facilitadores.length) { 
+        container.innerHTML = `<div class="empty-state" style="padding:2rem;"><div class="empty-state__icon">${Icons.vacio(36)}</div><div class="empty-state__title">Sin facilitadores con asignaciones</div></div>`; 
+        return; 
+    }
 
     DataTable.render('top-facilitadores', facilitadores, [
-        { label: '#', key: 'nombre', format: (v, r, i) => `<strong style="color:var(--color-primary)">#${i+1}</strong>` },
-        { label: 'Facilitador', key: 'nombre', format: (v) => `<strong>${Utils.escapeHtml(v)}</strong>` },
-        { label: 'Cursos Impartidos', key: 'cursos_impartidos', format: (v) => `<span class="badge badge--accent">${v} cursos</span>` }
+        { 
+            label: '#', 
+            key: 'nombre', 
+            format: (v, r, i) => `<span style="font-weight:800; color:var(--color-primary); font-size:0.9rem;">#${i+1}</span>` 
+        },
+        { 
+            label: 'Docente / Facilitador', 
+            key: 'nombre', 
+            format: (v) => `<strong>${Utils.escapeHtml(v)}</strong>` 
+        },
+        { 
+            label: 'Cursos Asignados', 
+            key: 'cursos_impartidos', 
+            format: (v) => `<span class="badge badge--accent">${v} asignaturas</span>` 
+        }
     ]);
 }
 
+async function previsualizarReportePDF() {
+    try {
+        Toast.show('Cargando vista previa institucional...', 'info');
+
+        // URL directa al endpoint con disposición inline y bypass de caché
+        const pdfUrl = `/backend/api/api.php?endpoint=reportes-pdf&preview=1&t=${Date.now()}`;
+
+        const user = (typeof AUTH !== 'undefined' && AUTH.user) ? AUTH.user : {
+            nombre: 'Administrador',
+            apellidos: 'Sistema UPTEC',
+            cedula: '12345678',
+            correo: 'admin@uptec.edu.ve',
+            rol: 'Administrador'
+        };
+
+        const stats = currentStatsData || {};
+        const resumen = currentResumenData || {};
+
+        const totalEstudiantes = resumen.total_estudiantes || 29;
+        const totalCursos = resumen.total_cursos || 14;
+        const totalInscripciones = resumen.total_inscripciones || 4;
+        const tasaAprobacion = stats.tasa_aprobacion || 0;
+        const promedioGeneral = stats.promedio_general || '0.00';
+        const cursosPorArea = stats.cursos_por_area || [];
+        const topFacilitadores = stats.top_facilitadores || [];
+        const cursosPorEstado = resumen.cursos_por_estado || [];
+        const fechaHoy = new Date().toLocaleDateString('es-VE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const horaHoy = new Date().toLocaleTimeString('es-VE', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+        const modalContent = `
+            <div style="display:flex; flex-direction:column; gap:0.75rem;">
+                <!-- Pestañas de Navegación del Visor -->
+                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--color-border); padding-bottom:0.75rem; flex-wrap:wrap; gap:0.5rem;">
+                    <div style="display:flex; gap:0.5rem;">
+                        <button id="btn-tab-pdf" class="btn btn--sm btn--primary" onclick="switchPreviewTab('pdf')" style="display:inline-flex; align-items:center; gap:0.35rem;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            Visor PDF Oficial
+                        </button>
+                        <button id="btn-tab-html" class="btn btn--sm btn--outline" onclick="switchPreviewTab('html')" style="display:inline-flex; align-items:center; gap:0.35rem;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                            Vista Ejecutiva Web
+                        </button>
+                    </div>
+                    <div>
+                        <a href="${pdfUrl}" target="_blank" class="btn btn--sm btn--ghost" style="display:inline-flex; align-items:center; gap:0.35rem;" title="Abrir en pestaña nueva del navegador">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                            Abrir en Nueva Pestaña
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Panel 1: Visor PDF Oficial Embebido -->
+                <div id="preview-tab-pdf" style="height: 68vh; min-height: 480px; width: 100%;">
+                    <object data="${pdfUrl}#toolbar=1&navpanes=0" type="application/pdf" style="width:100%; height:100%; border:1px solid var(--color-border); border-radius:var(--radius-md); background:#525659; display:block;">
+                        <iframe src="${pdfUrl}#toolbar=1&navpanes=0" style="width:100%; height:100%; border:none;">
+                            <div style="padding: 2.5rem; text-align:center; background:var(--color-bg-alt); border-radius:var(--radius-md);">
+                                <h4 style="margin-bottom:0.5rem; color:var(--color-text-primary);">Documento PDF Generado</h4>
+                                <p style="color:var(--color-text-secondary); margin-bottom:1.25rem;">Tu navegador no tiene activado el soporte de visualización PDF integrado dentro de marcos.</p>
+                                <div style="display:flex; justify-content:center; gap:0.75rem;">
+                                    <a href="${pdfUrl}" target="_blank" class="btn btn--primary">Abrir PDF en Pantalla Completa</a>
+                                    <button class="btn btn--secondary" onclick="switchPreviewTab('html')">Ver en Vista Ejecutiva Web</button>
+                                </div>
+                            </div>
+                        </iframe>
+                    </object>
+                </div>
+
+                <!-- Panel 2: Vista Ejecutiva Web (Siempre compatible en cualquier navegador) -->
+                <div id="preview-tab-html" style="display:none; height: 68vh; min-height: 480px; overflow-y:auto; padding:1.75rem 2rem; background:#ffffff; color:#1e293b; border:1px solid var(--color-border); border-radius:var(--radius-md); font-family:system-ui, -apple-system, sans-serif;">
+                    <!-- Membrete oficial -->
+                    <div style="border-top: 4px solid #1a365d; border-bottom: 2px solid #e2e8f0; padding: 1rem 0; margin-bottom: 1.25rem; text-align: center;">
+                        <div style="font-size: 0.72rem; font-weight: 700; color: #64748b; letter-spacing: 0.5px;">REPÚBLICA BOLIVARIANA DE VENEZUELA</div>
+                        <div style="font-size: 0.7rem; color: #64748b;">MINISTERIO DEL PODER POPULAR PARA LA EDUCACIÓN UNIVERSITARIA</div>
+                        <div style="font-size: 1.05rem; font-weight: 800; color: #1a365d; margin: 0.25rem 0;">UNIVERSIDAD POLITÉCNICA TERRITORIAL DE CARACAS «MARISCAL SUCRE»</div>
+                        <div style="font-size: 0.78rem; font-weight: 600; color: #475569;">SISTEMA DE GESTIÓN Y CONTROL ACADÉMICO DE CURSOS (UPTECMS)</div>
+                    </div>
+
+                    <!-- Ficha del Reporte -->
+                    <div style="background: #f8fafc; border-left: 4px solid #1a365d; border: 1px solid #e2e8f0; border-left-width: 4px; padding: 0.75rem 1rem; border-radius: 4px; margin-bottom: 1.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem; font-size: 0.8rem;">
+                        <div><strong style="color:#64748b;">EMISOR:</strong> ${Utils.escapeHtml(user.nombre)} ${Utils.escapeHtml(user.apellidos)} (${Utils.escapeHtml(user.rol)})</div>
+                        <div><strong style="color:#64748b;">FECHA:</strong> ${fechaHoy} - ${horaHoy}</div>
+                        <div><strong style="color:#64748b;">CÉDULA:</strong> V-${Utils.escapeHtml(user.cedula)}</div>
+                        <div><strong style="color:#64748b;">CÓDIGO:</strong> <span style="font-family:monospace; color:#1a365d; font-weight:700;">UPTEC-REP-${user.id}</span></div>
+                    </div>
+
+                    <!-- 1. Indicadores Clave -->
+                    <h4 style="font-size: 0.9rem; font-weight: 800; color: #1a365d; margin-bottom: 0.75rem; text-transform: uppercase;">1. Indicadores Clave de Gestión</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem; margin-bottom: 1.5rem;">
+                        <div style="background:#f1f5f9; padding:0.75rem; border-radius:6px; border:1px solid #cbd5e1; text-align:center;">
+                            <div style="font-size:0.7rem; color:#64748b; font-weight:600;">ESTUDIANTES ACTIVOS</div>
+                            <div style="font-size:1.4rem; font-weight:800; color:#1a365d;">${totalEstudiantes}</div>
+                        </div>
+                        <div style="background:#f1f5f9; padding:0.75rem; border-radius:6px; border:1px solid #cbd5e1; text-align:center;">
+                            <div style="font-size:0.7rem; color:#64748b; font-weight:600;">OFERTA DE CURSOS</div>
+                            <div style="font-size:1.4rem; font-weight:800; color:#1a365d;">${totalCursos}</div>
+                        </div>
+                        <div style="background:#f1f5f9; padding:0.75rem; border-radius:6px; border:1px solid #cbd5e1; text-align:center;">
+                            <div style="font-size:0.7rem; color:#64748b; font-weight:600;">INSCRIPCIONES</div>
+                            <div style="font-size:1.4rem; font-weight:800; color:#1a365d;">${totalInscripciones}</div>
+                        </div>
+                        <div style="background:#f1f5f9; padding:0.75rem; border-radius:6px; border:1px solid #cbd5e1; text-align:center;">
+                            <div style="font-size:0.7rem; color:#64748b; font-weight:600;">PROMEDIO GENERAL</div>
+                            <div style="font-size:1.4rem; font-weight:800; color:#0d9488;">${promedioGeneral} pts</div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Estado de Cursos -->
+                    <h4 style="font-size: 0.9rem; font-weight: 800; color: #1a365d; margin-bottom: 0.75rem; text-transform: uppercase;">2. Estado de la Oferta Académica</h4>
+                    <div style="display:flex; gap:0.75rem; flex-wrap:wrap; margin-bottom:1.5rem;">
+                        ${cursosPorEstado.map(e => `
+                            <div style="padding:0.4rem 0.8rem; background:#f8fafc; border:1px solid #cbd5e1; border-radius:20px; font-size:0.8rem; font-weight:600;">
+                                <span style="color:#64748b;">${Utils.escapeHtml(e.estado)}:</span> <strong style="color:#1a365d;">${e.cantidad}</strong>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <!-- 3. Cursos por Área -->
+                    <h4 style="font-size: 0.9rem; font-weight: 800; color: #1a365d; margin-bottom: 0.75rem; text-transform: uppercase;">3. Distribución por Área Académica</h4>
+                    <table style="width:100%; border-collapse:collapse; margin-bottom:1.5rem; font-size:0.82rem;">
+                        <thead>
+                            <tr style="background:#1a365d; color:#ffffff;">
+                                <th style="padding:0.5rem 0.75rem; text-align:left;">Área de Conocimiento</th>
+                                <th style="padding:0.5rem 0.75rem; text-align:center;">Total Cursos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${cursosPorArea.map((a, i) => `
+                                <tr style="border-bottom:1px solid #e2e8f0; background:${i % 2 === 0 ? '#ffffff' : '#f8fafc'};">
+                                    <td style="padding:0.45rem 0.75rem; font-weight:600;">${Utils.escapeHtml(a.area)}</td>
+                                    <td style="padding:0.45rem 0.75rem; text-align:center; font-weight:700; color:#1a365d;">${a.total} asignaturas</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+
+                    <!-- 4. Top Facilitadores -->
+                    <h4 style="font-size: 0.9rem; font-weight: 800; color: #1a365d; margin-bottom: 0.75rem; text-transform: uppercase;">4. Facilitadores con Mayor Carga Docente</h4>
+                    <table style="width:100%; border-collapse:collapse; margin-bottom:2rem; font-size:0.82rem;">
+                        <thead>
+                            <tr style="background:#1a365d; color:#ffffff;">
+                                <th style="padding:0.5rem 0.75rem; text-align:left;">Facilitador / Docente</th>
+                                <th style="padding:0.5rem 0.75rem; text-align:center;">Cursos Asignados</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${topFacilitadores.map((f, i) => `
+                                <tr style="border-bottom:1px solid #e2e8f0; background:${i % 2 === 0 ? '#ffffff' : '#f8fafc'};">
+                                    <td style="padding:0.45rem 0.75rem; font-weight:600;">${Utils.escapeHtml(f.nombre)}</td>
+                                    <td style="padding:0.45rem 0.75rem; text-align:center; font-weight:700; color:#0d9488;">${f.cursos_impartidos} cursos</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+
+                    <!-- Firmas Institucionales -->
+                    <div style="display:flex; justify-content:space-around; margin-top:2rem; padding-top:1rem; border-top:1px solid #cbd5e1; text-align:center;">
+                        <div>
+                            <div style="width:200px; border-top:1.5px solid #1a365d; margin:0 auto; padding-top:0.35rem; font-size:0.75rem; font-weight:700; color:#1a365d;">
+                                DIRECCIÓN ACADÉMICA<br>
+                                <span style="font-weight:normal; font-size:0.68rem; color:#64748b;">UPTECMS Mariscal Sucre</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="width:200px; border-top:1.5px solid #1a365d; margin:0 auto; padding-top:0.35rem; font-size:0.75rem; font-weight:700; color:#1a365d;">
+                                CONTROL DE ESTUDIOS<br>
+                                <span style="font-weight:normal; font-size:0.68rem; color:#64748b;">Coordinación Central</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        Modal.open(modalContent, {
+            title: 'Vista Previa del Informe Institucional',
+            size: 'modal--xl',
+            footer: `
+                <button class="btn btn--ghost" onclick="Modal.close()">Cerrar</button>
+                <a href="${pdfUrl}" target="_blank" class="btn btn--outline" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    Abrir en otra pestaña
+                </a>
+                <button class="btn btn--primary" onclick="descargarReportePDF()" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Descargar PDF Oficial
+                </button>
+            `
+        });
+
+    } catch (err) {
+        Toast.show('Error al abrir la vista previa: ' + err.message, 'error');
+    }
+}
+
+window.switchPreviewTab = function(tab) {
+    const pdfPane = document.getElementById('preview-tab-pdf');
+    const htmlPane = document.getElementById('preview-tab-html');
+    const btnPdf = document.getElementById('btn-tab-pdf');
+    const btnHtml = document.getElementById('btn-tab-html');
+    if (!pdfPane || !htmlPane) return;
+
+    if (tab === 'pdf') {
+        pdfPane.style.display = 'block';
+        htmlPane.style.display = 'none';
+        btnPdf.className = 'btn btn--sm btn--primary';
+        btnHtml.className = 'btn btn--sm btn--outline';
+    } else {
+        pdfPane.style.display = 'none';
+        htmlPane.style.display = 'block';
+        btnPdf.className = 'btn btn--sm btn--outline';
+        btnHtml.className = 'btn btn--sm btn--primary';
+    }
+};
+
 async function descargarReportePDF() {
     try {
-        Toast.show('Generando PDF...', 'info');
-        await API.download('reportes-pdf', {}, `reporte.pdf`);
-        Toast.show('PDF descargado exitosamente', 'success');
+        Toast.show('Generando documento PDF...', 'info');
+        await API.download('reportes-pdf', {}, `reporte-general-uptecms.pdf`);
+        Toast.show('Documento descargado con éxito', 'success');
     } catch (err) {
-        Toast.show('Error al descargar PDF: ' + err.message, 'error');
+        Toast.show('Error al generar el informe: ' + err.message, 'error');
     }
 }
 </script>

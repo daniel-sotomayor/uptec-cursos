@@ -3,75 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Sistema de Control de Cursos - Universidad Politecnica Territorial de Caracas Mariscal Sucre">
-    <title>UPTEC Cursos - Universidad Politecnica Territorial de Caracas</title>
-    <link rel="icon" type="image/png" href="img\logo-uptec.png" >
+    <meta name="description" content="Sistema de Control de Cursos - Universidad Politécnica Territorial de Caracas «Mariscal Sucre» (UPTECMS)">
+    <title>UPTECMS Cursos | Universidad Politécnica Territorial de Caracas «Mariscal Sucre»</title>
+    <link rel="icon" type="image/png" href="img/logo-uptec.png">
     <style>
-        /* ===== GLASSMORPHISM LANDING PAGE ===== */
+        /* ===== SISTEMA DE DISEÑO INSTITUCIONAL UPTECMS ===== */
         :root {
-            --uptec-blue: #0061f1;
-            --uptec-blue-dark: #004fa3;
-            --uptec-red: #e00000;
-            --uptec-orange: #ff5e00;
-            --uptec-green: #18ad72;
+            --uptec-navy: #0f172a;
+            --uptec-blue-dark: #1e3a8a;
+            --uptec-blue: #1d4ed8;
+            --uptec-blue-light: #3b82f6;
+            --uptec-gold: #d97706;
+            --uptec-gold-light: #fbbf24;
+            --uptec-emerald: #059669;
+            --uptec-surface: #ffffff;
+            --uptec-bg-light: #f8fafc;
+            --uptec-bg-muted: #f1f5f9;
+            --uptec-text: #1e293b;
+            --uptec-text-muted: #64748b;
+            --uptec-border: #e2e8f0;
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 22px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+            --shadow-lg: 0 20px 35px -10px rgba(15, 23, 42, 0.15);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         html { scroll-behavior: smooth; }
 
         body.landing-page {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, var(--uptec-blue) 0%, var(--uptec-blue-dark) 50%, #1e3a8a 100%);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            min-height: 100vh;
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--uptec-bg-light);
+            color: var(--uptec-text);
+            line-height: 1.6;
             overflow-x: hidden;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* Particles Background */
-        .particles {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            overflow: hidden;
-            z-index: 0;
-            pointer-events: none;
-        }
-        .particle {
-            position: absolute;
-            width: 10px; height: 10px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-            animation: float 20s infinite;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
-        }
-
-        /* Glassmorphism Navbar */
+        /* ===== NAVBAR PROFESIONAL ===== */
         .landing-nav {
             position: fixed;
             top: 0; left: 0; right: 0;
             z-index: 1000;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            padding: 1rem 2rem;
+            background: rgba(15, 23, 42, 0.90);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 0.85rem 2rem;
             transition: all 0.3s ease;
         }
         .landing-nav__container {
-            max-width: 1200px;
+            max-width: 1240px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
@@ -80,441 +63,801 @@
         .landing-nav__logo {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 0.85rem;
             text-decoration: none;
         }
         .landing-nav__logo-icon {
-            height: 50px;
-            width: 50px;
-            font-size: 2rem;
-            animation: bounce 2s infinite;
+            height: 44px;
+            width: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .principal-logo{
-            height: 100%;
-            width: 100%;
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        .principal-logo {
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: contain;
         }
         .landing-nav__logo-text {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: white;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+        }
+        .landing-nav__logo-brand {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: #ffffff;
+        }
+        .landing-nav__logo-sub {
+            font-size: 0.72rem;
+            color: var(--uptec-gold-light);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         .landing-nav__menu {
             display: flex;
             list-style: none;
             gap: 2rem;
+            align-items: center;
         }
         .landing-nav__link {
-            color: white;
+            color: #e2e8f0;
             text-decoration: none;
             font-weight: 500;
+            font-size: 0.95rem;
             position: relative;
-            padding: 0.5rem 0;
-            transition: all 0.3s;
+            padding: 0.35rem 0;
+            transition: color 0.25s ease;
         }
         .landing-nav__link::after {
             content: '';
             position: absolute;
             bottom: 0; left: 0;
             width: 0; height: 2px;
-            background: white;
-            transition: width 0.3s;
+            background: var(--uptec-gold);
+            transition: width 0.3s ease;
         }
+        .landing-nav__link:hover { color: #ffffff; }
         .landing-nav__link:hover::after { width: 100%; }
 
-        /* Glassmorphism Buttons */
-        .btn-glass {
-            padding: 0.75rem 1.5rem;
-            border: 2px solid rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.1);
-            color: white;
+        /* Botones de acción */
+        .btn-portal {
+            padding: 0.65rem 1.4rem;
+            font-size: 0.92rem;
             font-weight: 600;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s;
+            border-radius: var(--radius-sm);
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            backdrop-filter: blur(10px);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 1px solid transparent;
         }
-        .btn-glass:hover {
-            background: rgba(255,255,255,0.25);
-            border-color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        .btn-portal svg {
+            flex-shrink: 0;
         }
-        .btn-glass--primary {
+        .btn-portal--ghost {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .btn-portal--ghost:hover {
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+        .btn-portal--primary {
             background: linear-gradient(135deg, var(--uptec-blue) 0%, var(--uptec-blue-dark) 100%);
-            border-color: transparent;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(29, 78, 216, 0.3);
         }
-        .btn-glass--primary:hover {
-            background: linear-gradient(135deg, var(--uptec-blue-dark) 0%, var(--uptec-blue) 100%);
+        .btn-portal--primary:hover {
+            box-shadow: 0 6px 18px rgba(29, 78, 216, 0.45);
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #2563eb 0%, var(--uptec-blue) 100%);
+        }
+        .btn-portal--gold {
+            background: linear-gradient(135deg, var(--uptec-gold) 0%, #b45309 100%);
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(217, 119, 6, 0.35);
+        }
+        .btn-portal--gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(217, 119, 6, 0.45);
         }
 
-        /* Hero Section */
+        /* ===== HERO INSTITUCIONAL CON IMAGEN DE FONDO ===== */
         .landing-hero {
-            min-height: 100vh;
+            position: relative;
+            min-height: 90vh;
             display: flex;
             align-items: center;
-            justify-content: center;
-            padding: 8rem 2rem 4rem;
-            position: relative;
-            z-index: 1;
+            padding: 8rem 2rem 5rem;
+            background: 
+                linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, rgba(30, 58, 138, 0.85) 60%, rgba(15, 23, 42, 0.90) 100%),
+                url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            color: #ffffff;
         }
-        .landing-hero__content {
-            text-align: center;
-            max-width: 800px;
-            animation: fadeInUp 1s ease;
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
+        .landing-hero__grid {
+            max-width: 1240px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 3.5rem;
+            align-items: center;
+            width: 100%;
         }
         .landing-hero__badge {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.45rem 1rem;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 50px;
-            color: white;
-            font-size: 0.875rem;
+            font-size: 0.825rem;
+            font-weight: 600;
+            color: var(--uptec-gold-light);
             margin-bottom: 1.5rem;
-            backdrop-filter: blur(10px);
+            letter-spacing: 0.5px;
         }
         .landing-hero__title {
-            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-size: clamp(2.3rem, 4.5vw, 3.4rem);
             font-weight: 800;
-            color: white;
-            margin-bottom: 1.5rem;
-            line-height: 1.2;
-            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            line-height: 1.18;
+            margin-bottom: 1.35rem;
+            color: #ffffff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .landing-hero__title span {
+            color: var(--uptec-gold-light);
         }
         .landing-hero__description {
-            font-size: clamp(1.1rem, 2vw, 1.25rem);
-            color: rgba(255,255,255,0.9);
-            margin-bottom: 2.5rem;
-            line-height: 1.8;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #e2e8f0;
+            margin-bottom: 2.25rem;
         }
         .landing-hero__actions {
             display: flex;
-            gap: 1rem;
-            justify-content: center;
+            gap: 1.25rem;
             flex-wrap: wrap;
         }
 
-        /* Section Styles */
-        .landing-section {
-            padding: 6rem 2rem;
+        /* Tarjeta gráfica Hero */
+        .landing-hero__showcase {
             position: relative;
-            z-index: 1;
         }
-        .landing-section__title {
-            font-size: clamp(2rem, 4vw, 2.5rem);
-            font-weight: 700;
-            color: white;
-            text-align: center;
-            margin-bottom: 1rem;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-        .landing-section__subtitle {
-            font-size: 1.1rem;
-            color: rgba(255,255,255,0.8);
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        /* Glass Cards */
-        .landing-features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .landing-feature {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 24px;
-            padding: 2.5rem;
-            text-align: center;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
+        .showcase-card {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
             overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
-        .landing-feature::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-        .landing-feature:hover::before { left: 100%; }
-        .landing-feature:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
-            border-color: rgba(255,255,255,0.4);
-        }
-        .landing-feature__icon {
-            width: 80px; height: 80px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            margin: 0 auto 1.5rem;
-            background: rgba(255,255,255,0.2);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            transition: all 0.3s;
-        }
-        .landing-feature:hover .landing-feature__icon {
-            transform: scale(1.1) rotate(10deg);
-        }
-        .landing-feature__icon--blue { background: linear-gradient(135deg, #0061f1, #00c6ff); }
-        .landing-feature__icon--green { background: linear-gradient(135deg, #18ad72, #00ff88); }
-        .landing-feature__icon--yellow { background: linear-gradient(135deg, #ff5e00, #ffcc00); }
-        .landing-feature__icon--red { background: linear-gradient(135deg, #e00000, #ff6b6b); }
-        .landing-feature__title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: white;
+        .showcase-card__image {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border-radius: var(--radius-md);
             margin-bottom: 1rem;
         }
-        .landing-feature__text {
-            color: rgba(255,255,255,0.8);
-            line-height: 1.6;
+        .showcase-card__badge {
+            background: #ecfdf5;
+            color: var(--uptec-emerald);
+            padding: 0.35rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-bottom: 0.5rem;
         }
-
-        /* Stats Section */
-        .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 2rem;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.2);
+        .showcase-card__title {
+            color: var(--uptec-navy);
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0.35rem;
         }
-        .stat-item {
-            text-align: center;
-        }
-        .stat-item__number {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: white;
-            display: block;
-        }
-        .stat-item__label {
-            color: rgba(255,255,255,0.8);
+        .showcase-card__subtitle {
+            color: var(--uptec-text-muted);
             font-size: 0.875rem;
         }
 
-        /* Footer */
-        .landing-footer {
-            background: rgba(0,0,0,0.3);
-            backdrop-filter: blur(20px);
-            padding: 3rem 2rem;
+        /* ===== SECCIONES LIMPIAS ===== */
+        .landing-section {
+            padding: 5.5rem 2rem;
+            max-width: 1240px;
+            margin: 0 auto;
+        }
+        .landing-section--full {
+            max-width: 100%;
+            background: #ffffff;
+            border-top: 1px solid var(--uptec-border);
+            border-bottom: 1px solid var(--uptec-border);
+        }
+        .landing-section__header {
             text-align: center;
-            color: rgba(255,255,255,0.8);
-            position: relative;
-            z-index: 1;
+            max-width: 780px;
+            margin: 0 auto 3.5rem;
         }
-        .landing-footer__text {
-            font-size: 0.9rem;
-        }
-        .landing-footer__uptec {
+        .landing-section__tag {
+            color: var(--uptec-blue);
+            font-size: 0.85rem;
             font-weight: 700;
-            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        .landing-section__title {
+            font-size: clamp(1.9rem, 3.2vw, 2.4rem);
+            font-weight: 800;
+            color: var(--uptec-navy);
+            margin-bottom: 0.75rem;
+        }
+        .landing-section__subtitle {
+            font-size: 1.05rem;
+            color: var(--uptec-text-muted);
+            line-height: 1.6;
+        }
+
+        /* Cards de Características */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        .feature-card {
+            background: #ffffff;
+            border: 1px solid var(--uptec-border);
+            border-radius: var(--radius-md);
+            padding: 2.25rem 2rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .feature-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-md);
+            border-color: #cbd5e1;
+        }
+        .feature-card__icon {
+            width: 54px;
+            height: 54px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--uptec-bg-muted);
+        }
+        .feature-card__title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--uptec-navy);
+        }
+        .feature-card__text {
+            color: var(--uptec-text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* ===== GALERÍA ESTUDIANTIL ===== */
+        .students-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.75rem;
+            margin-top: 1.5rem;
+        }
+        .student-photo-card {
+            background: #ffffff;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--uptec-border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .student-photo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        .student-photo-card__img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+        }
+        .student-photo-card__body {
+            padding: 1.25rem 1.5rem;
+        }
+        .student-photo-card__title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--uptec-navy);
+            margin-bottom: 0.35rem;
+        }
+        .student-photo-card__desc {
+            font-size: 0.875rem;
+            color: var(--uptec-text-muted);
+            line-height: 1.5;
+        }
+
+        /* ===== SECCIÓN IDENTIDAD ACADÉMICA ===== */
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.75rem;
+        }
+        .about-card {
+            background: var(--uptec-bg-light);
+            border: 1px solid var(--uptec-border);
+            border-left: 4px solid var(--uptec-blue);
+            border-radius: var(--radius-sm);
+            padding: 1.75rem 1.5rem;
+        }
+        .about-card--gold { border-left-color: var(--uptec-gold); }
+        .about-card--emerald { border-left-color: var(--uptec-emerald); }
+        .about-card--navy { border-left-color: var(--uptec-navy); }
+        .about-card__header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.85rem;
+        }
+        .about-card__icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .about-card__title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--uptec-navy);
+        }
+        .about-card__text {
+            font-size: 0.92rem;
+            color: var(--uptec-text-muted);
+            line-height: 1.65;
+        }
+
+        /* ===== ESTADÍSTICAS ELEGANTES ===== */
+        .stats-ribbon {
+            background: linear-gradient(135deg, var(--uptec-navy) 0%, #1e293b 100%);
+            border-radius: var(--radius-lg);
+            padding: 3.5rem 2rem;
+            color: #ffffff;
+            box-shadow: var(--shadow-lg);
+            margin: 2rem 0;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1080px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .stat-box__num {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--uptec-gold-light);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+        .stat-box__lbl {
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            font-weight: 500;
+        }
+
+        /* ===== CALL TO ACTION FINAL ===== */
+        .cta-banner {
+            position: relative;
+            background: 
+                linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 58, 138, 0.88) 100%),
+                url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+            border-radius: var(--radius-lg);
+            padding: 4.5rem 2rem;
+            text-align: center;
+            color: #ffffff;
+            margin: 4rem auto;
+            max-width: 1240px;
+            box-shadow: var(--shadow-lg);
+        }
+        .cta-banner__title {
+            font-size: clamp(2rem, 3.5vw, 2.7rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        .cta-banner__text {
+            font-size: 1.15rem;
+            max-width: 680px;
+            margin: 0 auto 2.5rem;
+            color: #e2e8f0;
+        }
+
+        /* ===== FOOTER INSTITUCIONAL ===== */
+        .landing-footer {
+            background: var(--uptec-navy);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3rem 2rem;
+            color: #94a3b8;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        .landing-footer__container {
+            max-width: 1240px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+        }
+        .landing-footer__title {
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1.05rem;
         }
 
         /* Responsive */
+        @media (max-width: 960px) {
+            .landing-hero__grid { grid-template-columns: 1fr; gap: 2.5rem; text-align: center; }
+            .landing-hero__actions { justify-content: center; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+        }
         @media (max-width: 768px) {
             .landing-nav__menu { display: none; }
-            .stats-bar { grid-template-columns: repeat(2, 1fr); }
-            .landing-hero__actions { flex-direction: column; }
-            .landing-hero__actions .btn-glass { width: 100%; justify-content: center; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .landing-nav { padding: 0.75rem 1.25rem; }
         }
     </style>
 </head>
 <body class="landing-page">
-    <!-- Particles Background -->
-    <div class="particles" id="particles"></div>
 
-    <!-- Navbar -->
+    <!-- BARRA DE NAVEGACIÓN INSTITUCIONAL -->
     <nav class="landing-nav">
         <div class="landing-nav__container">
             <a href="index.html" class="landing-nav__logo">
-                <div class="landing-nav__logo-icon"><img class="principal-logo" src="img/logo-uptec-grande.png" alt="UPTEC" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>'"></div>
-                <span class="landing-nav__logo-text">UPTEC Cursos</span>
+                <div class="landing-nav__logo-icon">
+                    <img class="principal-logo" src="img/logo-uptec-grande.png" alt="UPTECMS" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%231d4ed8%22 stroke-width=%222%22><path d=%22M3 21h18M3 10h18M5 10v11M19 10v11M9 10v11M15 10v11M12 2L2 7h20L12 2z%22/></svg>'">
+                </div>
+                <div class="landing-nav__logo-text">
+                    <span class="landing-nav__logo-brand">UPTECMS</span>
+                    <span class="landing-nav__logo-sub">Plataforma de Cursos</span>
+                </div>
             </a>
+            
             <ul class="landing-nav__menu">
                 <li><a href="#inicio" class="landing-nav__link">Inicio</a></li>
-                <li><a href="#caracteristicas" class="landing-nav__link">Caracteristicas</a></li>
-                <li><a href="#nosotros" class="landing-nav__link">Nosotros</a></li>
+                <li><a href="#caracteristicas" class="landing-nav__link">Beneficios</a></li>
+                <li><a href="#experiencia" class="landing-nav__link">Estudiantes</a></li>
+                <li><a href="#nosotros" class="landing-nav__link">Nuestra Universidad</a></li>
             </ul>
-            <div style="display: flex; gap: 1rem; align-items: center;">
-                <a href="login.html" class="btn-glass">Iniciar Sesion</a>
-                <a href="login.html#register" class="btn-glass btn-glass--primary">Registrarse</a>
+
+            <div style="display: flex; gap: 0.75rem; align-items: center;">
+                <a href="login.html" class="btn-portal btn-portal--ghost">Iniciar Sesión</a>
+                <a href="login.html#register" class="btn-portal btn-portal--primary">Registrarse</a>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="landing-hero" id="inicio">
-        <div class="landing-hero__content">
-            <div class="landing-hero__badge">✨ Plataforma Oficial UPTEC</div>
-            <h1 class="landing-hero__title">Sistema de Control de Cursos UPTEC</h1>
-            <p class="landing-hero__description">
-                Bienvenido a la plataforma de cursos de la
-                <strong>Universidad Politecnica Territorial de Caracas "Mariscal Sucre"</strong>.
-                Inscribete en nuestros cursos, consulta tu historial academico y desarrolla tus habilidades profesionales.
+    <!-- HERO PRINCIPAL CON FOTO DE CAMPUS Y ESTUDIANTES FELICES -->
+    <header class="landing-hero" id="inicio">
+        <div class="landing-hero__grid">
+            <div class="landing-hero__content">
+                <div class="landing-hero__badge">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 21h18M3 10h18M5 10v11M19 10v11M9 10v11M15 10v11M12 2L2 7h20L12 2z"/>
+                    </svg>
+                    <span>Universidad Politécnica Territorial de Caracas «Mariscal Sucre»</span>
+                </div>
+                <h1 class="landing-hero__title">
+                    Impulsa tu formación profesional en la <span>UPTECMS</span>
+                </h1>
+                <p class="landing-hero__description">
+                    Bienvenido al portal académico oficial de cursos y diplomados de la 
+                    <strong>UPTECMS</strong>. Desarrolla habilidades prácticas con docentes capacitados,
+                    obtén certificaciones respaldadas y abre nuevas oportunidades en el sector productivo y profesional.
+                </p>
+                <div class="landing-hero__actions">
+                    <a href="login.html" class="btn-portal btn-portal--gold" style="padding: 0.9rem 2rem; font-size: 1rem;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                        </svg>
+                        Explorar y Cursar
+                    </a>
+                    <a href="#caracteristicas" class="btn-portal btn-portal--ghost" style="padding: 0.9rem 1.8rem; font-size: 1rem;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                        </svg>
+                        Conocer Más
+                    </a>
+                </div>
+            </div>
+
+            <div class="landing-hero__showcase">
+                <div class="showcase-card">
+                    <img 
+                        class="showcase-card__image" 
+                        src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80" 
+                        alt="Estudiantes de la UPTECMS aprendiendo en equipo"
+                    >
+                    <span class="showcase-card__badge">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                        Experiencia Activa
+                    </span>
+                    <h3 class="showcase-card__title">Aprender es crecer en comunidad</h3>
+                    <p class="showcase-card__subtitle">Ambientes formativos donde cada clase impulsa tus proyectos y metas reales.</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- CARACTERÍSTICAS Y GESTIÓN ACADÉMICA -->
+    <section class="landing-section" id="caracteristicas">
+        <div class="landing-section__header">
+            <span class="landing-section__tag">Calidad y Rigor Académico</span>
+            <h2 class="landing-section__title">Todo lo que necesitas para tu desarrollo</h2>
+            <p class="landing-section__subtitle">
+                Diseñamos una plataforma moderna y estructurada para que la gestión de tus estudios sea transparente, accesible y ágil.
             </p>
-            <div class="landing-hero__actions">
-                <a href="login.html" class="btn-glass btn-glass--primary" style="padding: 1rem 2rem; font-size: 1.1rem;">
-                    🚀 Acceder al Sistema
-                </a>
-                <a href="#caracteristicas" class="btn-glass" style="padding: 1rem 2rem; font-size: 1.1rem;">
-                    📖 Conocer mas
-                </a>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-card__icon" style="background: #eff6ff;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10M6 10h10"/>
+                    </svg>
+                </div>
+                <h3 class="feature-card__title">Oferta Formativa Diversa</h3>
+                <p class="feature-card__text">
+                    Planes de estudio en Informática, Administración, Mecánica, Electricidad, Mantenimiento y Transporte Ferroviario.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-card__icon" style="background: #f0fdf4;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+                    </svg>
+                </div>
+                <h3 class="feature-card__title">Inscripciones en Línea</h3>
+                <p class="feature-card__text">
+                    Postúlate rápidamente en las asignaturas de tu área de interés con validación instantánea de cupos y horarios.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-card__icon" style="background: #fffbeb;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/>
+                    </svg>
+                </div>
+                <h3 class="feature-card__title">Seguimiento de Calificaciones</h3>
+                <p class="feature-card__text">
+                    Monitorea el plan de evaluación por módulos, ponderaciones acumuladas y consulta tus notas en tiempo real.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-card__icon" style="background: #fef2f2;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
+                    </svg>
+                </div>
+                <h3 class="feature-card__title">Certificados Oficiales</h3>
+                <p class="feature-card__text">
+                    Al culminar con éxito, descarga constancias avaladas con firmas institucionales, código de registro y pensum.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-card__icon" style="background: #f5f3ff;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                </div>
+                <h3 class="feature-card__title">Plataforma Segura</h3>
+                <p class="feature-card__text">
+                    Tus registros académicos y datos personales protegidos mediante estrictas políticas de privacidad y control de acceso.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-card__icon" style="background: #ecfeff;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0891b2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                    </svg>
+                </div>
+                <h3 class="feature-card__title">Acompañamiento Docente</h3>
+                <p class="feature-card__text">
+                    Facilitadores universitarios comprometidos que te guían paso a paso en clases teóricas y talleres prácticos.
+                </p>
             </div>
         </div>
     </section>
 
-    <!-- Caracteristicas -->
-    <section class="landing-section" id="caracteristicas" style="background: var(--color-bg);">
-        <h2 class="landing-section__title">Caracteristicas Principales</h2>
-        <p class="landing-section__subtitle">Todo lo que necesitas para la gestion de cursos en un solo lugar</p>
+    <!-- GALERÍA DE ESTUDIANTES FELICES -->
+    <div class="landing-section--full" id="experiencia">
+        <section class="landing-section">
+            <div class="landing-section__header">
+                <span class="landing-section__tag">Comunidad Estudiantil</span>
+                <h2 class="landing-section__title">Aprender es una experiencia transformadora</h2>
+                <p class="landing-section__subtitle">
+                    En la <strong>UPTECMS</strong> creemos que la educación superior debe motivar, inspirar y abrir puertas reales al desarrollo profesional.
+                </p>
+            </div>
 
-        <div class="landing-features">
-            <div class="landing-feature">
-                <div class="landing-feature__icon landing-feature__icon--blue">📚</div>
-                <h3 class="landing-feature__title">Cursos Disponibles</h3>
-                <p class="landing-feature__text">Amplia oferta de cursos en diversas areas con instructores calificados y planificacion academica.</p>
-            </div>
-            <div class="landing-feature">
-                <div class="landing-feature__icon landing-feature__icon--green">📝</div>
-                <h3 class="landing-feature__title">Inscripciones Online</h3>
-                <p class="landing-feature__text">Los participantes pueden inscribirse en cursos disponibles y consultar su historial academico.</p>
-            </div>
-            <div class="landing-feature">
-                <div class="landing-feature__icon landing-feature__icon--yellow">📋</div>
-                <h3 class="landing-feature__title">Consulta de Calificaciones</h3>
-                <p class="landing-feature__text">Visualiza tus notas y calificaciones de forma rapida y sencilla en cualquier momento.</p>
-            </div>
-            <div class="landing-feature">
-                <div class="landing-feature__icon landing-feature__icon--red">🔒</div>
-                <h3 class="landing-feature__title">Plataforma Segura</h3>
-                <p class="landing-feature__text">Tu informacion esta protegida con los mas altos estandares de seguridad y privacidad.</p>
-            </div>
-            <div class="landing-feature">
-                <div class="landing-feature__icon landing-feature__icon--blue">📊</div>
-                <h3 class="landing-feature__title">Diversas Areas de Estudio</h3>
-                <p class="landing-feature__text">Ofrecemos cursos en multiples areas para el desarrollo profesional y personal de nuestros estudiantes.</p>
-            </div>
-            <div class="landing-feature">
-                <div class="landing-feature__icon landing-feature__icon--green">🔍</div>
-                <h3 class="landing-feature__title">Consulta tus Notas</h3>
-                <p class="landing-feature__text">Accede facilmente a tu historial academico, calificaciones y constancias de cursos.</p>
-            </div>
-        </div>
-    </section>
+            <div class="students-grid">
+                <div class="student-photo-card">
+                    <img 
+                        class="student-photo-card__img" 
+                        src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=600&q=80" 
+                        alt="Estudiantes trabajando en proyectos de computación"
+                    >
+                    <div class="student-photo-card__body">
+                        <h4 class="student-photo-card__title">Trabajo Colaborativo</h4>
+                        <p class="student-photo-card__desc">Aprender en equipo estimula el pensamiento crítico y acelera la resolución de problemas reales.</p>
+                    </div>
+                </div>
 
-    <!-- Sobre UPTEC -->
+                <div class="student-photo-card">
+                    <img 
+                        class="student-photo-card__img" 
+                        src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc?auto=format&fit=crop&w=600&q=80" 
+                        alt="Jóvenes universitarias felices en clase"
+                    >
+                    <div class="student-photo-card__body">
+                        <h4 class="student-photo-card__title">Motivación Constante</h4>
+                        <p class="student-photo-card__desc">Clases dinámicas donde adquirir conocimientos técnicos resulta gratificante y retador.</p>
+                    </div>
+                </div>
+
+                <div class="student-photo-card">
+                    <img 
+                        class="student-photo-card__img" 
+                        src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=600&q=80" 
+                        alt="Docente explicando a sus alumnos en aula universitaria"
+                    >
+                    <div class="student-photo-card__body">
+                        <h4 class="student-photo-card__title">Mentoría Personalizada</h4>
+                        <p class="student-photo-card__desc">Instructores de la UPTECMS enfocados en potenciar el talento de cada participante.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- SOBRE LA UPTECMS -->
     <section class="landing-section" id="nosotros">
-        <h2 class="landing-section__title">Sobre UPTEC</h2>
-        <p class="landing-section__subtitle">Conoce nuestra universidad y su compromiso con la educacion</p>
+        <div class="landing-section__header">
+            <span class="landing-section__tag">Identidad Universitaria</span>
+            <h2 class="landing-section__title">Nuestra Casa de Estudios: UPTECMS</h2>
+            <p class="landing-section__subtitle">
+                Conoce los principios que guían a la Universidad Politécnica Territorial de Caracas «Mariscal Sucre».
+            </p>
+        </div>
 
-        <div class="landing-features" style="max-width: 900px;">
-            <div class="landing-feature">
-                <div class="landing-feature__icon landing-feature__icon--blue">🎯</div>
-                <h3 class="landing-feature__title">Mision</h3>
-                <p class="landing-feature__text">Formar profesionales en diversas áreas del conocimiento, con visión crítica, y un alto sentido de responsabilidad social; a través de su completo desarrollo como estudiante</p>
+        <div class="about-grid">
+            <div class="about-card">
+                <div class="about-card__header">
+                    <div class="about-card__icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+                        </svg>
+                    </div>
+                    <h3 class="about-card__title">Misión</h3>
+                </div>
+                <p class="about-card__text">
+                    Formar profesionales con vocación integral, capacidad científica y alto sentido de responsabilidad social, impulsando el progreso de la nación.
+                </p>
             </div>
-            <div class="landing-feature">
-                <div class="landing-feature__icon landing-feature__icon--green">👁️‍🗨️️</div>
-                <h3 class="landing-feature__title">Vision</h3>
-                <p class="landing-feature__text">Ser una universidad referente en educación superior tecnólogica, reconocida por la calidad de sus egresados y su vinculacion con el sector productivo.</p>
+
+            <div class="about-card about-card--gold">
+                <div class="about-card__header">
+                    <div class="about-card__icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </div>
+                    <h3 class="about-card__title">Visión</h3>
+                </div>
+                <p class="about-card__text">
+                    Consolidarse como un referente nacional en educación superior tecnológica por la excelencia de sus egresados y su articulación con los motores productivos.
+                </p>
             </div>
-            <div class="landing-feature">
-                <div class="landing-feature__icon landing-feature__icon--yellow">🗺️</div>
-                <h3 class="landing-feature__title">Ubicación</h3>
-                <p class="landing-feature__text">La sede principal se ubica en el Antiguo edificio La Fosforera, Av. Intercomunal de Antímano, C. Real De Antímano, Caracas 1000, Distrito Capital.</p>
+
+            <div class="about-card about-card--emerald">
+                <div class="about-card__header">
+                    <div class="about-card__icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
+                        </svg>
+                    </div>
+                    <h3 class="about-card__title">Ubicación</h3>
+                </div>
+                <p class="about-card__text">
+                    Sede principal en el Antiguo edificio La Fosforera, Av. Intercomunal de Antímano, C. Real De Antímano, Caracas, Distrito Capital.
+                </p>
             </div>
-            <div class="landing-feature">
-                <div class="landing-feature__icon landing-feature__icon--red">📜</div>
-                <h3 class="landing-feature__title">Historia</h3>
-                <p class="landing-feature__text">Creada en honor al Gran Mariscal de Ayacucho Antonio Jose de Sucre, la UPTEC es una institucion de educacion superior tecnologica al servicio del pais.</p>
+
+            <div class="about-card about-card--navy">
+                <div class="about-card__header">
+                    <div class="about-card__icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 21h18M3 10h18M5 10v11M19 10v11M9 10v11M15 10v11M12 2L2 7h20L12 2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="about-card__title">Historia</h3>
+                </div>
+                <p class="about-card__text">
+                    Nombrada en memoria del Gran Mariscal de Ayacucho Antonio José de Sucre, la UPTECMS fundamenta sus valores en el servicio público y la democratización del saber.
+                </p>
+            </div>
+        </div>
+
+        <!-- CINTILLO DE ESTADÍSTICAS -->
+        <div class="stats-ribbon">
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-box__num">6</div>
+                    <div class="stat-box__lbl">Programas de Formación</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-box__num">50+</div>
+                    <div class="stat-box__lbl">Cursos y Talleres Activos</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-box__num">1000+</div>
+                    <div class="stat-box__lbl">Estudiantes Formados</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-box__num">25+</div>
+                    <div class="stat-box__lbl">Años de Trayectoria Académica</div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Stats Bar -->
-    <section class="landing-section">
-        <div class="stats-bar">
-            <div class="stat-item">
-                <span class="stat-item__number">6</span>
-                <span class="stat-item__label">Carreras</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-item__number">50+</span>
-                <span class="stat-item__label">Cursos</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-item__number">1000+</span>
-                <span class="stat-item__label">Estudiantes</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-item__number">25+</span>
-                <span class="stat-item__label">Años de Trayectoria</span>
-            </div>
+    <!-- LLAMADO A LA ACCIÓN (CTA) -->
+    <div style="padding: 0 2rem;">
+        <div class="cta-banner">
+            <h2 class="cta-banner__title">¿Listo para dar el siguiente paso?</h2>
+            <p class="cta-banner__text">
+                Únete a la comunidad académica de la <strong>UPTECMS</strong> e inscríbete en nuestros cursos para certificar tus conocimientos y construir un mejor porvenir.
+            </p>
+            <a href="login.html#register" class="btn-portal btn-portal--gold" style="padding: 1.05rem 2.5rem; font-size: 1.1rem;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                </svg>
+                Crear Cuenta Gratuita
+            </a>
         </div>
-    </section>
+    </div>
 
-    <!-- CTA Section -->
-    <section class="landing-section" style="text-align: center;">
-        <h2 class="landing-section__title">¿Listo para comenzar?</h2>
-        <p class="landing-section__subtitle">Unete a nuestra comunidad academica y accede a los mejores cursos</p>
-        <a href="login.html#register" class="btn-glass btn-glass--primary" style="padding: 1rem 3rem; font-size: 1.2rem;">
-            🎓 Crear Cuenta Gratis
-        </a>
-    </section>
-
-    <!-- Footer -->
+    <!-- PIE DE PÁGINA -->
     <footer class="landing-footer">
-        <p class="landing-footer__text">
-            © 2026 <span class="landing-footer__uptec">UPTEC Cursos</span> - Universidad Politecnica Territorial de Caracas "Mariscal Sucre"
-        </p>
+        <div class="landing-footer__container">
+            <div class="landing-footer__title">
+                Universidad Politécnica Territorial de Caracas «Mariscal Sucre» (UPTECMS)
+            </div>
+            <p>
+                © 2026 <strong>UPTECMS Cursos</strong> — Sistema de Control y Gestión Académica. Antímano, Caracas, Venezuela.
+            </p>
+        </div>
     </footer>
 
     <script>
-        // Generar particulas animadas
-        function createParticles() {
-            const container = document.getElementById('particles');
-            const particleCount = 30;
-
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 20 + 's';
-                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
-                particle.style.width = particle.style.height = (5 + Math.random() * 15) + 'px';
-                container.appendChild(particle);
-            }
-        }
-
-        // Animacion de entrada para las cards
-        function observeElements() {
+        document.addEventListener('DOMContentLoaded', () => {
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -524,33 +867,12 @@
                 });
             }, { threshold: 0.1 });
 
-            document.querySelectorAll('.landing-feature').forEach((el, index) => {
+            document.querySelectorAll('.feature-card, .student-photo-card, .about-card').forEach((el) => {
                 el.style.opacity = '0';
-                el.style.transform = 'translateY(30px)';
-                el.style.transition = `all 0.6s ease ${index * 0.1}s`;
+                el.style.transform = 'translateY(24px)';
+                el.style.transition = 'all 0.5s ease-out';
                 observer.observe(el);
             });
-        }
-
-        // Navbar scroll effect
-        function navbarEffect() {
-            const navbar = document.querySelector('.landing-nav');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    navbar.style.background = 'rgba(255,255,255,0.15)';
-                    navbar.style.padding = '0.75rem 2rem';
-                } else {
-                    navbar.style.background = 'rgba(255,255,255,0.1)';
-                    navbar.style.padding = '1rem 2rem';
-                }
-            });
-        }
-
-        // Inicializar
-        document.addEventListener('DOMContentLoaded', () => {
-            createParticles();
-            observeElements();
-            navbarEffect();
         });
     </script>
 </body>

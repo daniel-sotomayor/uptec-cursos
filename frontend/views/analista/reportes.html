@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="">
-    <title>Reportes - Analista | UPTEC Cursos</title>
+    <title>Reportes - Analista | UPTECMS Cursos</title>
+    <link rel="icon" type="image/png" href="../../img/logo-uptec.png">
     <link rel="stylesheet" href="../../../frontend/css/main.css">
 </head>
 <body>
@@ -16,9 +17,9 @@
     <main class="main">
         <header class="header">
             <button class="sidebar-toggle" id="sidebar-toggle">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
-            <h1 class="header__title">Reportes</h1>
+            <h1 class="header__title">Reportes Académicos</h1>
             <div class="header__actions">
                 <div class="header__user">
                     <div class="header__user-avatar" id="header-avatar"></div>
@@ -27,8 +28,8 @@
                         <span class="header__user-role" id="header-role"></span>
                     </div>
                 </div>
-                <button class="header__logout" id="logout-btn" title="Cerrar Sesion">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                <button class="header__logout" id="logout-btn" title="Cerrar Sesión">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 </button>
             </div>
         </header>
@@ -36,19 +37,26 @@
         <div class="content">
             <div class="content__header">
                 <div>
-                    <h2 class="content__title">Reportes y Estadisticas</h2>
-                    <p class="content__subtitle">Visualiza estadisticas de cursos y participantes</p>
+                    <h2 class="content__title">Reportes y Estadísticas</h2>
+                    <p class="content__subtitle">Visualiza el balance operativo de cursos, facilitadores y matrícula activa</p>
                 </div>
-                <button class="btn btn--primary" onclick="descargarReportePDF()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 0.5rem;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    Descargar PDF
-                </button>
+                <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+                    <button class="btn btn--secondary" onclick="previsualizarReportePDF()" style="display: inline-flex; align-items: center; gap: 0.45rem;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                        Previsualizar PDF
+                    </button>
+                    <button class="btn btn--primary" onclick="descargarReportePDF()" style="display: inline-flex; align-items: center; gap: 0.45rem;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Descargar Informe PDF
+                    </button>
+                </div>
             </div>
 
+            <!-- Gráficos de Distribución -->
             <div class="grid grid--2" style="margin-bottom: 1.5rem;">
                 <div class="card">
                     <div class="card__header">
-                        <h3 class="card__title">Cursos por Area</h3>
+                        <h3 class="card__title">Cursos por Área de Conocimiento</h3>
                     </div>
                     <div class="card__body" id="reporte-areas">
                         <div class="skeleton" style="height: 200px;"></div>
@@ -57,7 +65,7 @@
 
                 <div class="card">
                     <div class="card__header">
-                        <h3 class="card__title">Estados de Cursos</h3>
+                        <h3 class="card__title">Distribución por Estado Académico</h3>
                     </div>
                     <div class="card__body" id="reporte-estados">
                         <div class="skeleton" style="height: 200px;"></div>
@@ -65,18 +73,20 @@
                 </div>
             </div>
 
+            <!-- Tabla de Facilitadores -->
             <div class="card" style="margin-bottom: 1.5rem;">
                 <div class="card__header">
-                    <h3 class="card__title">Facilitadores y Cursos Asignados</h3>
+                    <h3 class="card__title">Docentes y Facilitadores Disponibles</h3>
                 </div>
                 <div class="card__body" id="reporte-facilitadores">
                     <div class="skeleton" style="height: 250px;"></div>
                 </div>
             </div>
 
+            <!-- Resumen de Inscripciones -->
             <div class="card">
                 <div class="card__header">
-                    <h3 class="card__title">Inscripciones por Mes</h3>
+                    <h3 class="card__title">Total de Inscripciones Globales</h3>
                 </div>
                 <div class="card__body" id="reporte-inscripciones">
                     <div class="skeleton" style="height: 200px;"></div>
@@ -117,69 +127,152 @@ async function loadReportes() {
         // Procesar facilitadores
         renderFacilitadores(facilitadores.facilitadores || []);
         
-        // Inscripciones por mes no disponible para analista, mostrar total
+        // Resumen global de inscripciones
         renderInscripciones([{ mes: 'Total Inscripciones', cantidad: resumen.total_inscripciones || 0 }]);
     } catch (err) {
-        Toast.show('Error cargando reportes: ' + err.message, 'error');
+        Toast.show('Error al generar los reportes: ' + err.message, 'error');
+    }
+}
+
+let currentPreviewBlobUrl = null;
+
+async function previsualizarReportePDF() {
+    try {
+        Toast.show('Cargando vista previa del informe institucional...', 'info');
+        const pdfUrl = `/backend/api/api.php?endpoint=reportes-pdf&preview=1&t=${Date.now()}`;
+
+        Modal.open(`
+            <div style="display: flex; flex-direction: column; height: 75vh; min-height: 480px;">
+                <object data="${pdfUrl}#toolbar=1&navpanes=0" type="application/pdf" style="width: 100%; height: 100%; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: #525659; display:block;">
+                    <iframe src="${pdfUrl}#toolbar=1&navpanes=0" style="width: 100%; height: 100%; border: none;">
+                        <div style="padding: 2.5rem; text-align:center; background:var(--color-bg-alt); border-radius:var(--radius-md);">
+                            <h4 style="margin-bottom:0.5rem; color:var(--color-text-primary);">Documento PDF Generado</h4>
+                            <p style="color:var(--color-text-secondary); margin-bottom:1.25rem;">Tu navegador no permite embeber el visor PDF directamente en marcos.</p>
+                            <a href="${pdfUrl}" target="_blank" class="btn btn--primary">Abrir PDF en Pantalla Completa</a>
+                        </div>
+                    </iframe>
+                </object>
+            </div>
+        `, {
+            title: 'Vista Previa del Informe de Control Curricular (PDF)',
+            size: 'modal--xl',
+            footer: `
+                <button class="btn btn--ghost" onclick="Modal.close()">Cerrar</button>
+                <a href="${pdfUrl}" target="_blank" class="btn btn--outline" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    Abrir en otra pestaña
+                </a>
+                <button class="btn btn--primary" onclick="descargarReportePDF()" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Descargar PDF
+                </button>
+            `
+        });
+    } catch (err) {
+        Toast.show('Error al previsualizar el informe: ' + err.message, 'error');
     }
 }
 
 async function descargarReportePDF() {
     try {
-        Toast.show('Generando PDF...', 'info');
-        await API.download('reportes-pdf', {}, `reporte.pdf`);
-        Toast.show('PDF descargado exitosamente', 'success');
+        Toast.show('Generando documento PDF...', 'info');
+        await API.download('reportes-pdf', {}, `reporte-analista-uptecms.pdf`);
+        Toast.show('Documento descargado exitosamente', 'success');
     } catch (err) {
-        Toast.show('Error al descargar PDF: ' + err.message, 'error');
+        Toast.show('Error al descargar el archivo: ' + err.message, 'error');
     }
 }
 
 function renderAreas(areas) {
     const container = document.getElementById('reporte-areas');
-    if (!areas.length) { container.innerHTML = '<div class="empty-state">Sin datos</div>'; return; }
-    const max = Math.max(...areas.map(a => a.cantidad));
-    container.innerHTML = `<div style="display:flex;flex-direction:column;gap:0.875rem">${areas.map(a => `
-        <div>
-            <div class="d-flex justify-between" style="margin-bottom:0.375rem">
-                <span style="font-weight:500;font-size:0.9375rem">${Utils.escapeHtml(a.area || 'Sin area')}</span>
-                <span style="font-weight:600;color:var(--color-primary)">${a.cantidad}</span>
-            </div>
-            <div style="background:var(--color-border-light);border-radius:var(--radius-full);height:8px;overflow:hidden">
-                <div style="background:var(--color-primary);height:100%;border-radius:var(--radius-full);width:${(a.cantidad/max*100)}%;transition:width 0.5s"></div>
-            </div>
+    if (!areas.length) { 
+        container.innerHTML = `<div class="empty-state" style="padding:2rem;"><div class="empty-state__icon">${Icons.vacio(36)}</div><div class="empty-state__title">Sin cursos registrados por área</div></div>`; 
+        return; 
+    }
+
+    const max = Math.max(...areas.map(a => parseInt(a.cantidad || a.total || 0))) || 1;
+
+    container.innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            ${areas.map(a => {
+                const cant = parseInt(a.cantidad || a.total || 0);
+                const pct = ((cant / max) * 100).toFixed(1);
+                return `
+                <div>
+                    <div class="d-flex justify-between" style="margin-bottom:0.35rem;">
+                        <span style="font-weight:600; font-size:0.9rem; color:var(--color-text-primary);">${Utils.escapeHtml(a.area || 'Sin área asignada')}</span>
+                        <span style="font-weight:700; color:var(--color-primary); font-size:0.9rem;">${cant} cursos</span>
+                    </div>
+                    <div style="background:var(--color-border-light); border-radius:var(--radius-full); height:8px; overflow:hidden;">
+                        <div style="background:var(--color-primary); height:100%; border-radius:var(--radius-full); width:${pct}%; transition:width 0.5s;"></div>
+                    </div>
+                </div>
+            `}).join('')}
         </div>
-    `).join('')}</div>`;
+    `;
 }
 
 function renderEstados(estados) {
     const container = document.getElementById('reporte-estados');
-    if (!estados.length) { container.innerHTML = '<div class="empty-state">Sin datos</div>'; return; }
-    const total = estados.reduce((sum, e) => sum + e.cantidad, 0);
-    const colores = { 'Planificado': 'var(--color-primary)', 'En Curso': 'var(--color-accent)', 'Finalizado': 'var(--color-secondary)', 'Cancelado': 'var(--color-danger)' };
+    if (!estados.length) { 
+        container.innerHTML = `<div class="empty-state" style="padding:2rem;"><div class="empty-state__icon">${Icons.vacio(36)}</div><div class="empty-state__title">Sin información de estados</div></div>`; 
+        return; 
+    }
 
-    container.innerHTML = `<div style="display:flex;flex-direction:column;gap:0.875rem">${estados.map(e => `
-        <div>
-            <div class="d-flex justify-between" style="margin-bottom:0.375rem">
-                <span style="font-weight:500;font-size:0.9375rem">${e.estado}</span>
-                <span style="font-weight:600;color:var(--color-text-secondary)">${e.cantidad} (${Math.round(e.cantidad/total*100)}%)</span>
-            </div>
-            <div style="background:var(--color-border-light);border-radius:var(--radius-full);height:8px;overflow:hidden">
-                <div style="background:${colores[e.estado] || 'var(--color-primary)'};height:100%;border-radius:var(--radius-full);width:${(e.cantidad/total*100)}%;transition:width 0.5s"></div>
-            </div>
+    const total = estados.reduce((sum, e) => sum + e.cantidad, 0) || 1;
+    const colores = { 
+        'Planificado': 'var(--color-primary)', 
+        'En Curso': 'var(--color-accent)', 
+        'Finalizado': 'var(--color-secondary)', 
+        'Cancelado': 'var(--color-danger)' 
+    };
+
+    container.innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            ${estados.map(e => `
+                <div>
+                    <div class="d-flex justify-between" style="margin-bottom:0.35rem;">
+                        <span style="font-weight:600; font-size:0.9rem; color:var(--color-text-primary);">${e.estado}</span>
+                        <span style="font-weight:700; color:var(--color-text-secondary); font-size:0.9rem;">${e.cantidad} (${Math.round(e.cantidad/total*100)}%)</span>
+                    </div>
+                    <div style="background:var(--color-border-light); border-radius:var(--radius-full); height:8px; overflow:hidden;">
+                        <div style="background:${colores[e.estado] || 'var(--color-primary)'}; height:100%; border-radius:var(--radius-full); width:${(e.cantidad/total*100)}%; transition:width 0.5s;"></div>
+                    </div>
+                </div>
+            `).join('')}
         </div>
-    `).join('')}</div>`;
+    `;
 }
 
 function renderFacilitadores(data) {
     const container = document.getElementById('reporte-facilitadores');
     const facilitadores = data || [];
-    if (!facilitadores.length) { container.innerHTML = '<div class="empty-state">Sin datos</div>'; return; }
+    if (!facilitadores.length) { 
+        container.innerHTML = `<div class="empty-state" style="padding:2.5rem;"><div class="empty-state__icon">${Icons.vacio(36)}</div><div class="empty-state__title">No hay facilitadores registrados</div></div>`; 
+        return; 
+    }
 
     DataTable.render('reporte-facilitadores', facilitadores, [
-        { label: 'Facilitador', key: 'nombre_completo', format: (v, r) => `<strong>${Utils.escapeHtml(v || r.nombre + ' ' + r.apellidos)}</strong>` },
-        { label: 'Cedula', key: 'cedula', format: (v) => `<small>${v}</small>` },
-        { label: 'Correo', key: 'correo' },
-        { label: 'Telefono', key: 'telefono' }
+        { 
+            label: 'Docente / Facilitador', 
+            key: 'nombre_completo', 
+            format: (v, r) => `<strong>${Utils.escapeHtml(v || r.nombre + ' ' + r.apellidos)}</strong>` 
+        },
+        { 
+            label: 'Cédula', 
+            key: 'cedula', 
+            format: (v) => `<small style="font-weight:600;">CI ${Utils.escapeHtml(v)}</small>` 
+        },
+        { 
+            label: 'Correo Electrónico', 
+            key: 'correo',
+            format: (v) => `<small>${Utils.escapeHtml(v || '-')}</small>`
+        },
+        { 
+            label: 'Teléfono', 
+            key: 'telefono',
+            format: (v) => `<small>${Utils.escapeHtml(v || '-')}</small>`
+        }
     ]);
 }
 
@@ -187,11 +280,19 @@ function renderInscripciones(data) {
     const container = document.getElementById('reporte-inscripciones');
     const total = data && data.length ? data[0].cantidad : 0;
     
+    // Contenedor visual limpio con icono SVG estilizado
     container.innerHTML = `
-        <div style="text-align: center; padding: 2rem;">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">📝</div>
-            <div style="font-size: 2.5rem; font-weight: 700; color: var(--color-secondary); margin-bottom: 0.5rem;">${Utils.formatNumber(total)}</div>
-            <div style="color: var(--color-text-secondary);">inscripciones registradas en el sistema</div>
+        <div style="text-align: center; padding: 2.5rem 1.5rem;">
+            <div style="width: 64px; height: 64px; margin: 0 auto 1rem; border-radius: 50%; background: rgba(37, 99, 235, 0.1); color: var(--color-primary); display: flex; align-items: center; justify-content: center;">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+            </div>
+            <div style="font-size: 2.8rem; font-weight: 800; color: var(--color-text-primary); margin-bottom: 0.35rem; line-height: 1;">${Utils.formatNumber(total)}</div>
+            <div style="color: var(--color-text-secondary); font-size: 0.95rem; font-weight: 500;">inscripciones totales registradas en el sistema</div>
         </div>
     `;
 }
